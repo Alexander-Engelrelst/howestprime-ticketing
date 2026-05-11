@@ -42,33 +42,33 @@ jobs:
     
     steps:
       - name: Checkout code
-              uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
-            - name: Set up Deno
-              uses: denoland/setup-deno@v2
-              with:
-                deno-version: v2.x
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
 
-            - name: Install dependencies
-              run: deno install
+      - name: Install dependencies
+        run: deno install
 
-            - name: Run tests with coverage
-              run: deno test --coverage=coverage --allow-all
+      - name: Run tests with coverage
+        run: deno test --coverage=coverage --allow-all
 
-            - name: Check coverage threshold
-              run: |
-                coverage_report="$(deno coverage --exclude=tests coverage)"
-                echo "$coverage_report"
-                
-                COVERAGE="$(echo "$coverage_report" | grep "All files" | awk -F'|' '{print $3}' | sed 's/\x1B\[[0-9;]*m//g' | tr -d '[:space:]' | tr -d '%')"
-                
-                COVERAGE_INT="${COVERAGE%.*}"
-                
-                echo "Determined Coverage: $COVERAGE_INT%"
-                
-                if [[ $COVERAGE_INT -lt 95 ]]; then
-                  echo "Error: Code coverage ($COVERAGE_INT%) is below the required threshold of 95%"
-                  exit 1
-                fi
-                
-                echo "Success: Code coverage meets threshold!"
+      - name: Check coverage threshold
+        run: |
+          coverage_report="$(deno coverage --exclude=tests coverage)"
+          echo "$coverage_report"
+          
+          COVERAGE="$(echo "$coverage_report" | grep "All files" | awk -F'|' '{print $3}' | sed 's/\x1B\[[0-9;]*m//g' | tr -d '[:space:]' | tr -d '%')"
+          
+          COVERAGE_INT="${COVERAGE%.*}"
+          
+          echo "Determined Coverage: $COVERAGE_INT%"
+          
+          if [[ $COVERAGE_INT -lt 95 ]]; then
+            echo "Error: Code coverage ($COVERAGE_INT%) is below the required threshold of 95%"
+            exit 1
+          fi
+          
+          echo "Success: Code coverage meets threshold!"
