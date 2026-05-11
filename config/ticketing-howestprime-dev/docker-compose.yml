@@ -1,0 +1,59 @@
+services:
+  ticketing-db.howestprime.dev:
+    image: mongo:8.3.1 #latest stable lts minor as of 11/05/2026
+    container_name: ticketing-db
+    env_file:
+      - .env.ticketing-db.howestprime.dev
+    ports:
+      - "40131:5000"
+    networks:
+      - ticketing-howestprime-dev
+    volumes:
+      - ../../data:/data/db
+    restart: always
+    command: >
+       bash -c "
+        mongod --port 5000 --replSet rs0 --bind_ip_all &
+         until mongosh --port 5000 --eval 'print(\"waited for connection\")'
+         do
+           sleep 1
+         done
+        mongosh --port 5000 --eval 'rs.initiate({
+          _id: \"rs0\",
+          members: [{ _id: 0, host: \"ticketing-db.howestprime.dev:5000\" }]
+        })'
+        wait
+        "
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --port 5000 --eval 'db.adminCommand(\"ping\")'"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 40s
+
+  messagebroker.howestprime.dev:
+    image: cloudamqp/lavinmq:2.7.3 #latest stable version as of 10/05/2026 
+                                   # 2.8.0 skipped to avoid day 1 bugs in a currently 3 day old minor release 
+    container_name: ticketing-broker
+    ports:
+      - "40100:5672"   # AMQP protocol
+      - "40101:15672" # Management UI
+    networks:
+      - ticketing-howestprime-dev
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "lavinmqctl status | grep -q 'Uptime: ' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 40s
+
+networks:
+  ticketing-howestprime-dev:
+    name: ticketing-howestprime-dev
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.21.0.0/16
+
+
