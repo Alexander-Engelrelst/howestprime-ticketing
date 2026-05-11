@@ -1,4 +1,3 @@
-.env
 *.lcov
 cov_profile
 .scannerwork
@@ -7,3 +6,6 @@ coverage
 /old
 .DS_Store
 /merged
+
+.env*
+!.env*.example
