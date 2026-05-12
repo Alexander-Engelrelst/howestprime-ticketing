@@ -21,9 +21,7 @@ export class Money extends ValueObject {
     }
 
     protected validate(): void {
-        // TODO(alex): what about NaN and Infinity? What should we trust?
-
-        if (this._value < 0) {
+        if (!Number.isFinite(this._value) || Math.abs(this._value) > Number.MAX_SAFE_INTEGER || this._value < 0) {
             throw new InvalidMoneyException(this._value);
         }
     }

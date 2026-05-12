@@ -24,7 +24,7 @@ export class AgeRating extends ValueObject {
     }
 
     protected validate(): void {
-        if (!Number.isInteger(this._value) || this._value < MIN_AGE_RATING || this._value > MAX_AGE_RATING) {
+        if (!Number.isSafeInteger(this._value) || this._value < MIN_AGE_RATING || this._value > MAX_AGE_RATING) {
             throw new InvalidAgeRatingException(this._value);
         }
     }
