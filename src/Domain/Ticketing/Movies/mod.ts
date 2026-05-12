@@ -3,3 +3,5 @@ export { MovieTitle, InvalidMovieTitleException } from './ValueObjects/MovieTitl
 export { MovieDuration, InvalidMovieDurationException } from './ValueObjects/MovieDuration.ts';
 export { PosterUrl, InvalidPosterUrlException } from './ValueObjects/PosterUrl.ts';
 export { AgeRating, InvalidAgeRatingException } from './ValueObjects/AgeRating.ts';
+export { Movie, MovieId } from './Movie.ts';
+export type { MovieRepository } from './MovieRepository.ts';
