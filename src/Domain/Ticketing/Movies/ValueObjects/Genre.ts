@@ -2,7 +2,9 @@ import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
 
 export class InvalidGenreException extends DomainException {
     constructor(value: string) {
-        super(`Genre has invalid value: '${String(value)}'`);
+        const displayValue = value.length === 0 ? "[Emtpy or Whitespace]" : value;
+
+        super(`Genre has invalid value: '${String(displayValue)}'`);
     }
 }
 
@@ -15,6 +17,11 @@ export class Genre extends ValueObject {
     }   
 
     static create(value: string): Genre {
+        if (value === null || value === undefined) {
+            throw new InvalidGenreException("[Missing Value]");
+        }
+
+
         const normalized = value.trim();
         const instance = new Genre(normalized);
         instance.validate();
