@@ -1,5 +1,6 @@
 import { AggregateRoot, ExternalId, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import { AgeRating, Genre, MovieDuration, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import { EmptyGenresListException } from './MovieExceptions.ts';
 
 
 export class MovieId extends UUIDEntityId {
@@ -51,7 +52,7 @@ export class Movie extends AggregateRoot<MovieId> {
         posterUrl: string,
         externalId: string
     ): Movie {
-        return new Movie(
+        const movie = new Movie(
             MovieId.create(),
             MovieTitle.create(title),
             MovieDuration.create(duration),
@@ -61,6 +62,9 @@ export class Movie extends AggregateRoot<MovieId> {
             Money.create(duration * Movie.PRICE_PER_MINUTE), // todo(alexander) must create do this?
             ExternalId.create(externalId)
         );
+
+        movie.validate();
+        return movie;
     }
 
     override get id(): MovieId {
@@ -97,5 +101,8 @@ export class Movie extends AggregateRoot<MovieId> {
     }
 
     private validate(): void {
-
+        if (this._genres.length === 0) {
+            throw new EmptyGenresListException();
+        }
+    }
 }
