@@ -13,6 +13,8 @@ export class MovieId extends UUIDEntityId {
 }
 
 export class Movie extends AggregateRoot<MovieId> {
+    private static readonly PRICE_PER_MINUTE = 0.15;
+
     private readonly _title: MovieTitle;
     private readonly _duration: MovieDuration;
     private readonly _genres: Genre[];
@@ -47,8 +49,7 @@ export class Movie extends AggregateRoot<MovieId> {
         genres: string[],
         ageRating: number,
         posterUrl: string,
-        price: number,
-        externalId: ExternalId
+        externalId: string
     ): Movie {
         return new Movie(
             MovieId.create(),
@@ -57,8 +58,8 @@ export class Movie extends AggregateRoot<MovieId> {
             genres.map(Genre.create),
             AgeRating.create(ageRating),
             PosterUrl.create(posterUrl),
-            Money.create(price),
-            externalId
+            Money.create(duration * Movie.PRICE_PER_MINUTE), // todo(alexander) must create do this?
+            ExternalId.create(externalId)
         );
     }
 
@@ -94,4 +95,7 @@ export class Movie extends AggregateRoot<MovieId> {
     get externalId(): ExternalId {
         return this._externalId;
     }
+
+    private validate(): void {
+
 }
