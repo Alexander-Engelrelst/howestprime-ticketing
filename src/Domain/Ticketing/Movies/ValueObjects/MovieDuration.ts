@@ -1,5 +1,7 @@
 import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
 
+const DURATION_BEFORE_INTERMISSION_MANDATORY = 100;
+const INTERMISSION_DURATION = 10;
 export class InvalidMovieDurationException extends DomainException {
     constructor(value: number) {
         super(`MovieDuration has invalid value: '${String(value)}'`);
@@ -21,7 +23,7 @@ export class MovieDuration extends ValueObject {
     }
 
     protected validate(): void {
-        if (!Number.isInteger(this._value) || this._value <= 0) {
+        if (!Number.isSafeInteger(this._value) || this._value <= 0) {
             throw new InvalidMovieDurationException(this._value);
         }
     }
@@ -32,5 +34,9 @@ export class MovieDuration extends ValueObject {
 
     get value(): number {
         return this._value;
+    }
+
+    get intermission(): number {
+        return this._value >= DURATION_BEFORE_INTERMISSION_MANDATORY ? INTERMISSION_DURATION : 0;
     }
 }

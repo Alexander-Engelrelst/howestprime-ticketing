@@ -7,6 +7,7 @@ export { NotFoundDomainException } from './NotFoundDomainException.ts';
 export { type EntityId } from './EntityId.ts';
 export { ValueObject } from './ValueObject.ts';
 export { Email, InvalidEmailException } from './ValueObjects/Email.ts';
+export { Money, InvalidMoneyException } from './ValueObjects/Money.ts';
 export { Entity } from './Entity.ts';
 export { AggregateRoot } from './AggregateRoot.ts';
 export { UUIDEntityId } from './UUIDEntityId.ts';

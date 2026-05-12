@@ -2,7 +2,9 @@ import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
 
 export class InvalidMovieTitleException extends DomainException {
     constructor(value: string) {
-        super(`MovieTitle has invalid value: '${String(value)}'`);
+        const displayValue = value.trim().length === 0 ? "[Emtpy or Whitespace]" : value;
+
+        super(`MovieTitle has invalid value: '${displayValue}'`);
     }
 }
 
@@ -15,12 +17,6 @@ export class MovieTitle extends ValueObject {
     }   
 
     static create(value: string): MovieTitle {
-        // TODO(alex): ask what to do with this because using ?? will cause incorrect error messages
-        if (value === null || value === undefined) {
-            throw new InvalidMovieTitleException("[Missing Value]");
-        }
-
-        value = value.trim();
         const normalized = value.trim();
         const instance = new MovieTitle(normalized);
         instance.validate();

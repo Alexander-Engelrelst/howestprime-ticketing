@@ -5,7 +5,9 @@ const IMAGE_URL_EXTENSIONS = [
 ];
 export class InvalidPosterUrlException extends DomainException {
     constructor(value: string) {
-        super(`PosterUrl is not a valid URL: '${String(value)}'`);
+        const displayValue = value.trim().length === 0 ? "[Empty or Whitespace]" : value;
+
+        super(`PosterUrl is not a valid URL: '${displayValue}'`);
     }
 }
 
@@ -18,10 +20,6 @@ export class PosterUrl extends ValueObject {
     }   
 
     static create(value: string): PosterUrl {
-        if (value === null || value === undefined) {
-            throw new InvalidPosterUrlException("[Missing Value]");
-        }
-
         const normalized = value.trim();
         const instance = new PosterUrl(normalized);
         instance.validate();
@@ -45,7 +43,7 @@ export class PosterUrl extends ValueObject {
         }
 
         const pathname = url.pathname.toLowerCase();
-        
+
         if (!IMAGE_URL_EXTENSIONS.some(ext => pathname.endsWith(ext))) {
             throw new InvalidPosterUrlException(this._value);
         }

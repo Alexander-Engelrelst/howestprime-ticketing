@@ -17,11 +17,6 @@ export class Genre extends ValueObject {
     }   
 
     static create(value: string): Genre {
-        if (value === null || value === undefined) {
-            throw new InvalidGenreException("[Missing Value]");
-        }
-
-
         const normalized = value.trim();
         const instance = new Genre(normalized);
         instance.validate();
