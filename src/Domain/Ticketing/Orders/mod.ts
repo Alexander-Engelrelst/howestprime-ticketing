@@ -19,3 +19,4 @@ export {
     TicketQuantityMismatchException
 } from './OrderExceptions.ts';
 export { TicketMappingService } from './TicketMappingService.ts';
+export type { OrderRepository } from './OrderRepository.ts';
