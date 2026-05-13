@@ -87,7 +87,7 @@ operations:
         messages:
             - $ref: '#/channels/howestprime.ticketing.suggestions.created/messages/SuggestionCreated'
 
-    WhenMovieRegisteredReceived:
+    WhenMovieRegisteredReceivedSaveMovie:
         action: receive
         channel:
             $ref: '#/channels/Howestprime.Movies.Movie.MovieRegistered'
@@ -229,8 +229,3 @@ components:
                     type: string
                     description: URL to the movie poster image.
                     example: https://example.com/posters/the-matrix.jpg
-                occurredOn:
-                    type: string
-                    format: date-time
-                    description: UTC timestamp when the event occurred.
-                    example: '2026-03-24T10:15:30.000Z'

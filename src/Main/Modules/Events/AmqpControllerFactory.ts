@@ -7,6 +7,8 @@ import {
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import {
     CreateSuggestionController,
+    SaveMovieController,
+    SaveMovieRequest,
     type CreateSuggestionRequest,
 } from '@/Infrastructure/Messaging/LavinMQ/Controllers/mod.ts';
 
@@ -16,6 +18,7 @@ import {
 } from '@/Infrastructure/Messaging/LavinMQ/Shared/mod.ts';
 import type { ConsumerContext } from '@/Infrastructure/Messaging/LavinMQ/Shared/Amqp/AmqpBrokerConfigurator.ts';
 import { IllegalStateException } from '@domaincrafters/std';
+import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
 
 export class AmqpControllerFactory implements ControllerFactory {
     private readonly _serviceProvider: ServiceProvider;
@@ -33,13 +36,16 @@ export class AmqpControllerFactory implements ControllerFactory {
         switch (normalizedOperationId) {
             case 'whensuggestionsendcreatesuggestion':
                 return this.createCreateSuggestionController();
+            case 'whenmovieregisteredreceivedsavemovie':
+                return this.createSaveMovieController();
         }
 
         const normalizedEventName = eventName.toLowerCase();
         switch (normalizedEventName) {
             case 'thirdparty.service.demo.suggestion.sendcreatesuggestion':
                 return this.createCreateSuggestionController();
-
+            case 'howestprime.movies.movie.movieregistered':
+                return this.createSaveMovieController();
             default:
                 throw new IllegalStateException(
                     `No controller is defined for operation '${operationId}' and event '${eventName}'`,
@@ -53,5 +59,13 @@ export class AmqpControllerFactory implements ControllerFactory {
         >(CreateSuggestionUseCase.name)).getOrThrow();
 
         return new CreateSuggestionController(useCase) as AmqpController<CreateSuggestionRequest>;
+    }
+
+    private async createSaveMovieController(): Promise<AmqpController<unknown>> {
+        const useCase = (await this._serviceProvider.getService<
+            UseCase<SaveMovieUseCaseInput, void>
+        >(SaveMovieUseCase.name)).getOrThrow();
+
+        return new SaveMovieController(useCase) as AmqpController<SaveMovieRequest>;
     }
 }
