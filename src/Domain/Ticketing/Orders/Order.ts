@@ -101,10 +101,10 @@ export class Order extends AggregateRoot<OrderId> {
 
     private validate(): void {
         if (this._tickets.length === 0) {
-            // TODO(alexander) custom exception
             throw new InvalidTicketAmountException();
         }
 
+        // TODO(alexander) : add a domain service to create tickets 
     }
 
     public confirmPayment(): void {
