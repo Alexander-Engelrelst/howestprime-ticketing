@@ -30,3 +30,9 @@ export class CannotSubmitCustomerInfoForNonOpenOrderException extends DomainExce
         super('Customer information can only be submitted for orders in open state.');
     }
 }
+
+export class TicketQuantityMismatchException extends DomainException {
+    constructor(expected: number, actual: number) {
+        super(`The total amount of tickets (${actual}) must match the number of seats (${expected}).`);
+    }
+}

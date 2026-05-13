@@ -1,4 +1,4 @@
-import { MovieInfo, RoomName, Seat, ShowTime, Ticket, TicketId, VisitorType } from '@/Domain/Ticketing/Orders/mod.ts';
+import { MovieInfo, RoomName, Seat, ShowTime, Ticket, TicketId, TicketQuantityMismatchException, VisitorType } from '@/Domain/Ticketing/Orders/mod.ts';
 
 export type VisitorTypeQuantity = {
     type: VisitorType;
@@ -13,9 +13,10 @@ export abstract class TicketMappingService {
         room: RoomName,
         showTime: ShowTime
     ): Ticket[] {
-        if (seatNumbers.length !== visitorTypes.reduce((sum, vt) => sum + vt.quantity, 0)) {
-            // TODO(alexander) custom exception
-            throw new Error("The total quantity of visitor types must match the number of seat numbers provided.");
+        const numberOfTicketsBooked = visitorTypes.reduce((sum, vt) => sum + vt.quantity, 0);
+        
+        if (seatNumbers.length !== numberOfTicketsBooked) {
+            throw new TicketQuantityMismatchException(numberOfTicketsBooked, seatNumbers.length);
         }
 
         const tickets: Ticket[] = [];

@@ -15,5 +15,7 @@ export {
     InvalidTicketAmountException,
     CustomerMustAgreeToTermsException,
     CannotAcceptTermsForNonOpenOrderException,
-    CannotSubmitCustomerInfoForNonOpenOrderException
+    CannotSubmitCustomerInfoForNonOpenOrderException,
+    TicketQuantityMismatchException
 } from './OrderExceptions.ts';
+export { TicketMappingService } from './TicketMappingService.ts';
