@@ -6,7 +6,7 @@ import {
     MovieTitle,
     PosterUrl,
 } from '@/Domain/Ticketing/Movies/mod.ts';
-import { EmptyGenresListException } from './MovieExceptions.ts';
+import { EmptyGenresListException, MissingMovieValueException } from './MovieExceptions.ts';
 
 export class MovieId extends UUIDEntityId {
     private constructor(id?: string) {
@@ -50,22 +50,22 @@ export class Movie extends AggregateRoot<MovieId> {
     }
 
     static create(
-        title: string,
-        duration: number,
-        genres: string[],
-        ageRating: number,
-        posterUrl: string,
-        externalId: string,
+        title: MovieTitle,
+        duration: MovieDuration,
+        genres: Genre[],
+        ageRating: AgeRating,
+        posterUrl: PosterUrl,
+        externalId: ExternalId,
     ): Movie {
         const movie = new Movie(
             MovieId.create(),
-            MovieTitle.create(title),
-            MovieDuration.create(duration),
-            genres.map(Genre.create),
-            AgeRating.create(ageRating),
-            PosterUrl.create(posterUrl),
-            Money.create(duration * Movie.PRICE_PER_MINUTE), // todo(alexander) must create do this?
-            ExternalId.create(externalId),
+            title,
+            duration,
+            genres,
+            ageRating,
+            posterUrl,
+            Money.create(duration.value * Movie.PRICE_PER_MINUTE),
+            externalId,
         );
 
         movie.validate();
@@ -106,8 +106,16 @@ export class Movie extends AggregateRoot<MovieId> {
     }
 
     private validate(): void {
-        if (this._genres.length === 0) {
-            throw new EmptyGenresListException();
-        }
+        if (!this._id) throw new MissingMovieValueException('ID');
+        if (!this._title) throw new MissingMovieValueException('Title');
+        if (!this._duration) throw new MissingMovieValueException('Duration');
+        if (!this._genres) throw new MissingMovieValueException('Genres');
+        if (!this._ageRating) throw new MissingMovieValueException('Age Rating');
+        if (!this._posterUrl) throw new MissingMovieValueException('Poster URL');
+        if (!this._price) throw new MissingMovieValueException('Price');
+        if (!this._externalId) throw new MissingMovieValueException('External ID');
+        
+        if (this._genres.length === 0) throw new EmptyGenresListException();
+
     }
 }

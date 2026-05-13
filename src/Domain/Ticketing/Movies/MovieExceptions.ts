@@ -5,3 +5,9 @@ export class EmptyGenresListException extends DomainException {
         super('Genres list cannot be empty');
     }
 }
+
+export class MissingMovieValueException extends DomainException {
+    constructor(fieldName: string) {
+        super(`${fieldName} cannot be empty`);
+    }
+}
