@@ -25,7 +25,7 @@ export class MovieTitle extends ValueObject {
 
     protected validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidMovieTitleException("[Empty or Whitespace]");
+            throw new InvalidMovieTitleException(this._value);
         }
     }
 

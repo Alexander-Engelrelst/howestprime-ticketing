@@ -1,5 +1,10 @@
-import { ValueObject } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
+export class InvalidExternalIdException extends DomainException {
+    constructor(value: string) {
+        super(`Invalid ExternalId: '${value}' is not a valid UUID format.`);
+    }
+}
 export class ExternalId extends ValueObject {
     // The standard UUID pattern: 8-4-4-4-12 hex characters
     // The [0-9a-f] part covers hex, and 'i' makes it case-insensitive
@@ -14,7 +19,7 @@ export class ExternalId extends ValueObject {
 
     public static create(value: string): ExternalId {
         if (!ExternalId.UUID_REGEX.test(value)) {
-            throw new Error(`ExternalId Validation Error: '${value}' is not a valid UUID format.`);
+            throw new InvalidExternalIdException(value);
         }
         return new ExternalId(value);
     }

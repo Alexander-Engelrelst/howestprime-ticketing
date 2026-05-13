@@ -28,7 +28,7 @@ export class PosterUrl extends ValueObject {
 
     protected validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidPosterUrlException("[Empty or Whitespace]");
+            throw new InvalidPosterUrlException(this._value);
         }
 
         let url: URL;
