@@ -5,4 +5,3 @@ export { InvalidPosterUrlException, PosterUrl } from './ValueObjects/PosterUrl.t
 export { AgeRating, InvalidAgeRatingException } from './ValueObjects/AgeRating.ts';
 export { Movie, MovieId } from './Movie.ts';
 export type { MovieRepository } from './MovieRepository.ts';
-export { EmptyGenresListException, MissingMovieValueException } from './MovieExceptions.ts';

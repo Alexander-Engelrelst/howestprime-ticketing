@@ -8,8 +8,8 @@ export class InvalidCustomerEmailException extends DomainException {
 }
 
 export class CustomerEmail extends ValueObject {
-    private static readonly emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    private static readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
     private readonly _value: string;
 
     private constructor(value: string) {

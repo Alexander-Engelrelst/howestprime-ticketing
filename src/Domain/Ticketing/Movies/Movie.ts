@@ -6,7 +6,6 @@ import {
     MovieTitle,
     PosterUrl,
 } from '@/Domain/Ticketing/Movies/mod.ts';
-import { EmptyGenresListException, MissingMovieValueException } from './MovieExceptions.ts';
 
 export class MovieId extends UUIDEntityId {
     private constructor(id?: string) {
@@ -59,7 +58,7 @@ export class Movie extends AggregateRoot<MovieId> {
         ageRating: AgeRating,
         posterUrl: PosterUrl,
     ): Movie {
-        const movie = new Movie(
+        return new Movie(
             id,
             title,
             duration,
@@ -68,9 +67,6 @@ export class Movie extends AggregateRoot<MovieId> {
             posterUrl,
             Money.create(duration.value * Movie.PRICE_PER_MINUTE),
         );
-
-        movie.validate();
-        return movie;
     }
 
     override get id(): MovieId {
@@ -100,18 +96,5 @@ export class Movie extends AggregateRoot<MovieId> {
 
     get price(): Money {
         return this._price;
-    }
-
-    private validate(): void {
-        if (!this._id) throw new MissingMovieValueException('ID');
-        if (!this._title) throw new MissingMovieValueException('Title');
-        if (!this._duration) throw new MissingMovieValueException('Duration');
-        if (!this._genres) throw new MissingMovieValueException('Genres');
-        if (!this._ageRating) throw new MissingMovieValueException('Age Rating');
-        if (!this._posterUrl) throw new MissingMovieValueException('Poster URL');
-        if (!this._price) throw new MissingMovieValueException('Price');
-        
-        if (this._genres.length === 0) throw new EmptyGenresListException();
-
     }
 }
