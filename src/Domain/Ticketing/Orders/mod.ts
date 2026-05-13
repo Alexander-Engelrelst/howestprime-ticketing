@@ -14,5 +14,6 @@ export {
     InvalidOrderStateTransitionException,
     InvalidTicketAmountException,
     CustomerMustAgreeToTermsException,
-    CannotAcceptTermsForNonOpenOrderException
+    CannotAcceptTermsForNonOpenOrderException,
+    CannotSubmitCustomerInfoForNonOpenOrderException
 } from './OrderExceptions.ts';

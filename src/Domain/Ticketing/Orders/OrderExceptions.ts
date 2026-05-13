@@ -14,13 +14,19 @@ export class InvalidTicketAmountException extends DomainException {
 }
 
 export class CustomerMustAgreeToTermsException extends DomainException {
-    constructor() {
-        super('Customer must agree to terms before confirming payment.');
+    constructor(intent: string) {
+        super(`Customer must agree to terms before ${intent}.`);
     }
 }
 
 export class CannotAcceptTermsForNonOpenOrderException extends DomainException {
     constructor() {
         super('Terms can only be accepted for orders in open state.');
+    }
+}
+
+export class CannotSubmitCustomerInfoForNonOpenOrderException extends DomainException {
+    constructor() {
+        super('Customer information can only be submitted for orders in open state.');
     }
 }

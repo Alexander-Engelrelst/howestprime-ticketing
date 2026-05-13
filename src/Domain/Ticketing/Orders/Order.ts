@@ -1,5 +1,13 @@
-import { AggregateRoot, DomainException, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
-import { BookingId, CannotAcceptTermsForNonOpenOrderException, Customer, CustomerMustAgreeToTermsException, InvalidOrderStateTransitionException, InvalidTicketAmountException, Ticket } from '@/Domain/Ticketing/Orders/mod.ts';
+import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+import {
+    BookingId,
+    CannotAcceptTermsForNonOpenOrderException,
+    CannotSubmitCustomerInfoForNonOpenOrderException,
+    Customer, CustomerMustAgreeToTermsException,
+    InvalidOrderStateTransitionException,
+    InvalidTicketAmountException,
+    Ticket 
+} from '@/Domain/Ticketing/Orders/mod.ts';
 import { Optional } from '@domaincrafters/std';
 
 export enum OrderStatus {
@@ -20,10 +28,10 @@ export class OrderId extends UUIDEntityId {
 
 export class Order extends AggregateRoot<OrderId> {
     private readonly _bookingId: BookingId;
-    private readonly _customer: Optional<Customer>;
-    private readonly _price: Money;
+    private _customer: Optional<Customer>;
     private _status: OrderStatus;
-    private readonly _agreeToTerms: boolean;
+    private _agreeToTerms: boolean;
+    private readonly _price: Money;
     private readonly _tickets: Ticket[];
 
     private constructor(
@@ -101,7 +109,7 @@ export class Order extends AggregateRoot<OrderId> {
 
     public confirmPayment(): void {
         if (!this._agreeToTerms) {
-            throw new CustomerMustAgreeToTermsException();
+            throw new CustomerMustAgreeToTermsException("confirming payment");
         }
 
         if (this._status !== OrderStatus.Open) {
@@ -134,4 +142,17 @@ export class Order extends AggregateRoot<OrderId> {
             throw new CannotAcceptTermsForNonOpenOrderException();
         }
 
-    // TODO(alexander) add method to assign customer, to release tickets
+        this._agreeToTerms = true;
+    }
+
+    public assignCustomer(customer: Customer): void {
+        if (!this._agreeToTerms) {
+            throw new CustomerMustAgreeToTermsException("submitting information");
+        }
+        if (this._status !== OrderStatus.Open) {
+            throw new CannotSubmitCustomerInfoForNonOpenOrderException();
+        }
+
+        this._customer = Optional.of<Customer>(customer);
+    }
+}
