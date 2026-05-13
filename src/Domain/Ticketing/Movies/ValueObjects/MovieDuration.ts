@@ -22,14 +22,14 @@ export class MovieDuration extends ValueObject {
         return instance;
     }
 
-    protected validate(): void {
+    private validate(): void {
         if (!Number.isSafeInteger(this._value) || this._value <= 0) {
             throw new InvalidMovieDurationException(this._value);
         }
     }
 
-    override equals(other: MovieDuration): boolean {
-        return other?._value === this._value;
+    override equals(other: ValueObject): boolean {
+        return other instanceof MovieDuration && other._value === this._value;
     }
 
     get value(): number {

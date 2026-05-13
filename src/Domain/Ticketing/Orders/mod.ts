@@ -1,0 +1,1 @@
+export { CustomerSalutation, InvalidCustomerSalutationException } from './ValueObject/CustomerSalutation.ts';

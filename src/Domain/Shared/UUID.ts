@@ -42,7 +42,7 @@
  * ```
  */
 import { IllegalArgumentException } from '@domaincrafters/std';
-import { validate as validateUuid } from "jsr:@std/uuid@1";
+import { validate as validateUUID } from "@std/uuid";
 
 export class UUID {
     /**
@@ -96,7 +96,7 @@ export class UUID {
      * const parsedUuid = UUID.parse('550e8400-e29b-41d4-a716-446655440000');
      */
     static parse(uuidString: string): UUID {
-        if (!validateUuid(uuidString)) {
+        if (!validateUUID(uuidString)) {
             throw new IllegalArgumentException('Invalid UUID');
         }
 

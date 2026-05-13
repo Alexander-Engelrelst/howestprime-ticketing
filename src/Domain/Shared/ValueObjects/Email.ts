@@ -23,7 +23,7 @@ export class Email extends ValueObject {
         return instance;
     }
 
-    protected validate(): void {
+    private validate(): void {
         if (!this._value || !EMAIL_REGEX.test(this._value)) {
             throw new InvalidEmailException(this._value);
         }

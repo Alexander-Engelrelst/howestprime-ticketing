@@ -2,7 +2,7 @@ import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidMovieTitleException extends DomainException {
     constructor(value: string) {
-        const displayValue = value.trim().length === 0 ? '[Emtpy or Whitespace]' : value;
+        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
 
         super(`MovieTitle has invalid value: '${displayValue}'`);
     }
@@ -23,14 +23,14 @@ export class MovieTitle extends ValueObject {
         return instance;
     }
 
-    protected validate(): void {
+    private validate(): void {
         if (!this._value || this._value.length === 0) {
             throw new InvalidMovieTitleException(this._value);
         }
     }
 
-    override equals(other: MovieTitle): boolean {
-        return other?._value === this._value;
+    override equals(other: ValueObject): boolean {
+        return other instanceof MovieTitle && other._value === this._value;
     }
 
     get value(): string {

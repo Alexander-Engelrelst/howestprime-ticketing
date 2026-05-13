@@ -1,14 +1,14 @@
 import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
-export class InvalidGenreException extends DomainException {
+export class InvalidCustomerFirstNameException extends DomainException {
     constructor(value: string) {
-        const displayValue = value.length === 0 ? '[Empty or Whitespace]' : value;
+        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
 
-        super(`Genre has invalid value: '${String(displayValue)}'`);
+        super(`CustomerFirstName has invalid value: '${displayValue}'`);
     }
 }
 
-export class Genre extends ValueObject {
+export class CustomerFirstName extends ValueObject {
     private readonly _value: string;
 
     private constructor(value: string) {
@@ -16,21 +16,21 @@ export class Genre extends ValueObject {
         this._value = value;
     }
 
-    static create(value: string): Genre {
+    static create(value: string): CustomerFirstName {
         const normalized = value.trim();
-        const instance = new Genre(normalized);
+        const instance = new CustomerFirstName(normalized);
         instance.validate();
         return instance;
     }
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidGenreException(this._value);
+            throw new InvalidCustomerFirstNameException(this._value);
         }
     }
 
     override equals(other: ValueObject): boolean {
-        return other instanceof Genre && other._value === this._value;
+        return other instanceof CustomerFirstName && other._value === this._value;
     }
 
     get value(): string {
