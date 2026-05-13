@@ -40,7 +40,7 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
         Guard.check(payload.title, 'title').againstEmpty();
         Guard.check(payload.duration, 'duration').againstZero().againstNegative();
         Guard.check(payload.genres, 'genres').againstEmpty();
-        
+
         if (!Array.isArray(payload.genres)) {
             throw new IllegalArgumentException('genres must be an array.');
         }
@@ -50,7 +50,7 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
             Guard.check(genre, 'genre').isType('string');
             Guard.check(genre, 'genre').againstEmpty();
         });
-        
+
         Guard.check(payload.ageRating, 'ageRating').againstZero().againstNegative();
         Guard.check(payload.posterUrl, 'posterUrl').againstEmpty();
 
@@ -64,4 +64,3 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
         };
     }
 }
-

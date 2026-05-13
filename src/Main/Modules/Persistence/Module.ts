@@ -14,7 +14,7 @@ import {
     PublishDomainEventsMongoDbUnitOfWorkInterceptor,
 } from '@/Infrastructure/Persistence/MongoDb/mod.ts';
 import {
-MongoDbMovieRepository,
+    MongoDbMovieRepository,
     MongoDbSuggestionRepository,
     MovieDocumentMapper,
     SuggestionDocumentMapper,

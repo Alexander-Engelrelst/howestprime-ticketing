@@ -35,5 +35,5 @@ export class SaveMovieUseCase implements UseCase<SaveMovieUseCaseInput, void> {
                 movieId: movie.id.value,
             });
         });
-    };
+    }
 }

@@ -1,5 +1,8 @@
 import { Movie, MovieId, MovieRepository } from '@/Domain/Ticketing/Movies/mod.ts';
-import { MongoDbClient, MongoDbRepository } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
+import {
+    MongoDbClient,
+    MongoDbRepository,
+} from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { MovieDocumentMapper } from './Mappers/MovieDocumentMapper.ts';
 
 export class MongoDbMovieRepository extends MongoDbRepository<Movie, MovieId>
@@ -12,8 +15,6 @@ export class MongoDbMovieRepository extends MongoDbRepository<Movie, MovieId>
     ) {
         super(client, mapper, MongoDbMovieRepository.collectionName);
     }
-
-
 
     override get entityName(): string {
         return Movie.name;

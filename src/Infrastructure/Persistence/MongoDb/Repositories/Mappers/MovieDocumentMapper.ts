@@ -8,22 +8,22 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
     toDocument(movie: Movie): Document {
         const movieWithVersion = movie as unknown as { __v: number };
 
-        // TODO(alexander): if time remains add incrementing version number, 
+        // TODO(alexander): if time remains add incrementing version number,
         // remove upsert functionality and add retry logic/policy in the application layer
         const document = serializeObjectToDocument({
             _id: movie.id.toString(),
             title: movie.title.value,
             duration: movie.duration.value,
-            genres: movie.genres.map(genre => genre.value),
+            genres: movie.genres.map((genre) => genre.value),
             ageRating: movie.ageRating.value,
             posterUrl: movie.posterUrl.value,
             price: movie.price.value,
             externalId: movie.externalId.value,
-            __v: movieWithVersion.__v || 0, 
+            __v: movieWithVersion.__v || 0,
         });
         return document;
     }
-    
+
     reconstitute(document: Document): Movie {
         const movie = this.reconsituteFromDocument(
             document._id,
@@ -33,16 +33,15 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
             document.ageRating,
             document.posterUrl,
             document.price,
-            document.externalId
+            document.externalId,
         );
 
         if (document.__v !== undefined) {
-            (movie as unknown as {__v: number}).__v = document.__v;
+            (movie as unknown as { __v: number }).__v = document.__v;
         }
 
         return movie;
     }
-
 
     private reconsituteFromDocument(
         id: string,
@@ -52,7 +51,7 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
         ageRating: number,
         posterUrl: string,
         price: number,
-        externalId: string
+        externalId: string,
     ): Movie {
         const movie = Object.create(Movie.prototype);
         movie['_id'] = MovieId.create(id);

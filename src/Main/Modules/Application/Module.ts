@@ -111,11 +111,10 @@ export class Application implements Module {
                 const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
                     .getOrThrow();
 
-                const useCase: UseCase<SaveMovieUseCaseInput, void> =
-                    new SaveMovieUseCase(
-                        unitOfWork,
-                        logger,
-                    );
+                const useCase: UseCase<SaveMovieUseCaseInput, void> = new SaveMovieUseCase(
+                    unitOfWork,
+                    logger,
+                );
 
                 return useCase;
             },

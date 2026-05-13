@@ -1,11 +1,19 @@
-import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 const IMAGE_URL_EXTENSIONS = [
-  ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg", ".avif", ".tiff"
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.webp',
+    '.svg',
+    '.avif',
+    '.tiff',
 ];
 export class InvalidPosterUrlException extends DomainException {
     constructor(value: string) {
-        const displayValue = value.trim().length === 0 ? "[Empty or Whitespace]" : value;
+        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
 
         super(`PosterUrl is not a valid URL: '${displayValue}'`);
     }
@@ -17,7 +25,7 @@ export class PosterUrl extends ValueObject {
     private constructor(value: string) {
         super();
         this._value = value;
-    }   
+    }
 
     static create(value: string): PosterUrl {
         const normalized = value.trim();
@@ -38,13 +46,13 @@ export class PosterUrl extends ValueObject {
             throw new InvalidPosterUrlException(this._value);
         }
 
-        if (url.protocol !== "http:" && url.protocol !== "https:") {
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') {
             throw new InvalidPosterUrlException(this._value);
         }
 
         const pathname = url.pathname.toLowerCase();
 
-        if (!IMAGE_URL_EXTENSIONS.some(ext => pathname.endsWith(ext))) {
+        if (!IMAGE_URL_EXTENSIONS.some((ext) => pathname.endsWith(ext))) {
             throw new InvalidPosterUrlException(this._value);
         }
     }

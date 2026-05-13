@@ -1,8 +1,8 @@
-import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidGenreException extends DomainException {
     constructor(value: string) {
-        const displayValue = value.length === 0 ? "[Emtpy or Whitespace]" : value;
+        const displayValue = value.length === 0 ? '[Emtpy or Whitespace]' : value;
 
         super(`Genre has invalid value: '${String(displayValue)}'`);
     }
@@ -14,7 +14,7 @@ export class Genre extends ValueObject {
     private constructor(value: string) {
         super();
         this._value = value;
-    }   
+    }
 
     static create(value: string): Genre {
         const normalized = value.trim();

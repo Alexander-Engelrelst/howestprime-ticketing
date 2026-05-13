@@ -1,4 +1,4 @@
-import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 const DURATION_BEFORE_INTERMISSION_MANDATORY = 100;
 const INTERMISSION_DURATION = 10;
@@ -14,7 +14,7 @@ export class MovieDuration extends ValueObject {
     private constructor(value: number) {
         super();
         this._value = value;
-    }   
+    }
 
     static create(value: number): MovieDuration {
         const instance = new MovieDuration(value);

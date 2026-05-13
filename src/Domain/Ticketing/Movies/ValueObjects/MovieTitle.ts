@@ -1,8 +1,8 @@
-import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidMovieTitleException extends DomainException {
     constructor(value: string) {
-        const displayValue = value.trim().length === 0 ? "[Emtpy or Whitespace]" : value;
+        const displayValue = value.trim().length === 0 ? '[Emtpy or Whitespace]' : value;
 
         super(`MovieTitle has invalid value: '${displayValue}'`);
     }
@@ -14,7 +14,7 @@ export class MovieTitle extends ValueObject {
     private constructor(value: string) {
         super();
         this._value = value;
-    }   
+    }
 
     static create(value: string): MovieTitle {
         const normalized = value.trim();

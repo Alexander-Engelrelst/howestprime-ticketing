@@ -1,4 +1,4 @@
-import { ValueObject, DomainException } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidMoneyException extends DomainException {
     constructor(value: number) {
@@ -12,7 +12,7 @@ export class Money extends ValueObject {
     private constructor(value: number) {
         super();
         this._value = value;
-    }   
+    }
 
     static create(value: number): Money {
         const instance = new Money(value);
@@ -21,7 +21,10 @@ export class Money extends ValueObject {
     }
 
     protected validate(): void {
-        if (!Number.isFinite(this._value) || Math.abs(this._value) > Number.MAX_SAFE_INTEGER || this._value < 0) {
+        if (
+            !Number.isFinite(this._value) || Math.abs(this._value) > Number.MAX_SAFE_INTEGER ||
+            this._value < 0
+        ) {
             throw new InvalidMoneyException(this._value);
         }
     }

@@ -1,7 +1,12 @@
 import { AggregateRoot, ExternalId, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
-import { AgeRating, Genre, MovieDuration, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import {
+    AgeRating,
+    Genre,
+    MovieDuration,
+    MovieTitle,
+    PosterUrl,
+} from '@/Domain/Ticketing/Movies/mod.ts';
 import { EmptyGenresListException } from './MovieExceptions.ts';
-
 
 export class MovieId extends UUIDEntityId {
     private constructor(id?: string) {
@@ -32,7 +37,7 @@ export class Movie extends AggregateRoot<MovieId> {
         ageRating: AgeRating,
         posterUrl: PosterUrl,
         price: Money,
-        externalId: ExternalId
+        externalId: ExternalId,
     ) {
         super(id);
         this._title = title;
@@ -42,7 +47,7 @@ export class Movie extends AggregateRoot<MovieId> {
         this._posterUrl = posterUrl;
         this._price = price;
         this._externalId = externalId;
-    } 
+    }
 
     static create(
         title: string,
@@ -50,7 +55,7 @@ export class Movie extends AggregateRoot<MovieId> {
         genres: string[],
         ageRating: number,
         posterUrl: string,
-        externalId: string
+        externalId: string,
     ): Movie {
         const movie = new Movie(
             MovieId.create(),
@@ -60,7 +65,7 @@ export class Movie extends AggregateRoot<MovieId> {
             AgeRating.create(ageRating),
             PosterUrl.create(posterUrl),
             Money.create(duration * Movie.PRICE_PER_MINUTE), // todo(alexander) must create do this?
-            ExternalId.create(externalId)
+            ExternalId.create(externalId),
         );
 
         movie.validate();

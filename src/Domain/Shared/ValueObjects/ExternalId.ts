@@ -8,7 +8,8 @@ export class InvalidExternalIdException extends DomainException {
 export class ExternalId extends ValueObject {
     // The standard UUID pattern: 8-4-4-4-12 hex characters
     // The [0-9a-f] part covers hex, and 'i' makes it case-insensitive
-    private static readonly UUID_REGEX: RegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    private static readonly UUID_REGEX: RegExp =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
     private readonly _value: string;
 
