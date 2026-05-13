@@ -14,7 +14,9 @@ import {
     PublishDomainEventsMongoDbUnitOfWorkInterceptor,
 } from '@/Infrastructure/Persistence/MongoDb/mod.ts';
 import {
+    MongoDbMovieRepository,
     MongoDbSuggestionRepository,
+    MovieDocumentMapper,
     SuggestionDocumentMapper,
 } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 import {
@@ -33,6 +35,7 @@ export class Persistence implements Module {
 
         MongoDbServices.add(config, serviceCollection, [
             MongoDbSuggestionRepository.name,
+            MongoDbMovieRepository.name,
         ]);
 
         // Register InMemoryContext as singleton
@@ -102,6 +105,13 @@ export class Persistence implements Module {
                 const unitOfWork = new MongoDbUnitOfWork(mongoClient.session);
                 unitOfWork.registerRepository(suggestionRepository);
 
+                const movieRepository = (await serviceProvider.getService<
+                    MongoDbMovieRepository
+                >(
+                    MongoDbMovieRepository.name,
+                )).getOrThrow();
+                unitOfWork.registerRepository(movieRepository);
+
                 const interceptors = [
                     new PublishDomainEventsMongoDbUnitOfWorkInterceptor(
                         unitOfWork,
@@ -128,6 +138,16 @@ export class Persistence implements Module {
             },
         );
 
+        serviceCollection.addScoped(
+            MongoDbMovieRepository.name,
+            async (serviceProvider: ServiceProvider) => {
+                const mongoClient =
+                    (await serviceProvider.getService<MongoDbClient>('MongoDbClient')).getOrThrow();
+                const mapper = new MovieDocumentMapper();
+
+                return new MongoDbMovieRepository(mongoClient, mapper);
+            },
+        );
         /*
         serviceCollection.addScoped(
             InMemoryTournamentRepository.name,

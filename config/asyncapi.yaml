@@ -52,6 +52,20 @@ channels:
                     type: topic
                     routingKey: howestprime.ticketing.suggestions.created
 
+    Howestprime.Movies.Movie.MovieRegistered:
+        address: howestprime.movies.movie.movieregistered
+        title: Movie Registered
+        messages:
+            MovieRegistered:
+                $ref: '#/components/messages/MovieRegistered'
+        bindings:
+            amqp:
+                is: routingKey
+                exchange:
+                    name: howestprime
+                    type: topic
+                    routingKey: howestprime.movies.movie.movieregistered
+
 operations:
     WhenSuggestionSendCreateSuggestion:
         action: receive
@@ -73,6 +87,16 @@ operations:
         messages:
             - $ref: '#/channels/howestprime.ticketing.suggestions.created/messages/SuggestionCreated'
 
+    WhenMovieRegisteredReceivedSaveMovie:
+        action: receive
+        channel:
+            $ref: '#/channels/Howestprime.Movies.Movie.MovieRegistered'
+        description: |
+            Triggered when a new movie is registered in the Howestprime Movies service.
+            Consumes the MovieRegistered event for processing.
+        messages:
+            - $ref: '#/channels/Howestprime.Movies.Movie.MovieRegistered/messages/MovieRegistered'
+
 components:
     messages:
         SuggestionSendCreateSuggestion:
@@ -88,6 +112,13 @@ components:
             summary: Event message emitted after a suggestion is created.
             payload:
                 $ref: '#/components/schemas/SuggestionCreatedPayload'
+
+        MovieRegistered:
+            name: MovieRegistered
+            title: Movie Registered
+            summary: Indicates a new movie has been registered in the Movies service.
+            payload:
+                $ref: '#/components/schemas/MovieRegisteredPayload'
 
     schemas:
         SuggestionSendCreateSuggestionPayload:
@@ -148,8 +179,53 @@ components:
                     maxLength: 2000
                     description: Detailed suggestion text.
                     example: Cache frequently requested movie data to reduce latency.
-                occurredOn:
+
+        MovieRegisteredPayload:
+            type: object
+            required:
+                - movieId
+                - title
+                - releaseYear
+                - duration
+                - genres
+                - actors
+                - ageRating
+                - posterUrl
+            properties:
+                movieId:
                     type: string
-                    format: date-time
-                    description: UTC timestamp when the event occurred.
-                    example: '2026-03-24T10:15:30.000Z'
+                    format: uuid
+                    description: Unique identifier for the movie.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                title:
+                    type: string
+                    description: Title of the movie.
+                    example: The Matrix
+                releaseYear:
+                    type: integer
+                    description: Year the movie was released.
+                    example: 1999
+                duration:
+                    type: integer
+                    description: Duration of the movie in minutes.
+                    example: 136
+                genres:
+                    type: array
+                    items:
+                        type: string
+                    description: List of genres for the movie.
+                    example: ['Science Fiction', 'Action']
+                actors:
+                    type: array
+                    items:
+                        type: string
+                    description: List of actors in the movie.
+                    example: ['Keanu Reeves', 'Laurence Fishburne']
+                ageRating:
+                    type: integer
+                    description: Minimum age rating for the movie.
+                    example: 12
+                posterUrl:
+                    type: string
+                    description: URL to the movie poster image.
+                    example: https://example.com/posters/the-matrix.jpg
