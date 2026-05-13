@@ -1,4 +1,4 @@
-import { AgeRating, Genre, Movie, MovieId, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import { AgeRating, Genre, Movie, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
 import type { DocumentMapper } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import type { Document } from '@mongodb';
 import { serializeObjectToDocument } from '../../Shared/DocumentMapper.ts';
@@ -20,13 +20,14 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
 
     reconstitute(document: Document): Movie {
         const movie = Object.create(Movie.prototype);
-        movie['_id'] = MovieId.create(document._id);
-        movie['_title'] = document.title;
-        movie['_duration'] = document.duration;
-        movie['_genres'] = document.genres.map(Genre.create);
+        movie['_id'] = MovieId.create(document.id ?? document._id);
+        movie['_title'] = MovieTitle.create(document.title);
+        movie['_duration'] = MovieDuration.create(document.duration);
+        movie['_genres'] = document.genres.map((g) => Genre.create(g));
         movie['_ageRating'] = AgeRating.create(document.ageRating);
         movie['_posterUrl'] = PosterUrl.create(document.posterUrl);
         movie['_price'] = Money.create(document.price);
+        movie['_domainEvents'] = [];
 
         return movie as Movie;
     }
