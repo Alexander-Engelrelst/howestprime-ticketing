@@ -23,7 +23,7 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
         movie['_id'] = MovieId.create(document.id ?? document._id);
         movie['_title'] = MovieTitle.create(document.title);
         movie['_duration'] = MovieDuration.create(document.duration);
-        movie['_genres'] = document.genres.map((g) => Genre.create(g));
+        movie['_genres'] = document.genres.map((g: string) => Genre.create(g));
         movie['_ageRating'] = AgeRating.create(document.ageRating);
         movie['_posterUrl'] = PosterUrl.create(document.posterUrl);
         movie['_price'] = Money.create(document.price);
