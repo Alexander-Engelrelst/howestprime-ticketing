@@ -2,7 +2,7 @@ import { AgeRating, Genre, Movie, MovieId, PosterUrl } from '@/Domain/Ticketing/
 import type { DocumentMapper } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import type { Document } from '@mongodb';
 import { serializeObjectToDocument } from '../../Shared/DocumentMapper.ts';
-import { ExternalId, Money } from '@/Domain/Shared/mod.ts';
+import { Money } from '@/Domain/Shared/mod.ts';
 
 export class MovieDocumentMapper implements DocumentMapper<Movie> {
     toDocument(movie: Movie): Document {
@@ -18,7 +18,6 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
             ageRating: movie.ageRating.value,
             posterUrl: movie.posterUrl.value,
             price: movie.price.value,
-            externalId: movie.externalId.value,
             __v: movieWithVersion.__v || 0,
         });
         return document;
@@ -33,7 +32,6 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
             document.ageRating,
             document.posterUrl,
             document.price,
-            document.externalId,
         );
 
         if (document.__v !== undefined) {
@@ -51,7 +49,6 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
         ageRating: number,
         posterUrl: string,
         price: number,
-        externalId: string,
     ): Movie {
         const movie = Object.create(Movie.prototype);
         movie['_id'] = MovieId.create(id);
@@ -61,7 +58,6 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
         movie['_ageRating'] = AgeRating.create(ageRating);
         movie['_posterUrl'] = PosterUrl.create(posterUrl);
         movie['_price'] = Money.create(price);
-        movie['_externalId'] = ExternalId.create(externalId);
         movie['__v'] = 0; // will be set by the reconsitute method
 
         return movie as Movie;

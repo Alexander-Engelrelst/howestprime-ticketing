@@ -1,4 +1,4 @@
-import { AggregateRoot, ExternalId, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import {
     AgeRating,
     Genre,
@@ -18,6 +18,10 @@ export class MovieId extends UUIDEntityId {
     }
 }
 
+// deliberately not using a separate externalMovieId field
+// to my the fact that it would be called this implies this is conceptually the same thing 
+// view through different lenses,
+// I feel like the bounded context should be agnostic to the fact that this other lens even exists
 export class Movie extends AggregateRoot<MovieId> {
     private static readonly PRICE_PER_MINUTE = 0.15;
 
@@ -27,7 +31,6 @@ export class Movie extends AggregateRoot<MovieId> {
     private readonly _ageRating: AgeRating;
     private readonly _posterUrl: PosterUrl;
     private readonly _price: Money;
-    private readonly _externalId: ExternalId;
 
     private constructor(
         id: MovieId,
@@ -37,7 +40,6 @@ export class Movie extends AggregateRoot<MovieId> {
         ageRating: AgeRating,
         posterUrl: PosterUrl,
         price: Money,
-        externalId: ExternalId,
     ) {
         super(id);
         this._title = title;
@@ -46,26 +48,24 @@ export class Movie extends AggregateRoot<MovieId> {
         this._ageRating = ageRating;
         this._posterUrl = posterUrl;
         this._price = price;
-        this._externalId = externalId;
     }
 
     static create(
+        id: MovieId,
         title: MovieTitle,
         duration: MovieDuration,
         genres: Genre[],
         ageRating: AgeRating,
         posterUrl: PosterUrl,
-        externalId: ExternalId,
     ): Movie {
         const movie = new Movie(
-            MovieId.create(),
+            id,
             title,
             duration,
             genres,
             ageRating,
             posterUrl,
             Money.create(duration.value * Movie.PRICE_PER_MINUTE),
-            externalId,
         );
 
         movie.validate();
@@ -101,10 +101,6 @@ export class Movie extends AggregateRoot<MovieId> {
         return this._price;
     }
 
-    get externalId(): ExternalId {
-        return this._externalId;
-    }
-
     private validate(): void {
         if (!this._id) throw new MissingMovieValueException('ID');
         if (!this._title) throw new MissingMovieValueException('Title');
@@ -113,7 +109,6 @@ export class Movie extends AggregateRoot<MovieId> {
         if (!this._ageRating) throw new MissingMovieValueException('Age Rating');
         if (!this._posterUrl) throw new MissingMovieValueException('Poster URL');
         if (!this._price) throw new MissingMovieValueException('Price');
-        if (!this._externalId) throw new MissingMovieValueException('External ID');
         
         if (this._genres.length === 0) throw new EmptyGenresListException();
 

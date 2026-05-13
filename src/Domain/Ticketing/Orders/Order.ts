@@ -1,3 +1,5 @@
+import { AggregateRoot, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+
 export class OrderId extends UUIDEntityId {
     private constructor(id?: string) {
         super(id);
@@ -9,4 +11,13 @@ export class OrderId extends UUIDEntityId {
 }
 
 export class Order extends AggregateRoot<OrderId> {
-    private readonly _tickets: Ticket[];
+
+
+    private constructor(id: OrderId) {
+        super(id);
+    }
+
+    static create(): Order {
+        return new Order(OrderId.create());
+    }
+}

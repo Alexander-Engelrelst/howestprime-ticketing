@@ -27,7 +27,7 @@ Deno.test(
             genres: ['Science Fiction', 'Action'],
             ageRating: 12,
             posterUrl: 'https://example.com/posters/the-matrix.jpg',
-            externalId: '550e8400-e29b-41d4-a716-446655440000',
+            movieId: '550e8400-e29b-41d4-a716-446655440000',
         });
 
         // Assert
@@ -54,7 +54,7 @@ Deno.test(
             genres: ['Science Fiction', 'Action', 'Thriller', 'Mystery'],
             ageRating: 12,
             posterUrl: 'https://example.com/posters/inception.jpg',
-            externalId: 'a1b2c3d4-e5f6-4a5b-6c7d-8e9f0a1b2c3d',
+            movieId: 'a1b2c3d4-e5f6-4a5b-6c7d-8e9f0a1b2c3d',
         });
 
         // Assert
@@ -79,7 +79,7 @@ Deno.test(
             genres: ['Animation', 'Family', 'Comedy'],
             ageRating: 0,
             posterUrl: 'https://example.com/posters/toy-story.jpg',
-            externalId: 'f1e2d3c4-b5a6-4d5c-6b7a-8c9d0e1f2a3b',
+            movieId: 'f1e2d3c4-b5a6-4d5c-6b7a-8c9d0e1f2a3b',
         });
 
         // Assert
@@ -104,7 +104,7 @@ Deno.test(
             genres: ['Crime', 'Drama', 'Action'],
             ageRating: 12,
             posterUrl: 'https://example.com/posters/dark-knight.jpg',
-            externalId: 'd4c3b2a1-9f8e-7d6c-5b4a-3c2d1e0f9a8b',
+            movieId: 'd4c3b2a1-9f8e-7d6c-5b4a-3c2d1e0f9a8b',
         });
 
         // Assert

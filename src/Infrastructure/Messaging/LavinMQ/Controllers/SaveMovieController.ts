@@ -55,7 +55,7 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
         Guard.check(payload.posterUrl, 'posterUrl').againstEmpty();
 
         return {
-            externalId: payload.movieId as string,
+            movieId: payload.movieId as string,
             title: payload.title as string,
             duration: payload.duration as number,
             genres: genres as string[],
