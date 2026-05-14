@@ -18,6 +18,8 @@ import {
     MongoDbSuggestionRepository,
     MovieDocumentMapper,
     SuggestionDocumentMapper,
+    MongoDbOrderRepository,
+    OrderDocumentMapper,
 } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 import {
     MongoDbGetSuggestionByIdQuery,
@@ -112,6 +114,13 @@ export class Persistence implements Module {
                 )).getOrThrow();
                 unitOfWork.registerRepository(movieRepository);
 
+                const orderRepository = (await serviceProvider.getService<
+                    MongoDbOrderRepository
+                >(
+                    MongoDbOrderRepository.name,
+                )).getOrThrow();
+                unitOfWork.registerRepository(orderRepository);
+
                 const interceptors = [
                     new PublishDomainEventsMongoDbUnitOfWorkInterceptor(
                         unitOfWork,
@@ -146,6 +155,16 @@ export class Persistence implements Module {
                 const mapper = new MovieDocumentMapper();
 
                 return new MongoDbMovieRepository(mongoClient, mapper);
+            },
+        );
+        serviceCollection.addScoped(
+            MongoDbOrderRepository.name,
+            async (serviceProvider: ServiceProvider) => {
+                const mongoClient =
+                    (await serviceProvider.getService<MongoDbClient>('MongoDbClient')).getOrThrow();
+
+                const mapper = new OrderDocumentMapper();
+                return new MongoDbOrderRepository(mongoClient, mapper);
             },
         );
         /*
