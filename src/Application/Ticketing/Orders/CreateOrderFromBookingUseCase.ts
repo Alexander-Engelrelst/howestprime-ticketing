@@ -13,13 +13,13 @@ export interface CreateOrderFromBookingUseCaseInput {
     seatNumbers: number[];
 }
 
-export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBookingUseCaseInput, void> {
+export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBookingUseCaseInput, OrderId> {
     constructor(
         private readonly _unitOfWork: UnitOfWork,
         private readonly _logger: Logger,
     ) {}
 
-    async execute(input: CreateOrderFromBookingUseCaseInput): Promise<void> {
+    async execute(input: CreateOrderFromBookingUseCaseInput): Promise<OrderId> {
         this._logger.debug('Creating order from booking', { input });
         const movieRepository = this._unitOfWork.getRepository<MovieRepository>(Movie.name);
 
@@ -49,10 +49,11 @@ export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBoo
             RoomName.create(input.room),
             ShowTime.create(input.showTime)
         );
+        const orderId = OrderId.create();
 
         await this._unitOfWork.do(async () => {
            const order = Order.create(
-                OrderId.create(),
+                orderId,
                 BookingId.create(input.bookingId),
                 ticketList,
            );
@@ -64,5 +65,7 @@ export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBoo
                bookingId: order.bookingId.value,
            });
         });
+
+        return orderId;
     }
 }

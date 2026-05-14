@@ -66,6 +66,20 @@ channels:
                     type: topic
                     routingKey: howestprime.movies.movie.movieregistered
 
+    Howestprime.Movies.MovieEvent.BookingOpened:
+        address: howestprime.movies.movieevent.bookingopened
+        title: Booking Opened
+        messages:
+            BookingOpened:
+                $ref: '#/components/messages/BookingOpened'
+        bindings:
+            amqp:
+                is: routingKey
+                exchange:
+                    name: howestprime
+                    type: topic
+                    routingKey: howestprime.movies.movieevent.bookingopened
+
 operations:
     WhenSuggestionSendCreateSuggestion:
         action: receive
@@ -97,6 +111,16 @@ operations:
         messages:
             - $ref: '#/channels/Howestprime.Movies.Movie.MovieRegistered/messages/MovieRegistered'
 
+    WhenBookingOpenedReceivedCreateOrder:
+        action: receive
+        channel:
+            $ref: '#/channels/Howestprime.Movies.MovieEvent.BookingOpened'
+        description: |
+            Triggered when booking opens for a movie event in the Movies service.
+            Consumes the BookingOpened event to create an order.
+        messages:
+            - $ref: '#/channels/Howestprime.Movies.MovieEvent.BookingOpened/messages/BookingOpened'
+
 components:
     messages:
         SuggestionSendCreateSuggestion:
@@ -119,6 +143,13 @@ components:
             summary: Indicates a new movie has been registered in the Movies service.
             payload:
                 $ref: '#/components/schemas/MovieRegisteredPayload'
+
+        BookingOpened:
+            name: BookingOpened
+            title: Booking Opened
+            summary: Indicates booking has been opened for a movie event.
+            payload:
+                $ref: '#/components/schemas/BookingOpenedPayload'
 
     schemas:
         SuggestionSendCreateSuggestionPayload:
@@ -229,3 +260,48 @@ components:
                     type: string
                     description: URL to the movie poster image.
                     example: https://example.com/posters/the-matrix.jpg
+
+        BookingOpenedPayload:
+            type: object
+            required:
+                - bookingId
+                - movieId
+                - room
+                - showtime
+                - standardVisitors
+                - discountedVisitors
+                - seatNumbers
+            properties:
+                bookingId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the booking.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                movieId:
+                    type: string
+                    format: uuid
+                    description: Unique identifier for the movie.
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                room:
+                    type: string
+                    description: Room where the screening takes place.
+                    example: Room 1
+                showtime:
+                    type: string
+                    format: date-time
+                    description: Date and time of the screening.
+                    example: 2026-05-14T20:00:00Z
+                standardVisitors:
+                    type: integer
+                    description: Number of standard visitors.
+                    example: 2
+                discountedVisitors:
+                    type: integer
+                    description: Number of discounted visitors.
+                    example: 1
+                seatNumbers:
+                    type: array
+                    items:
+                        type: integer
+                    description: List of reserved seat numbers.
+                    example: [1, 2, 3]
