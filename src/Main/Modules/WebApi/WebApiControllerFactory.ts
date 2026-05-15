@@ -7,6 +7,10 @@ import {
     type GetSuggestionByIdQueryUseCaseInput,
     ListSuggestionsQueryUseCase,
 } from '@/Application/Ticketing/Suggestions/mod.ts';
+import {
+    AddCustomerToOrderUseCase,
+    type AddCustomerToOrderUseCaseInput,
+} from '@/Application/Ticketing/Orders/mod.ts';
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import type {
     SuggestionByIdReadModel,
@@ -16,6 +20,7 @@ import {
     CreateSuggestionController,
     GetSuggestionByIdController,
     ListSuggestionsController,
+    AddCustomerInformationController,
 } from '@/Infrastructure/WebApi/Controllers/mod.ts';
 import {
     type ControllerFactory,
@@ -43,6 +48,8 @@ export class WebApiControllerFactory implements ControllerFactory {
                 return await this.createListSuggestionsController();
             case GetSuggestionByIdController.name:
                 return await this.createGetSuggestionByIdController();
+            case AddCustomerInformationController.name:
+                return await this.createAddCustomerInformationController();
 
             default:
                 throw new IllegalStateException(
@@ -73,5 +80,13 @@ export class WebApiControllerFactory implements ControllerFactory {
         >(GetSuggestionByIdQueryUseCase.name)).getOrThrow();
 
         return new GetSuggestionByIdController(useCase);
+    }
+
+    private async createAddCustomerInformationController(): Promise<AddCustomerInformationController> {
+        const useCase = (await this._serviceProvider.getService<
+            UseCase<AddCustomerToOrderUseCaseInput, string>
+        >(AddCustomerToOrderUseCase.name)).getOrThrow();
+
+        return new AddCustomerInformationController(useCase);
     }
 }
