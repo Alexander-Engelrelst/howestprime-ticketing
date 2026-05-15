@@ -11,7 +11,7 @@ export type CreateOrderFromBookingRequest = {
     standardVisitors: number;
     discountedVisitors: number;
     seatNumbers: number[];
-}
+};
 
 export class CreateOrderFromBookingController
     implements AmqpController<CreateOrderFromBookingRequest> {
@@ -60,7 +60,8 @@ export class CreateOrderFromBookingController
         Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
         Guard.check(payload.room, 'room').isType('string').againstEmpty();
         Guard.check(payload.showtime, 'showtime').isType('string').againstEmpty();
-        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number').againstNegative();
+        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number')
+            .againstNegative();
         Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number')
             .againstNegative();
         Guard.check(payload.seatNumbers, 'seatNumbers').againstNullOrUndefined();
