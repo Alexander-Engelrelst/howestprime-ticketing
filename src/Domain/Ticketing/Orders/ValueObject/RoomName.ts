@@ -1,4 +1,5 @@
 import { ValueObject } from '@/Domain/Shared/mod.ts';
+import { IllegalArgumentException } from '@domaincrafters/std';
 
 export class RoomName extends ValueObject {
     private readonly _value: string;
@@ -11,6 +12,9 @@ export class RoomName extends ValueObject {
     static create(value: string): RoomName {
         const normalized = value.trim();
         const instance = new RoomName(normalized);
+
+        instance.validate();
+
         return instance;
     }
 
@@ -20,6 +24,12 @@ export class RoomName extends ValueObject {
 
     get value(): string {
         return this._value;
+    }
+
+    private validate(): void {
+        if (this._value.length === 0) {
+            throw new IllegalArgumentException('Room name cannot be empty');
+        }   
     }
 }
 

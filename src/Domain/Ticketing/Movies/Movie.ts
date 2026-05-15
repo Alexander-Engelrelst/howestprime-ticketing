@@ -70,15 +70,7 @@ export class Movie extends AggregateRoot<MovieId> {
         );
 
         movie.validateState();
-        return new Movie(
-            id,
-            title,
-            duration,
-            genres,
-            ageRating,
-            posterUrl,
-            Money.create(duration.value * Movie.PRICE_PER_MINUTE),
-        );
+        return movie;
     }
 
     override get id(): MovieId {

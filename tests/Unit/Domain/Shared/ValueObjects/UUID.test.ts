@@ -5,7 +5,7 @@ import { UUID } from '@/Domain/Shared/mod.ts';
 Deno.test("[Unit] UUID.create - should generate a valid v4 UUID", () => {
     const uuid = UUID.create();
     
-    assertInstanceOf(uuid, UUID);
+    assertInstanceOf(uuid, UUID as any);
     // Standard UUID regex
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     assertEquals(uuidRegex.test(uuid.value), true, "Generated UUID should match v4 format");

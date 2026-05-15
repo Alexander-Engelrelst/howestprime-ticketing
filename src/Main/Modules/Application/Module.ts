@@ -26,7 +26,6 @@ import { Module } from '@/Main/Modules/Shared/mod.ts';
 import { OnlinePaymentService } from '@/Infrastructure/Payment/mod.ts';
 import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
 import { CreateOrderFromBookingUseCase, CreateOrderFromBookingUseCaseInput } from '@/Application/Ticketing/Orders/mod.ts';
-import { OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
 
 export class Application implements Module {
     add(serviceCollection: ServiceCollection, _config: Config): void {
