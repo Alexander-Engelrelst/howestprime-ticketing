@@ -96,3 +96,29 @@ Deno.test(
         });
     }
 );
+
+Deno.test(
+    '[Unit] - CreateOrderFromBookingUseCase - execute - movie does not exist - throws error',
+    async () => {
+        const movieRepository = {
+            byId: () => Promise.resolve(createMockMovieResult('550e8400-e29b-41d4-a716-446655440000', false))
+        };
+        const unitOfWork = createMockUnitOfWork({
+            repositories: new Map<string, any>([[Movie.name, movieRepository]])
+        });
+        const useCase = new CreateOrderFromBookingUseCase(unitOfWork, mockLogger);
+
+        await assertRejects(
+            () => useCase.execute({
+                bookingId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+                movieId: '550e8400-e29b-41d4-a716-446655440000',
+                room: 'Screen 1',
+                showTime: new Date(),
+                numberOfStandardTickets: 1,
+                numberOfDiscountedTickets: 0,
+                seatNumbers: [1],
+            })
+        );
+        assertEquals(unitOfWork.saveCalled, false);
+    }
+);
