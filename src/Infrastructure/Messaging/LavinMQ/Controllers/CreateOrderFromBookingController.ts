@@ -3,7 +3,7 @@ import { CreateOrderFromBookingUseCaseInput } from '@/Application/Ticketing/Orde
 import { UseCase } from '@/Application/Ports/mod.ts';
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
-export interface CreateOrderFromBookingRequest {
+export type CreateOrderFromBookingRequest = {
     bookingId: string;
     movieId: string;
     room: string;
@@ -28,9 +28,24 @@ export class CreateOrderFromBookingController
     }
 
     private extractInput(request: unknown): CreateOrderFromBookingUseCaseInput {
+        const payload = CreateOrderFromBookingController.validatePayload(request);
+        const showTimeDate = new Date(payload.showtime);
+
+        return {
+            bookingId: payload.bookingId,
+            movieId: payload.movieId,
+            room: payload.room,
+            showTime: showTimeDate,
+            numberOfStandardTickets: payload.standardVisitors,
+            numberOfDiscountedTickets: payload.discountedVisitors,
+            seatNumbers: payload.seatNumbers,
+        };
+    }
+
+    private static validatePayload(request: unknown): CreateOrderFromBookingRequest {
         Guard.check(request, 'request').againstNullOrUndefined();
 
-        if (typeof request !== 'object') {
+        if (typeof request !== 'object' || Array.isArray(request)) {
             throw new IllegalArgumentException('Booking opened payload must be a JSON object.');
         }
 
@@ -45,8 +60,7 @@ export class CreateOrderFromBookingController
         Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
         Guard.check(payload.room, 'room').isType('string').againstEmpty();
         Guard.check(payload.showtime, 'showtime').isType('string').againstEmpty();
-        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number')
-            .againstNegative();
+        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number').againstNegative();
         Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number')
             .againstNegative();
         Guard.check(payload.seatNumbers, 'seatNumbers').againstNullOrUndefined();
@@ -69,9 +83,9 @@ export class CreateOrderFromBookingController
             bookingId: payload.bookingId as string,
             movieId: payload.movieId as string,
             room: payload.room as string,
-            showTime: showTimeDate,
-            numberOfStandardTickets: payload.standardVisitors as number,
-            numberOfDiscountedTickets: payload.discountedVisitors as number,
+            showtime: payload.showtime as string,
+            standardVisitors: payload.standardVisitors as number,
+            discountedVisitors: payload.discountedVisitors as number,
             seatNumbers: seatNumbers as number[],
         };
     }

@@ -42,7 +42,20 @@ export class AddCustomerInformationController implements WebApiController {
     }
 
     private mapToUseCaseInput(orderId: string, payload: unknown): AddCustomerToOrderUseCaseInput {
-        if (payload === null || typeof payload !== 'object') {
+        const body = AddCustomerInformationController.validatePayload(payload);
+
+        return {
+            orderId,
+            salutation: body.salutation,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            email: body.email,
+            agreeToTerms: body.agreeToTerms,
+        };
+    }
+
+    private static validatePayload(payload: unknown): AddCustomerRequest {
+        if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) {
             throw new IllegalArgumentException('Request body must be a JSON object.');
         }
 
@@ -53,13 +66,6 @@ export class AddCustomerInformationController implements WebApiController {
         Guard.check(body.email, 'email').isType('string').againstEmpty();
         Guard.check(body.agreeToTerms, 'agreeToTerms').isType('boolean');
 
-        return {
-            orderId,
-            salutation: body.salutation,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            email: body.email,
-            agreeToTerms: body.agreeToTerms,
-        };
+        return body;
     }
 }
