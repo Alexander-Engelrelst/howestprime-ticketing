@@ -23,20 +23,22 @@ export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBoo
         this._logger.debug('Creating order from booking', { input });
         const movieRepository = this._unitOfWork.getRepository<MovieRepository>(Movie.name);
 
-        const movie = await movieRepository.byId(MovieId.create(input.movieId));
+        const movieOpt = await movieRepository.byId(MovieId.create(input.movieId));
 
-        if (!movie.isPresent) {
+        if (!movieOpt.isPresent) {
             throw new MovieNotFoundApplicationException(input.movieId);
         }
 
+        const movie = movieOpt.value;
+
         const movieInfo = MovieInfo.create(
-            movie.value.id,
-            movie.value.title,
-            movie.value.duration,
-            movie.value.genres,
-            movie.value.ageRating,
-            movie.value.posterUrl,
-            movie.value.price,
+            movie.id,
+            movie.title,
+            movie.duration,
+            movie.genres,
+            movie.ageRating,
+            movie.posterUrl,
+            movie.price,
         );
 
         const ticketList = TicketMappingService.mapToTickets(
@@ -51,13 +53,15 @@ export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBoo
         );
         const orderId = OrderId.create();
 
-        await this._unitOfWork.do(async () => {
-           const order = Order.create(
+        const order = Order.create(
                 orderId,
                 BookingId.create(input.bookingId),
                 ticketList,
-           );
+        );
 
+
+        await this._unitOfWork.do(async () => {
+           
            await this._unitOfWork.save(order);
 
            this._logger.info('Order created from booking', {

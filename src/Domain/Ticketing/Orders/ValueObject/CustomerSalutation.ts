@@ -45,4 +45,8 @@ export class CustomerSalutation extends ValueObject {
     override equals(other: ValueObject): boolean {
         return other instanceof CustomerSalutation && other._value === this._value;
     }
+
+    get value(): string {
+        return this._value;
+    }
 }

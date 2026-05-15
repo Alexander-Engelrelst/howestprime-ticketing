@@ -3,4 +3,5 @@ export {
     NotFoundApplicationException,
     SuggestionNotFoundApplicationException,
     MovieNotFoundApplicationException,
+    OrderNotFoundApplicationException,
 } from './ApplicationException.ts';

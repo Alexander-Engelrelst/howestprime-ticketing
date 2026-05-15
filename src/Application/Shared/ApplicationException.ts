@@ -22,3 +22,9 @@ export class MovieNotFoundApplicationException extends NotFoundApplicationExcept
         super(`Movie with id '${movieId}' was not found.`);
     }
 }
+
+export class OrderNotFoundApplicationException extends NotFoundApplicationException {
+    constructor(orderId: string) {
+        super(`Order with id '${orderId}' was not found.`);
+    }
+}

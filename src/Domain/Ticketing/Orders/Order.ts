@@ -103,8 +103,6 @@ export class Order extends AggregateRoot<OrderId> {
         if (this._tickets.length === 0) {
             throw new InvalidTicketAmountException();
         }
-
-        // TODO(alexander) : add a domain service to create tickets 
     }
 
     public confirmPayment(): void {
