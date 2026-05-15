@@ -132,7 +132,7 @@ export class Application implements Module {
                 const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
                     .getOrThrow();
 
-                const useCase: UseCase<CreateOrderFromBookingUseCaseInput, OrderId> = new CreateOrderFromBookingUseCase(
+                const useCase: UseCase<CreateOrderFromBookingUseCaseInput, void> = new CreateOrderFromBookingUseCase(
                     unitOfWork,
                     logger,
                 );

@@ -1,6 +1,7 @@
 import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import {
     AgeRating,
+    EmptyGenresListException,
     Genre,
     MovieDuration,
     MovieTitle,
@@ -58,6 +59,17 @@ export class Movie extends AggregateRoot<MovieId> {
         ageRating: AgeRating,
         posterUrl: PosterUrl,
     ): Movie {
+        const movie = new Movie(
+            id,
+            title,
+            duration,
+            genres,
+            ageRating,
+            posterUrl,
+            Money.create(duration.value * Movie.PRICE_PER_MINUTE),
+        );
+
+        movie.validateState();
         return new Movie(
             id,
             title,
@@ -96,5 +108,11 @@ export class Movie extends AggregateRoot<MovieId> {
 
     get price(): Money {
         return this._price;
+    }
+
+    private validateState(): void {
+        if (this._genres.length === 0) {
+            throw new EmptyGenresListException();
+        }
     }
 }
