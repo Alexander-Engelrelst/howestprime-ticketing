@@ -12,6 +12,8 @@ servers:
 tags:
     - name: Suggestions
       description: Create and read suggestions
+    - name: Orders
+      description: Order management and customer information
 
 paths:
     /api/suggestions:
@@ -100,8 +102,51 @@ paths:
                 '500':
                     $ref: '#/components/responses/InternalServerErrorProblem'
 
+    /api/orders/{orderId}/customer:
+        post:
+            tags:
+                - Orders
+            summary: Add customer information to order
+            operationId: addCustomerInformation
+            parameters:
+                - $ref: '#/components/parameters/OrderId'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddCustomerInformationRequest'
+                        examples:
+                            addCustomerInformation:
+                                value:
+                                    salutation: Mr.
+                                    firstName: Alex
+                                    lastName: Engelrelst
+                                    email: alex@example.com
+                                    agreeToTerms: true
+            responses:
+                '201':
+                    description: Customer information stored
+                    headers:
+                        Location:
+                            $ref: '#/components/headers/Location'
+                '400':
+                    $ref: '#/components/responses/BadRequestProblem'
+                '404':
+                    $ref: '#/components/responses/NotFoundProblem'
+                '500':
+                    $ref: '#/components/responses/InternalServerErrorProblem'
+
 components:
     parameters:
+        OrderId:
+            name: orderId
+            in: path
+            required: true
+            description: Order identifier
+            schema:
+                $ref: '#/components/schemas/UUID'
+
         SuggestionId:
             name: suggestionId
             in: path
@@ -162,6 +207,40 @@ components:
                     maxLength: 2000
                     example: Cache frequently requested movie data to reduce latency.
 
+        AddCustomerInformationRequest:
+            type: object
+            required:
+                - salutation
+                - firstName
+                - lastName
+                - email
+                - agreeToTerms
+            properties:
+                salutation:
+                    type: string
+                    enum:
+                        - Mr.
+                        - Ms.
+                        - Mx.
+                    example: Mr.
+                firstName:
+                    type: string
+                    minLength: 1
+                    pattern: .*\S.*
+                    example: Alex
+                lastName:
+                    type: string
+                    minLength: 1
+                    pattern: .*\S.*
+                    example: Engelrelst
+                email:
+                    type: string
+                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+                    example: alex@example.com
+                agreeToTerms:
+                    type: boolean
+                    example: true
+
         SuggestionResponse:
             type: object
             required:
@@ -221,3 +300,4 @@ components:
         UUID:
             type: string
             format: uuid
+

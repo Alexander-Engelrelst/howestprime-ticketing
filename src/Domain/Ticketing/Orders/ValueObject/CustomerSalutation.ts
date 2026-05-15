@@ -2,12 +2,10 @@ import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidCustomerSalutationException extends DomainException {
     constructor(receivedValue: string) {
-        // Format the received value for clarity
         const displayValue = receivedValue.trim().length === 0
             ? '[empty or whitespace]'
             : `"${receivedValue}"`;
 
-        // Create a comma-separated list of valid options
         const expected = CustomerSalutation.ALLOWED_SALUTATIONS.join(', ');
 
         const message = `Invalid salutation: Received ${displayValue}. ` +
