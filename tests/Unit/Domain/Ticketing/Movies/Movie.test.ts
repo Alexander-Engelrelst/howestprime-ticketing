@@ -1,5 +1,6 @@
-import { AgeRating, EmptyGenresListException, Genre, Movie, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import { AgeRating, Genre, Movie, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
 import { assert, assertEquals, assertThrows } from '@std/assert';
+import { EmptyListException } from '@/Domain/Shared/mod.ts';
 
 Deno.test('[Unit] - Movie - create - valid input - returns movie aggregate', () => {
     // Arrange
@@ -68,7 +69,7 @@ Deno.test('[Unit] - Movie - create - empty genres list - throws EmptyGenresListE
             AgeRating.create(12),
             PosterUrl.create('https://example.com/poster.jpg')
         ),
-        EmptyGenresListException
+        EmptyListException,
     );
 });
 

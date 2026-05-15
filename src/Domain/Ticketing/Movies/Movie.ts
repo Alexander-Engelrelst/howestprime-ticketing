@@ -1,7 +1,6 @@
-import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+import { AggregateRoot, EmptyListException, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import {
     AgeRating,
-    EmptyGenresListException,
     Genre,
     MovieDuration,
     MovieTitle,
@@ -104,7 +103,7 @@ export class Movie extends AggregateRoot<MovieId> {
 
     private validateState(): void {
         if (this._genres.length === 0) {
-            throw new EmptyGenresListException();
+            throw new EmptyListException('Genres');
         }
     }
 }

@@ -25,6 +25,7 @@ Deno.test('[Unit] - Order - create - valid input - calculates total price and se
     assertEquals(order.status, OrderStatus.Open);
     assertEquals(order.agreeToTerms, false);
     assertEquals(order.tickets.length, 2);
+    assertEquals(order.bookingId.equals(bookingId), true);
 });
 
 Deno.test('[Unit] - Order - create - empty tickets - throws InvalidTicketAmountException', () => {
