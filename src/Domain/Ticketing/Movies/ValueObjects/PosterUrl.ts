@@ -34,7 +34,7 @@ export class PosterUrl extends ValueObject {
         return instance;
     }
 
-    protected validate(): void {
+    private validate(): void {
         if (!this._value || this._value.length === 0) {
             throw new InvalidPosterUrlException(this._value);
         }
@@ -57,8 +57,8 @@ export class PosterUrl extends ValueObject {
         }
     }
 
-    override equals(other: PosterUrl): boolean {
-        return other?._value === this._value;
+    override equals(other: ValueObject): boolean {
+        return other instanceof PosterUrl && other._value === this._value;
     }
 
     get value(): string {

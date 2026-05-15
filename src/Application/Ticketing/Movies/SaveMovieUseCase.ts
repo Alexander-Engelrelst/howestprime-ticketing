@@ -1,4 +1,4 @@
-import { Movie } from '@/Domain/Ticketing/Movies/mod.ts';
+import { AgeRating, Genre, Movie, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
 
 export interface SaveMovieUseCaseInput {
@@ -7,7 +7,7 @@ export interface SaveMovieUseCaseInput {
     genres: string[];
     ageRating: number;
     posterUrl: string;
-    externalId: string;
+    movieId: string;
 }
 
 export class SaveMovieUseCase implements UseCase<SaveMovieUseCaseInput, void> {
@@ -21,12 +21,12 @@ export class SaveMovieUseCase implements UseCase<SaveMovieUseCaseInput, void> {
 
         await this._unitOfWork.do(async () => {
             const movie = Movie.create(
-                input.title,
-                input.duration,
-                input.genres,
-                input.ageRating,
-                input.posterUrl,
-                input.externalId,
+                MovieId.create(input.movieId), 
+                MovieTitle.create(input.title),
+                MovieDuration.create(input.duration),
+                input.genres.map(Genre.create),
+                AgeRating.create(input.ageRating),
+                PosterUrl.create(input.posterUrl),
             );
 
             await this._unitOfWork.save(movie);

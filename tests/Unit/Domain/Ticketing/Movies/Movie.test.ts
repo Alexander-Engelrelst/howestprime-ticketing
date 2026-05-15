@@ -1,4 +1,4 @@
-import { EmptyGenresListException, Movie, MovieId } from '@/Domain/Ticketing/Movies/mod.ts';
+import { AgeRating, EmptyGenresListException, Genre, Movie, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
 import { assert, assertEquals, assertThrows } from '@std/assert';
 
 Deno.test('[Unit] - Movie - create - valid input - returns movie aggregate', () => {
@@ -14,12 +14,12 @@ Deno.test('[Unit] - Movie - create - valid input - returns movie aggregate', () 
 
     // Act
     const movie = Movie.create(
-        input.title,
-        input.duration,
-        input.genres,
-        input.ageRating,
-        input.posterUrl,
-        input.externalId
+        MovieId.create(),
+        MovieTitle.create(input.title),
+        MovieDuration.create(input.duration),
+        input.genres.map(Genre.create),
+        AgeRating.create(input.ageRating),
+        PosterUrl.create(input.posterUrl),
     );
 
     // Assert
@@ -33,7 +33,6 @@ Deno.test('[Unit] - Movie - create - valid input - returns movie aggregate', () 
 
     assertEquals(movie.ageRating.value, 13);
     assertEquals(movie.posterUrl.value, 'https://example.com/poster.jpg');
-    assertEquals(movie.externalId.value, input.externalId);
 });
 
 Deno.test('[Unit] - Movie - create - calculation logic - sets correct price based on duration', () => {
@@ -43,12 +42,12 @@ Deno.test('[Unit] - Movie - create - calculation logic - sets correct price base
 
     // Act
     const movie = Movie.create(
-        'Inception',
-        duration,
-        ['Action'],
-        13,
-        'https://example.com/poster.jpg',
-        'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+        MovieId.create(),
+        MovieTitle.create('Inception'),
+        MovieDuration.create(duration),
+        ['Action'].map(Genre.create),
+        AgeRating.create(13),
+        PosterUrl.create('https://example.com/poster.jpg'),
     );
 
     // Assert
@@ -57,17 +56,17 @@ Deno.test('[Unit] - Movie - create - calculation logic - sets correct price base
 
 Deno.test('[Unit] - Movie - create - empty genres list - throws EmptyGenresListException', () => {
     // Arrange
-    const emptyGenres: string[] = [];
+    const emptyGenres: Genre[] = [];
 
     // Act & Assert
     assertThrows(
         () => Movie.create(
-            'Empty Genre Movie',
-            120,
+            MovieId.create(),
+            MovieTitle.create('Empty Genre Movie'),
+            MovieDuration.create(120),
             emptyGenres,
-            12,
-            'https://example.com/poster.jpg',
-            'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+            AgeRating.create(12),
+            PosterUrl.create('https://example.com/poster.jpg')
         ),
         EmptyGenresListException
     );
@@ -76,12 +75,12 @@ Deno.test('[Unit] - Movie - create - empty genres list - throws EmptyGenresListE
 Deno.test('[Unit] - Movie - genres getter - returns shallow copy to preserve immutability', () => {
     // Arrange
     const movie = Movie.create(
-        'The Matrix',
-        136,
-        ['Action', 'Sci-Fi'],
-        16,
-        'https://example.com/poster.jpg',
-        'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+        MovieId.create(),
+        MovieTitle.create('The Matrix'),
+        MovieDuration.create(136),
+        ['Action', 'Sci-Fi'].map(Genre.create),
+        AgeRating.create(16),
+        PosterUrl.create('https://example.com/poster.jpg'),
     );
 
     // Act
@@ -99,12 +98,12 @@ Deno.test('[Unit] - Movie - create - invalid value object input - propagates int
     // Providing an invalid URL should trigger the PosterUrl validation before the Movie is even created
     assertThrows(
         () => Movie.create(
-            'Invalid Poster',
-            120,
-            ['Drama'],
-            12,
-            'not-a-url',
-            'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+            MovieId.create(),
+            MovieTitle.create('Invalid Poster'),
+            MovieDuration.create(120),
+            ['Drama'].map(Genre.create),
+            AgeRating.create(12),
+            PosterUrl.create('not-a-url'),
         )
     );
 });

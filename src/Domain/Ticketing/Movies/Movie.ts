@@ -1,12 +1,12 @@
-import { AggregateRoot, ExternalId, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import {
     AgeRating,
+    EmptyGenresListException,
     Genre,
     MovieDuration,
     MovieTitle,
     PosterUrl,
 } from '@/Domain/Ticketing/Movies/mod.ts';
-import { EmptyGenresListException } from './MovieExceptions.ts';
 
 export class MovieId extends UUIDEntityId {
     private constructor(id?: string) {
@@ -18,6 +18,11 @@ export class MovieId extends UUIDEntityId {
     }
 }
 
+// deliberately not using a separate externalMovieId field
+// to my the fact that it would be called this implies this is conceptually the same thing 
+// view through different lenses,
+// I feel like the bounded context should be agnostic to the fact that this other lens even exists
+// the UUID boilerplate was modified to be version agnostic 
 export class Movie extends AggregateRoot<MovieId> {
     private static readonly PRICE_PER_MINUTE = 0.15;
 
@@ -27,7 +32,6 @@ export class Movie extends AggregateRoot<MovieId> {
     private readonly _ageRating: AgeRating;
     private readonly _posterUrl: PosterUrl;
     private readonly _price: Money;
-    private readonly _externalId: ExternalId;
 
     private constructor(
         id: MovieId,
@@ -37,7 +41,6 @@ export class Movie extends AggregateRoot<MovieId> {
         ageRating: AgeRating,
         posterUrl: PosterUrl,
         price: Money,
-        externalId: ExternalId,
     ) {
         super(id);
         this._title = title;
@@ -46,29 +49,27 @@ export class Movie extends AggregateRoot<MovieId> {
         this._ageRating = ageRating;
         this._posterUrl = posterUrl;
         this._price = price;
-        this._externalId = externalId;
     }
 
     static create(
-        title: string,
-        duration: number,
-        genres: string[],
-        ageRating: number,
-        posterUrl: string,
-        externalId: string,
+        id: MovieId,
+        title: MovieTitle,
+        duration: MovieDuration,
+        genres: Genre[],
+        ageRating: AgeRating,
+        posterUrl: PosterUrl,
     ): Movie {
         const movie = new Movie(
-            MovieId.create(),
-            MovieTitle.create(title),
-            MovieDuration.create(duration),
-            genres.map(Genre.create),
-            AgeRating.create(ageRating),
-            PosterUrl.create(posterUrl),
-            Money.create(duration * Movie.PRICE_PER_MINUTE), // todo(alexander) must create do this?
-            ExternalId.create(externalId),
+            id,
+            title,
+            duration,
+            genres,
+            ageRating,
+            posterUrl,
+            Money.create(duration.value * Movie.PRICE_PER_MINUTE),
         );
 
-        movie.validate();
+        movie.validateState();
         return movie;
     }
 
@@ -101,11 +102,7 @@ export class Movie extends AggregateRoot<MovieId> {
         return this._price;
     }
 
-    get externalId(): ExternalId {
-        return this._externalId;
-    }
-
-    private validate(): void {
+    private validateState(): void {
         if (this._genres.length === 0) {
             throw new EmptyGenresListException();
         }

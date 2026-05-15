@@ -20,7 +20,7 @@ Deno.test('[Unit] - Genre - create - empty string - throws InvalidGenreException
     assertThrows(
         () => Genre.create(emptyGenre),
         InvalidGenreException,
-        "Genre has invalid value: '[Emtpy or Whitespace]'"
+        "Genre has invalid value: '[Empty or Whitespace]'"
     );
 });
 
@@ -32,7 +32,7 @@ Deno.test('[Unit] - Genre - create - whitespace only - throws InvalidGenreExcept
     assertThrows(
         () => Genre.create(whitespaceGenre),
         InvalidGenreException,
-        "Genre has invalid value: '[Emtpy or Whitespace]'"
+        "Genre has invalid value: '[Empty or Whitespace]'"
     );
 });
 

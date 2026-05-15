@@ -36,9 +36,9 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
             );
         }
 
-        Guard.check(payload.movieId, 'movieId').againstEmpty();
-        Guard.check(payload.title, 'title').againstEmpty();
-        Guard.check(payload.duration, 'duration').againstZero().againstNegative();
+        Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
+        Guard.check(payload.title, 'title').isType('string').againstEmpty();
+        Guard.check(payload.duration, 'duration').isType('number').againstZero().againstNegative();
         Guard.check(payload.genres, 'genres').againstEmpty();
 
         if (!Array.isArray(payload.genres)) {
@@ -47,15 +47,14 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
 
         const genres = payload.genres as unknown[];
         genres.forEach((genre: unknown) => {
-            Guard.check(genre, 'genre').isType('string');
-            Guard.check(genre, 'genre').againstEmpty();
+            Guard.check(genre, 'genre').isType('string').againstEmpty();
         });
 
-        Guard.check(payload.ageRating, 'ageRating').againstZero().againstNegative();
-        Guard.check(payload.posterUrl, 'posterUrl').againstEmpty();
+        Guard.check(payload.ageRating, 'ageRating').isType('number').againstZero().againstNegative();
+        Guard.check(payload.posterUrl, 'posterUrl').isType('string').againstEmpty();
 
         return {
-            externalId: payload.movieId as string,
+            movieId: payload.movieId as string,
             title: payload.title as string,
             duration: payload.duration as number,
             genres: genres as string[],

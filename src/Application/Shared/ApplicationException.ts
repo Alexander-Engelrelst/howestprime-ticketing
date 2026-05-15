@@ -16,3 +16,9 @@ export class SuggestionNotFoundApplicationException extends NotFoundApplicationE
         super(`Suggestion with id '${suggestionId}' was not found.`);
     }
 }
+
+export class MovieNotFoundApplicationException extends NotFoundApplicationException {
+    constructor(movieId: string) {
+        super(`Movie with id '${movieId}' was not found.`);
+    }
+}
