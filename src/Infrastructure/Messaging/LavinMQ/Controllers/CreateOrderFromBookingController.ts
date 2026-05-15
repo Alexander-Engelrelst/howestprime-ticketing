@@ -13,9 +13,13 @@ export interface CreateOrderFromBookingRequest {
     seatNumbers: number[];
 }
 
-export class CreateOrderFromBookingController implements AmqpController<CreateOrderFromBookingRequest> {
+export class CreateOrderFromBookingController
+    implements AmqpController<CreateOrderFromBookingRequest> {
     constructor(
-        private readonly _createOrderFromBookingUseCase: UseCase<CreateOrderFromBookingUseCaseInput, void>,
+        private readonly _createOrderFromBookingUseCase: UseCase<
+            CreateOrderFromBookingUseCaseInput,
+            void
+        >,
     ) {}
 
     async handle(request: CreateOrderFromBookingRequest): Promise<void> {
@@ -41,8 +45,10 @@ export class CreateOrderFromBookingController implements AmqpController<CreateOr
         Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
         Guard.check(payload.room, 'room').isType('string').againstEmpty();
         Guard.check(payload.showtime, 'showtime').isType('string').againstEmpty();
-        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number').againstNegative();
-        Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number').againstNegative();
+        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number')
+            .againstNegative();
+        Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number')
+            .againstNegative();
         Guard.check(payload.seatNumbers, 'seatNumbers').againstNullOrUndefined();
 
         if (!Array.isArray(payload.seatNumbers)) {

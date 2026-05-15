@@ -15,11 +15,11 @@ import {
 } from '@/Infrastructure/Persistence/MongoDb/mod.ts';
 import {
     MongoDbMovieRepository,
+    MongoDbOrderRepository,
     MongoDbSuggestionRepository,
     MovieDocumentMapper,
-    SuggestionDocumentMapper,
-    MongoDbOrderRepository,
     OrderDocumentMapper,
+    SuggestionDocumentMapper,
 } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 import {
     MongoDbGetSuggestionByIdQuery,

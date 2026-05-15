@@ -3,18 +3,19 @@ import {
     BookingId,
     CannotAcceptTermsForNonOpenOrderException,
     CannotSubmitCustomerInfoForNonOpenOrderException,
-    Customer, CustomerMustAgreeToTermsException,
+    Customer,
+    CustomerMustAgreeToTermsException,
     InvalidOrderStateTransitionException,
     InvalidTicketAmountException,
-    Ticket 
+    Ticket,
 } from '@/Domain/Ticketing/Orders/mod.ts';
 import { Optional } from '@domaincrafters/std';
 
 export enum OrderStatus {
-    Open = "open",
-    Paid = "paid",
-    TicketReleased = "ticketReleased",
-    Cancelled = "cancelled",
+    Open = 'open',
+    Paid = 'paid',
+    TicketReleased = 'ticketReleased',
+    Cancelled = 'cancelled',
 }
 export class OrderId extends UUIDEntityId {
     private constructor(id?: string) {
@@ -41,7 +42,7 @@ export class Order extends AggregateRoot<OrderId> {
         price: Money,
         status: OrderStatus,
         agreeToTerms: boolean,
-        tickets: Ticket[]
+        tickets: Ticket[],
     ) {
         super(id);
         this._bookingId = bookingId;
@@ -58,8 +59,8 @@ export class Order extends AggregateRoot<OrderId> {
         tickets: Ticket[],
     ): Order {
         const price = Money.create(
-            tickets.reduce(((total, ticket) => total + ticket.price.value), 0)
-        )
+            tickets.reduce((total, ticket) => total + ticket.price.value, 0),
+        );
 
         const order = new Order(
             id,
@@ -68,7 +69,7 @@ export class Order extends AggregateRoot<OrderId> {
             price,
             OrderStatus.Open,
             false,
-            tickets
+            tickets,
         );
 
         order.validate();
@@ -107,7 +108,7 @@ export class Order extends AggregateRoot<OrderId> {
 
     public confirmPayment(): void {
         if (!this._agreeToTerms) {
-            throw new CustomerMustAgreeToTermsException("confirming payment");
+            throw new CustomerMustAgreeToTermsException('confirming payment');
         }
 
         if (this._status !== OrderStatus.Open) {
@@ -126,7 +127,10 @@ export class Order extends AggregateRoot<OrderId> {
 
     public releaseTickets(): void {
         if (this._status !== OrderStatus.Paid) {
-            throw new InvalidOrderStateTransitionException(this._status, OrderStatus.TicketReleased);
+            throw new InvalidOrderStateTransitionException(
+                this._status,
+                OrderStatus.TicketReleased,
+            );
         }
         this._status = OrderStatus.TicketReleased;
     }
@@ -145,7 +149,7 @@ export class Order extends AggregateRoot<OrderId> {
 
     public assignCustomer(customer: Customer): void {
         if (!this._agreeToTerms) {
-            throw new CustomerMustAgreeToTermsException("submitting information");
+            throw new CustomerMustAgreeToTermsException('submitting information');
         }
         if (this._status !== OrderStatus.Open) {
             throw new CannotSubmitCustomerInfoForNonOpenOrderException();

@@ -6,11 +6,11 @@ import {
 } from '@/Application/Ticketing/Suggestions/mod.ts';
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import {
+    CreateOrderFromBookingController,
     CreateSuggestionController,
     type CreateSuggestionRequest,
     SaveMovieController,
     SaveMovieRequest,
-    CreateOrderFromBookingController,
 } from '@/Infrastructure/Messaging/LavinMQ/Controllers/mod.ts';
 
 import {
@@ -20,7 +20,10 @@ import {
 import type { ConsumerContext } from '@/Infrastructure/Messaging/LavinMQ/Shared/Amqp/AmqpBrokerConfigurator.ts';
 import { IllegalStateException } from '@domaincrafters/std';
 import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
-import { CreateOrderFromBookingUseCase, CreateOrderFromBookingUseCaseInput } from '@/Application/Ticketing/Orders/mod.ts';
+import {
+    CreateOrderFromBookingUseCase,
+    CreateOrderFromBookingUseCaseInput,
+} from '@/Application/Ticketing/Orders/mod.ts';
 
 export class AmqpControllerFactory implements ControllerFactory {
     private readonly _serviceProvider: ServiceProvider;
@@ -80,4 +83,5 @@ export class AmqpControllerFactory implements ControllerFactory {
         >(CreateOrderFromBookingUseCase.name)).getOrThrow();
 
         return new CreateOrderFromBookingController(useCase) as unknown as AmqpController<unknown>;
-    }}
+    }
+}

@@ -8,16 +8,19 @@ import {
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
 type AddCustomerRequest = {
-  salutation: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  agreeToTerms: boolean;
+    salutation: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    agreeToTerms: boolean;
 };
 
 export class AddCustomerInformationController implements WebApiController {
     constructor(
-        private readonly _addCustomerInformationUseCase: UseCase<AddCustomerToOrderUseCaseInput, string>,
+        private readonly _addCustomerInformationUseCase: UseCase<
+            AddCustomerToOrderUseCaseInput,
+            string
+        >,
     ) {}
 
     async handle(ctx: RouterContext<string>): Promise<void> {

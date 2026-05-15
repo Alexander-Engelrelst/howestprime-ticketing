@@ -1,6 +1,15 @@
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
 import { OrderNotFoundApplicationException } from '@/Application/Shared/mod.ts';
-import { Customer, CustomerEmail, CustomerFirstName, CustomerLastName, Order, OrderId, OrderRepository ,CustomerSalutation } from '@/Domain/Ticketing/Orders/mod.ts';
+import {
+    Customer,
+    CustomerEmail,
+    CustomerFirstName,
+    CustomerLastName,
+    CustomerSalutation,
+    Order,
+    OrderId,
+    OrderRepository,
+} from '@/Domain/Ticketing/Orders/mod.ts';
 
 export interface AddCustomerToOrderUseCaseInput {
     orderId: string;
@@ -42,17 +51,17 @@ export class AddCustomerToOrderUseCase implements UseCase<AddCustomerToOrderUseC
         order.assignCustomer(customer);
 
         return await this._unitOfWork.do(async () => {
-           await this._unitOfWork.save(order);
+            await this._unitOfWork.save(order);
 
-           this._logger.info('Customer information added to order', {
-               orderId: order.id.value,
-               customerEmail: customer.email.value,
-               customerFirstName: customer.firstName.value,
-               customerLastName: customer.lastName.value,
-               customerSalutation: customer.salutation.value,
-           });
+            this._logger.info('Customer information added to order', {
+                orderId: order.id.value,
+                customerEmail: customer.email.value,
+                customerFirstName: customer.firstName.value,
+                customerLastName: customer.lastName.value,
+                customerSalutation: customer.salutation.value,
+            });
 
-           return order.id.value;
+            return order.id.value;
         });
     }
 }

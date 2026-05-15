@@ -1,7 +1,16 @@
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
 import { Movie, MovieId, MovieRepository } from '@/Domain/Ticketing/Movies/mod.ts';
 import { MovieNotFoundApplicationException } from '@/Application/Shared/mod.ts';
-import { BookingId, MovieInfo, Order, OrderId, RoomName, ShowTime, TicketMappingService, VisitorType } from '@/Domain/Ticketing/Orders/mod.ts';
+import {
+    BookingId,
+    MovieInfo,
+    Order,
+    OrderId,
+    RoomName,
+    ShowTime,
+    TicketMappingService,
+    VisitorType,
+} from '@/Domain/Ticketing/Orders/mod.ts';
 
 export interface CreateOrderFromBookingUseCaseInput {
     bookingId: string;
@@ -13,7 +22,8 @@ export interface CreateOrderFromBookingUseCaseInput {
     seatNumbers: number[];
 }
 
-export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBookingUseCaseInput, void> {
+export class CreateOrderFromBookingUseCase
+    implements UseCase<CreateOrderFromBookingUseCaseInput, void> {
     constructor(
         private readonly _unitOfWork: UnitOfWork,
         private readonly _logger: Logger,
@@ -44,30 +54,28 @@ export class CreateOrderFromBookingUseCase implements UseCase<CreateOrderFromBoo
         const ticketList = TicketMappingService.mapToTickets(
             input.seatNumbers,
             [
-                { type: VisitorType.Standard, quantity: input.numberOfStandardTickets }, 
-                { type: VisitorType.Discounted, quantity: input.numberOfDiscountedTickets }
+                { type: VisitorType.Standard, quantity: input.numberOfStandardTickets },
+                { type: VisitorType.Discounted, quantity: input.numberOfDiscountedTickets },
             ],
             movieInfo,
             RoomName.create(input.room),
-            ShowTime.create(input.showTime)
+            ShowTime.create(input.showTime),
         );
         const orderId = OrderId.create();
 
         const order = Order.create(
-                orderId,
-                BookingId.create(input.bookingId),
-                ticketList,
+            orderId,
+            BookingId.create(input.bookingId),
+            ticketList,
         );
 
-
         await this._unitOfWork.do(async () => {
-           
-           await this._unitOfWork.save(order);
+            await this._unitOfWork.save(order);
 
-           this._logger.info('Order created from booking', {
-               orderId: order.id.value,
-               bookingId: order.bookingId.value,
-           });
+            this._logger.info('Order created from booking', {
+                orderId: order.id.value,
+                bookingId: order.bookingId.value,
+            });
         });
     }
 }

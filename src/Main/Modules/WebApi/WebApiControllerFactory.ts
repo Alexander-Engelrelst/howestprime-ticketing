@@ -17,10 +17,10 @@ import type {
     SuggestionListItemReadModel,
 } from '@/Application/Ports/Queries/mod.ts';
 import {
+    AddCustomerInformationController,
     CreateSuggestionController,
     GetSuggestionByIdController,
     ListSuggestionsController,
-    AddCustomerInformationController,
 } from '@/Infrastructure/WebApi/Controllers/mod.ts';
 import {
     type ControllerFactory,
@@ -82,7 +82,9 @@ export class WebApiControllerFactory implements ControllerFactory {
         return new GetSuggestionByIdController(useCase);
     }
 
-    private async createAddCustomerInformationController(): Promise<AddCustomerInformationController> {
+    private async createAddCustomerInformationController(): Promise<
+        AddCustomerInformationController
+    > {
         const useCase = (await this._serviceProvider.getService<
             UseCase<AddCustomerToOrderUseCaseInput, string>
         >(AddCustomerToOrderUseCase.name)).getOrThrow();

@@ -1,8 +1,8 @@
 import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export enum VisitorType {
-    Standard = "standard",
-    Discounted = "discounted",
+    Standard = 'standard',
+    Discounted = 'discounted',
 }
 
 export class InvalidSeatNumberException extends DomainException {

@@ -1,26 +1,36 @@
-import { DocumentMapper, serializeObjectToDocument } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
+import {
+    DocumentMapper,
+    serializeObjectToDocument,
+} from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { Document } from '@mongodb';
-import { 
-    Order, 
-    OrderId, 
+import {
+    BookingId,
+    Customer,
+    CustomerEmail,
+    CustomerFirstName,
+    CustomerLastName,
+    CustomerSalutation,
+    MovieInfo,
+    Order,
+    OrderId,
     OrderStatus,
-    Ticket, 
-    BookingId, 
-    Customer, 
-    CustomerFirstName, 
-    CustomerLastName, 
-    CustomerEmail, 
-    CustomerSalutation, 
-    TicketId, 
-    Seat, 
-    RoomName, 
-    ShowTime, 
-    MovieInfo, 
-    VisitorType 
+    RoomName,
+    Seat,
+    ShowTime,
+    Ticket,
+    TicketId,
+    VisitorType,
 } from '@/Domain/Ticketing/Orders/mod.ts';
 import { Money } from '@/Domain/Shared/mod.ts';
 import { Optional } from '@domaincrafters/std';
-import { AgeRating, Genre, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import {
+    AgeRating,
+    Genre,
+    MovieDuration,
+    MovieId,
+    MovieTitle,
+    PosterUrl,
+} from '@/Domain/Ticketing/Movies/mod.ts';
 
 type movieInfoDocument = {
     movieId: string;
@@ -30,7 +40,7 @@ type movieInfoDocument = {
     ageRating: number;
     posterUrl: string;
     price: number;
-}
+};
 
 type ticketDocument = {
     id: string;
@@ -42,31 +52,32 @@ type ticketDocument = {
     showTime: Date;
     room: string;
     movieInfo: movieInfoDocument;
-}
+};
 
 type customerDocument = {
     firstName: string;
     lastName: string;
     email: string;
     salutation: string;
-}
+};
 
 export class OrderDocumentMapper implements DocumentMapper<Order> {
     toDocument(order: Order): Document {
-        
         const document = serializeObjectToDocument({
             _id: order.id.toString(),
             bookingId: order.bookingId.value,
             agreeToTerms: order.agreeToTerms,
             price: order.price.value,
             status: order.status,
-            tickets: order.tickets.map(ticket => this.TicketToDocument(ticket)),
-            customer: order.customer.isPresent ? {
-                firstName: order.customer.value.firstName,
-                lastName: order.customer.value.lastName,
-                email: order.customer.value.email,
-                salutation: order.customer.value.salutation,
-            } : undefined
+            tickets: order.tickets.map((ticket) => this.TicketToDocument(ticket)),
+            customer: order.customer.isPresent
+                ? {
+                    firstName: order.customer.value.firstName,
+                    lastName: order.customer.value.lastName,
+                    email: order.customer.value.email,
+                    salutation: order.customer.value.salutation,
+                }
+                : undefined,
         });
         return document;
     }
@@ -93,7 +104,7 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
         order['_agreeToTerms'] = orderData.agreeToTerms;
         order['_tickets'] = tickets;
         order['_domainEvents'] = [];
-        
+
         if (orderData.customer) {
             order['_customer'] = Optional.of(this.reconstituteCustomer(orderData.customer));
         } else {
@@ -112,10 +123,10 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
         customer['_salutation'] = CustomerSalutation.create(customerData.salutation);
         return customer;
     }
-    
+
     private reconstituteTicket(doc: ticketDocument): Ticket {
         const ticket = Object.create(Ticket.prototype);
-        
+
         const seat = Object.create(Seat.prototype);
         seat['_seatNumber'] = doc.seat.seatNumber;
         seat['_visitorType'] = doc.seat.visitorType as VisitorType;
@@ -143,22 +154,22 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
     private TicketToDocument(ticket: Ticket): ticketDocument {
         return {
             id: ticket.id.toString(),
-                seat: {
-                    visitorType: ticket.seat.visitorType,
-                    seatNumber: ticket.seat.seatNumber
-                },
-                price: ticket.price.value,
-                showTime: ticket.showTime.value,
-                room: ticket.room.value,
-                movieInfo: {
-                    movieId: ticket.movieInfo.movieId.value,
-                    title: ticket.movieInfo.title.value,
-                    duration: ticket.movieInfo.duration.value,
-                    genres: ticket.movieInfo.genres.map(genre => genre.value),
-                    ageRating: ticket.movieInfo.ageRating.value,
-                    posterUrl: ticket.movieInfo.posterUrl.value,
-                    price: ticket.movieInfo.price.value,
-                }
+            seat: {
+                visitorType: ticket.seat.visitorType,
+                seatNumber: ticket.seat.seatNumber,
+            },
+            price: ticket.price.value,
+            showTime: ticket.showTime.value,
+            room: ticket.room.value,
+            movieInfo: {
+                movieId: ticket.movieInfo.movieId.value,
+                title: ticket.movieInfo.title.value,
+                duration: ticket.movieInfo.duration.value,
+                genres: ticket.movieInfo.genres.map((genre) => genre.value),
+                ageRating: ticket.movieInfo.ageRating.value,
+                posterUrl: ticket.movieInfo.posterUrl.value,
+                price: ticket.movieInfo.price.value,
+            },
         };
     }
 }

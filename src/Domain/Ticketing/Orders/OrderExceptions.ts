@@ -33,6 +33,8 @@ export class CannotSubmitCustomerInfoForNonOpenOrderException extends DomainExce
 
 export class TicketQuantityMismatchException extends DomainException {
     constructor(expected: number, actual: number) {
-        super(`The total amount of tickets (${actual}) must match the number of seats (${expected}).`);
+        super(
+            `The total amount of tickets (${actual}) must match the number of seats (${expected}).`,
+        );
     }
 }
