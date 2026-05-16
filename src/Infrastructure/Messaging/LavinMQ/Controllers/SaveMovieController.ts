@@ -3,7 +3,7 @@ import { SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
 import { UseCase } from '@/Application/Ports/mod.ts';
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
-export interface SaveMovieRequest {
+export type SaveMovieRequest {
     movieId: string;
     title: string;
     duration: number;
