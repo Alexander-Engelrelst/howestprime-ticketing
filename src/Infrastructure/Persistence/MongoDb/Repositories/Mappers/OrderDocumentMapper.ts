@@ -70,15 +70,17 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
             price: order.price.value,
             status: order.status,
             tickets: order.tickets.map((ticket) => this.TicketToDocument(ticket)),
-            customer: order.customer.isPresent
-                ? {
-                    firstName: order.customer.value.firstName.value,
-                    lastName: order.customer.value.lastName.value,
-                    email: order.customer.value.email.value,
-                    salutation: order.customer.value.salutation.value,
-                }
-                : undefined,
         });
+
+        if (order.customer.isPresent) {
+            document.customer = {
+                firstName: order.customer.value.firstName.value,
+                lastName: order.customer.value.lastName.value,
+                email: order.customer.value.email.value,
+                salutation: order.customer.value.salutation.value,
+            };
+        }
+
         return document;
     }
 
