@@ -3,7 +3,7 @@
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
- * 
+ *
  * Modified by Alexander Engelrelst (13-05-2025)
  * Changes:
  *  - modified the static parse method to be version agnostic
@@ -42,7 +42,7 @@
  * ```
  */
 import { IllegalArgumentException } from '@domaincrafters/std';
-import { validate as validateUUID } from "@std/uuid";
+import { validate as validateUUID } from '@std/uuid';
 
 export class UUID {
     /**

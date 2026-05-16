@@ -1,5 +1,12 @@
-import { Money, ValueObject } from '@/Domain/Shared/mod.ts';
-import { AgeRating, Genre, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import { EmptyListException, Money, ValueObject } from '@/Domain/Shared/mod.ts';
+import {
+    AgeRating,
+    Genre,
+    MovieDuration,
+    MovieId,
+    MovieTitle,
+    PosterUrl,
+} from '@/Domain/Ticketing/Movies/mod.ts';
 
 export class MovieInfo extends ValueObject {
     private readonly _movieId: MovieId;
@@ -38,7 +45,18 @@ export class MovieInfo extends ValueObject {
         posterUrl: PosterUrl,
         price: Money,
     ): MovieInfo {
-        return new MovieInfo(movieId, title, duration, genres, ageRating, posterUrl, price);
+        const movieInfo = new MovieInfo(
+            movieId,
+            title,
+            duration,
+            genres,
+            ageRating,
+            posterUrl,
+            price,
+        );
+        movieInfo.validateState();
+
+        return movieInfo;
     }
 
     get movieId(): MovieId {
@@ -68,7 +86,7 @@ export class MovieInfo extends ValueObject {
     get price(): Money {
         return this._price;
     }
-    
+
     override equals(other: ValueObject): boolean {
         return (
             other instanceof MovieInfo &&
@@ -92,5 +110,10 @@ export class MovieInfo extends ValueObject {
 
         return sortedThisGenres.every((genre, index) => genre.equals(sortedOtherGenres[index]!));
     }
-}
 
+    private validateState(): void {
+        if (this._genres.length === 0) {
+            throw new EmptyListException('Genres');
+        }
+    }
+}

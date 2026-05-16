@@ -3,7 +3,7 @@
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
- * 
+ *
  * modified by Alexander Engelrelst (13-05-2025)
  * Changes:
  * - modified the import for UUID with a modified version of the UUID library that allows for version agnostic parsing

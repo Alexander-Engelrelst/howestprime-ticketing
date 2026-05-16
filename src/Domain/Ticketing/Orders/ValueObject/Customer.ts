@@ -1,4 +1,9 @@
-import { CustomerEmail, CustomerLastName, CustomerFirstName, CustomerSalutation } from '@/Domain/Ticketing/Orders/mod.ts';
+import {
+    CustomerEmail,
+    CustomerFirstName,
+    CustomerLastName,
+    CustomerSalutation,
+} from '@/Domain/Ticketing/Orders/mod.ts';
 import { ValueObject } from '@/Domain/Shared/ValueObject.ts';
 
 export class Customer extends ValueObject {
@@ -50,7 +55,7 @@ export class Customer extends ValueObject {
     get email(): CustomerEmail {
         return this._email;
     }
-    
+
     get salutation(): CustomerSalutation {
         return this._salutation;
     }

@@ -1,9 +1,9 @@
 import { 
     MovieId, MovieTitle, MovieDuration, Genre, AgeRating, PosterUrl 
 } from '@/Domain/Ticketing/Movies/mod.ts';
-import { Money } from '@/Domain/Shared/mod.ts';
+import { EmptyListException, Money } from '@/Domain/Shared/mod.ts';
 import { MovieInfo } from '@/Domain/Ticketing/Orders/mod.ts';
-import { assert, assertEquals } from '@std/assert';
+import { assert, assertEquals, assertThrows } from '@std/assert';
 
 // Helper om mock data aan te maken
 const createDefaultProps = () => ({
@@ -89,4 +89,13 @@ Deno.test("MovieInfo.equals - should return false if genres lengths differ", () 
     );
   
     assert(!movie1.equals(movieWithExtraGenre), "Movies with different number of genres should not be equal");
+});
+
+Deno.test("MovieInfo.validateState - should throw if genres list is empty", () => {
+    const props = createDefaultProps();
+    assertThrows(
+        () => MovieInfo.create(props.movieId, props.title, props.duration, [], props.ageRating, props.posterUrl, props.price),
+        EmptyListException,
+        "Genres list cannot be empty"
+    );
 });

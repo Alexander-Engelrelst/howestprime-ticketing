@@ -14,3 +14,4 @@ export { UUIDEntityId } from './UUIDEntityId.ts';
 export { type Repository } from './Repository.ts';
 export { MathRandomProvider, type RandomProvider } from './RandomProvider.ts';
 export { UUID } from './UUID.ts';
+export { EmptyListException } from './EmptyListException.ts';

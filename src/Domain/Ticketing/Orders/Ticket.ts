@@ -26,7 +26,7 @@ export class Ticket extends Entity<TicketId> {
         seat: Seat,
         room: RoomName,
         price: Money,
-        showTime: ShowTime
+        showTime: ShowTime,
     ) {
         super(id);
         this._movieInfo = movieInfo;
@@ -41,9 +41,9 @@ export class Ticket extends Entity<TicketId> {
         movieInfo: MovieInfo,
         seat: Seat,
         room: RoomName,
-        showTime: ShowTime
+        showTime: ShowTime,
     ): Ticket {
-        const price = seat.visitorType === VisitorType.Discounted 
+        const price = seat.visitorType === VisitorType.Discounted
             ? movieInfo.price
             : Money.create(movieInfo.price.value * Ticket.DISCOUNT_TICKET_PRICE_MULTIPLIER);
 
@@ -69,5 +69,4 @@ export class Ticket extends Entity<TicketId> {
     get showTime(): ShowTime {
         return this._showTime;
     }
-
 }

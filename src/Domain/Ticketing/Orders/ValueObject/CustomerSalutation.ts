@@ -1,26 +1,22 @@
 import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
-
 export class InvalidCustomerSalutationException extends DomainException {
     constructor(receivedValue: string) {
-        // Format the received value for clarity
-        const displayValue = receivedValue.trim().length === 0 
-            ? "[empty or whitespace]" 
+        const displayValue = receivedValue.trim().length === 0
+            ? '[empty or whitespace]'
             : `"${receivedValue}"`;
 
-        // Create a comma-separated list of valid options
-        const expected = CustomerSalutation.ALLOWED_SALUTATIONS.join(", ");
+        const expected = CustomerSalutation.ALLOWED_SALUTATIONS.join(', ');
 
         const message = `Invalid salutation: Received ${displayValue}. ` +
-                        `Must be one of the following: ${expected}.`;
+            `Must be one of the following: ${expected}.`;
 
         super(message);
     }
 }
 
 export class CustomerSalutation extends ValueObject {
-    public static readonly ALLOWED_SALUTATIONS = Object.freeze(["Mr.", "Ms.", "Mx"]);
-
+    public static readonly ALLOWED_SALUTATIONS = Object.freeze(['Mr.', 'Ms.', 'Mx']);
 
     private readonly _value: string;
 
@@ -44,5 +40,9 @@ export class CustomerSalutation extends ValueObject {
 
     override equals(other: ValueObject): boolean {
         return other instanceof CustomerSalutation && other._value === this._value;
+    }
+
+    get value(): string {
+        return this._value;
     }
 }

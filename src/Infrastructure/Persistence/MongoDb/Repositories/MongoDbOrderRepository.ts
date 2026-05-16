@@ -1,4 +1,7 @@
-import { MongoDbClient, MongoDbRepository } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
+import {
+    MongoDbClient,
+    MongoDbRepository,
+} from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { Order, OrderId, OrderRepository } from '@/Domain/Ticketing/Orders/mod.ts';
 import { OrderDocumentMapper } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 

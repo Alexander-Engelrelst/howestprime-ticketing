@@ -1,7 +1,6 @@
-import { AggregateRoot, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
+import { AggregateRoot, EmptyListException, Money, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import {
     AgeRating,
-    EmptyGenresListException,
     Genre,
     MovieDuration,
     MovieTitle,
@@ -19,10 +18,10 @@ export class MovieId extends UUIDEntityId {
 }
 
 // deliberately not using a separate externalMovieId field
-// to my the fact that it would be called this implies this is conceptually the same thing 
+// to my the fact that it would be called this implies this is conceptually the same thing
 // view through different lenses,
 // I feel like the bounded context should be agnostic to the fact that this other lens even exists
-// the UUID boilerplate was modified to be version agnostic 
+// the UUID boilerplate was modified to be version agnostic
 export class Movie extends AggregateRoot<MovieId> {
     private static readonly PRICE_PER_MINUTE = 0.15;
 
@@ -104,7 +103,7 @@ export class Movie extends AggregateRoot<MovieId> {
 
     private validateState(): void {
         if (this._genres.length === 0) {
-            throw new EmptyGenresListException();
+            throw new EmptyListException('Genres');
         }
     }
 }

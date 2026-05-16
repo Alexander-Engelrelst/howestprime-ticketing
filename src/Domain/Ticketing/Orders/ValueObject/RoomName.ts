@@ -29,7 +29,6 @@ export class RoomName extends ValueObject {
     private validate(): void {
         if (this._value.length === 0) {
             throw new IllegalArgumentException('Room name cannot be empty');
-        }   
+        }
     }
 }
-
