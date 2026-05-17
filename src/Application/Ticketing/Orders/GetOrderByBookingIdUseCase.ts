@@ -1,6 +1,9 @@
 import { OrderForBookingNotFoundApplicationException } from '@/Application/Shared/mod.ts';
 import { Logger, UseCase } from '@/Application/Ports/mod.ts';
-import { GetOrderByBookingIdQueryPort, OrderByBookingIdReadModel } from '@/Application/Ports/Queries/mod.ts';
+import {
+    GetOrderByBookingIdQueryPort,
+    OrderByBookingIdReadModel,
+} from '@/Application/Ports/Queries/mod.ts';
 
 export type GetOrderByBookingIdInput = {
     bookingId: string;
@@ -24,6 +27,5 @@ export class GetOrderByBookingIdUseCase
         }
 
         return orderOpt.value;
-
     }
 }

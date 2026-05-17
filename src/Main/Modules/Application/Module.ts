@@ -11,16 +11,16 @@ import {
 import { domainEventPolicies } from '@/Application/mod.ts';
 import type { Logger, UseCase } from '@/Application/Ports/mod.ts';
 import type {
-OrderByBookingIdReadModel,
+    OrderByBookingIdReadModel,
     SuggestionByIdReadModel,
     SuggestionListItemReadModel,
 } from '@/Application/Ports/Queries/mod.ts';
 import { DomainEventRegistry } from '@/Infrastructure/Events/Shared/mod.ts';
 import { PolicyDomainEventListener } from '@/Infrastructure/Events/mod.ts';
 import {
+    MongoDbGetOrderByBookingIdQuery,
     MongoDbGetSuggestionByIdQuery,
     MongoDbListSuggestionsQuery,
-    MongoDbGetOrderByBookingIdQuery,
 } from '@/Infrastructure/Persistence/MongoDb/Queries/mod.ts';
 import { MongoDbUnitOfWork } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { Config, ConsoleLogger } from '@/Infrastructure/Shared/mod.ts';

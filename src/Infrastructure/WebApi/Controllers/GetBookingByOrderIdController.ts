@@ -18,7 +18,9 @@ export class GetOrderByBookingIdController implements WebApiController {
 
     async handle(ctx: RouterContext<string>): Promise<void> {
         const bookingId = this.extractBookingId(ctx);
-        const order = await this._getOrderByBookingIdUseCase.execute({bookingId} as GetOrderByBookingIdInput);
+        const order = await this._getOrderByBookingIdUseCase.execute(
+            { bookingId } as GetOrderByBookingIdInput,
+        );
 
         WebApiResult.ok(ctx, order);
     }
@@ -27,12 +29,6 @@ export class GetOrderByBookingIdController implements WebApiController {
         const bookingId = ctx.params.bookingId;
         if (typeof bookingId !== 'string' || bookingId.trim().length === 0) {
             throw new IllegalArgumentException('Route parameter bookingId is required.');
-        }
-
-        // Validate UUID format (simple RFC4122 v4 pattern)
-        const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-        if (!uuidRegex.test(bookingId)) {
-            throw new IllegalArgumentException('Route parameter bookingId must be a valid UUID.');
         }
 
         return bookingId;

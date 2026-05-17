@@ -22,9 +22,9 @@ import {
     SuggestionDocumentMapper,
 } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 import {
+    MongoDbGetOrderByBookingIdQuery,
     MongoDbGetSuggestionByIdQuery,
     MongoDbListSuggestionsQuery,
-    MongoDbGetOrderByBookingIdQuery,
 } from '@/Infrastructure/Persistence/MongoDb/Queries/mod.ts';
 import {
     MongoDbClient,

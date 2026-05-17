@@ -2,7 +2,7 @@ import { type Collection, type Document, type Filter } from '@mongodb';
 import { Optional } from '@domaincrafters/std';
 
 import type {
-GetOrderByBookingIdQueryPort,
+    GetOrderByBookingIdQueryPort,
     OrderByBookingIdCustomerReadModel,
     OrderByBookingIdReadModel,
     OrderByBookingIdTicketReadModel,
@@ -31,14 +31,15 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
 
     private mapToReadModel(document: Document): OrderByBookingIdReadModel {
         const source = this.asRecord(document);
-        
-        // Handle defensive array processing for nested structural mapping
+
         const ticketsRaw = Array.isArray(source.tickets) ? source.tickets : [];
         const mappedTickets = ticketsRaw.map((t) => this.mapTicket(t));
 
         let mappedCustomer = Optional.empty<OrderByBookingIdCustomerReadModel>();
         if (source.customer && typeof source.customer === 'object') {
-            mappedCustomer = Optional.of<OrderByBookingIdCustomerReadModel>(this.mapCustomer(source.customer));
+            mappedCustomer = Optional.of<OrderByBookingIdCustomerReadModel>(
+                this.mapCustomer(source.customer),
+            );
         }
 
         return {
@@ -103,16 +104,16 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
     }
 
     private asNumber(value: unknown): number {
-    if (typeof value === 'number') {
-        return Number.isNaN(value) ? 0 : value;
-    }
+        if (typeof value === 'number') {
+            return Number.isNaN(value) ? 0 : value;
+        }
 
-    if (typeof value === 'string') {
-        const parsed = Number(value);
-        return Number.isNaN(parsed) ? 0 : parsed;
-    }
+        if (typeof value === 'string') {
+            const parsed = Number(value);
+            return Number.isNaN(parsed) ? 0 : parsed;
+        }
 
-    return 0;
+        return 0;
     }
 
     private asDate(value: unknown): Date {

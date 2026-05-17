@@ -2,7 +2,7 @@ export {
     ApplicationException,
     MovieNotFoundApplicationException,
     NotFoundApplicationException,
-    OrderNotFoundApplicationException,
     OrderForBookingNotFoundApplicationException,
+    OrderNotFoundApplicationException,
     SuggestionNotFoundApplicationException,
 } from './ApplicationException.ts';

@@ -15,7 +15,7 @@ import { GetOrderByBookingIdUseCase } from '@/Application/Ticketing/Orders/GetOr
 import type { GetOrderByBookingIdInput } from '@/Application/Ticketing/Orders/GetOrderByBookingIdUseCase.ts';
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import type {
-OrderByBookingIdReadModel,
+    OrderByBookingIdReadModel,
     SuggestionByIdReadModel,
     SuggestionListItemReadModel,
 } from '@/Application/Ports/Queries/mod.ts';

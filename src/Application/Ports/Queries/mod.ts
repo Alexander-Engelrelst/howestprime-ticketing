@@ -9,7 +9,7 @@ export {
 
 export {
     type GetOrderByBookingIdQueryPort,
-    type OrderByBookingIdReadModel,
     type OrderByBookingIdCustomerReadModel,
+    type OrderByBookingIdReadModel,
     type OrderByBookingIdTicketReadModel,
 } from './GetOrderByBookingIdQuery.ts';

@@ -10,7 +10,7 @@ export type SaveMovieRequest = {
     genres: string[];
     ageRating: number;
     posterUrl: string;
-}
+};
 
 export class SaveMovieController implements AmqpController<SaveMovieRequest> {
     constructor(
