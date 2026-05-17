@@ -1,9 +1,8 @@
 import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidCustomerLastNameException extends DomainException {
-    constructor(value: string) {
-        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
-        super(`CustomerLastName has invalid value: '${displayValue}'`);
+    constructor(reason: string) {
+        super(`CustomerLastName has invalid value: '${reason}'`);
     }
 }
 
@@ -24,7 +23,7 @@ export class CustomerLastName extends ValueObject {
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidCustomerLastNameException(this._value);
+            throw new InvalidCustomerLastNameException('Last name is empty or contains only whitespace');
         }
     }
 

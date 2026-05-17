@@ -1,9 +1,8 @@
 import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidCustomerEmailException extends DomainException {
-    constructor(value: string) {
-        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
-        super(`CustomerEmail has invalid value: '${displayValue}'`);
+    constructor(reason: string) {
+        super(`CustomerEmail has invalid value: '${reason}'`);
     }
 }
 
@@ -26,12 +25,11 @@ export class CustomerEmail extends ValueObject {
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidCustomerEmailException(this._value);
+            throw new InvalidCustomerEmailException('Email is empty or contains only whitespace');
         }
-        // Simple email format validation
 
         if (!CustomerEmail.emailRegex.test(this._value)) {
-            throw new InvalidCustomerEmailException(this._value);
+            throw new InvalidCustomerEmailException('Email has invalid format');
         }
     }
 
