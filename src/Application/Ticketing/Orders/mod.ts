@@ -6,3 +6,7 @@ export {
     AddCustomerToOrderUseCase,
     type AddCustomerToOrderUseCaseInput,
 } from './AddCustomerToOrderUseCase.ts';
+export { 
+    GetOrderByBookingIdUseCase,
+    type GetOrderByBookingIdInput,
+ } from './GetOrderByBookingIdUseCase.ts';

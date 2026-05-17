@@ -47,7 +47,7 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
             status: this.asString(source.status),
             price: this.asNumber(source.price),
             agreeToTerms: Boolean(source.agreeToTerms),
-            customer: mappedCustomer,
+            customer: mappedCustomer.isPresent ? mappedCustomer.value : null,
             tickets: mappedTickets,
         };
     }

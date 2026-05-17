@@ -1,4 +1,5 @@
 import type { UseCase } from '@/Application/Ports/mod.ts';
+import type { OrderByBookingIdReadModel } from '@/Application/Ports/Queries/mod.ts';
 import {
     type RouterContext,
     type WebApiController,
@@ -11,7 +12,7 @@ export class GetOrderByBookingIdController implements WebApiController {
     constructor(
         private readonly _getOrderByBookingIdUseCase: UseCase<
             GetOrderByBookingIdInput,
-            string
+            OrderByBookingIdReadModel
         >,
     ) {}
 
@@ -26,6 +27,12 @@ export class GetOrderByBookingIdController implements WebApiController {
         const bookingId = ctx.params.bookingId;
         if (typeof bookingId !== 'string' || bookingId.trim().length === 0) {
             throw new IllegalArgumentException('Route parameter bookingId is required.');
+        }
+
+        // Validate UUID format (simple RFC4122 v4 pattern)
+        const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        if (!uuidRegex.test(bookingId)) {
+            throw new IllegalArgumentException('Route parameter bookingId must be a valid UUID.');
         }
 
         return bookingId;

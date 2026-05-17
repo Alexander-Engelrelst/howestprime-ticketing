@@ -6,7 +6,7 @@ export type OrderByBookingIdReadModel = {
     status: string;
     price: number;
     agreeToTerms: boolean;
-    customer: Optional<OrderByBookingIdCustomerReadModel>;
+    customer: OrderByBookingIdCustomerReadModel | null;
     tickets: OrderByBookingIdTicketReadModel[];
 };
 
