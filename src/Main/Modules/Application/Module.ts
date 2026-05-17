@@ -11,12 +11,14 @@ import {
 import { domainEventPolicies } from '@/Application/mod.ts';
 import type { Logger, UseCase } from '@/Application/Ports/mod.ts';
 import type {
+    OrderByBookingIdReadModel,
     SuggestionByIdReadModel,
     SuggestionListItemReadModel,
 } from '@/Application/Ports/Queries/mod.ts';
 import { DomainEventRegistry } from '@/Infrastructure/Events/Shared/mod.ts';
 import { PolicyDomainEventListener } from '@/Infrastructure/Events/mod.ts';
 import {
+    MongoDbGetOrderByBookingIdQuery,
     MongoDbGetSuggestionByIdQuery,
     MongoDbListSuggestionsQuery,
 } from '@/Infrastructure/Persistence/MongoDb/Queries/mod.ts';
@@ -30,6 +32,8 @@ import {
     AddCustomerToOrderUseCaseInput,
     CreateOrderFromBookingUseCase,
     CreateOrderFromBookingUseCaseInput,
+    GetOrderByBookingIdInput,
+    GetOrderByBookingIdUseCase,
 } from '@/Application/Ticketing/Orders/mod.ts';
 
 export class Application implements Module {
@@ -161,6 +165,28 @@ export class Application implements Module {
                         unitOfWork,
                         logger,
                     );
+
+                return useCase;
+            },
+        );
+
+        serviceCollection.addScoped(
+            GetOrderByBookingIdUseCase.name,
+            async (serviceProvider: ServiceProvider) => {
+                const query = (await serviceProvider.getService<MongoDbGetOrderByBookingIdQuery>(
+                    MongoDbGetOrderByBookingIdQuery.name,
+                )).getOrThrow();
+
+                const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
+                    .getOrThrow();
+
+                const useCase: UseCase<
+                    GetOrderByBookingIdInput,
+                    OrderByBookingIdReadModel
+                > = new GetOrderByBookingIdUseCase(
+                    query,
+                    logger,
+                );
 
                 return useCase;
             },

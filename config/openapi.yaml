@@ -137,6 +137,28 @@ paths:
                 '500':
                     $ref: '#/components/responses/InternalServerErrorProblem'
 
+    /api/orders/{bookingId}:
+        get:
+            tags:
+                - Orders
+            summary: Get order by booking id
+            operationId: getOrderByBookingId
+            parameters:
+                - $ref: '#/components/parameters/BookingId'
+            responses:
+                '200':
+                    description: Order found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OrderResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestProblem'
+                '404':
+                    $ref: '#/components/responses/NotFoundProblem'
+                '500':
+                    $ref: '#/components/responses/InternalServerErrorProblem'
+
 components:
     parameters:
         OrderId:
@@ -144,6 +166,14 @@ components:
             in: path
             required: true
             description: Order identifier
+            schema:
+                $ref: '#/components/schemas/UUID'
+
+        BookingId:
+            name: bookingId
+            in: path
+            required: true
+            description: Booking identifier
             schema:
                 $ref: '#/components/schemas/UUID'
 
@@ -266,6 +296,75 @@ components:
                     minLength: 10
                     maxLength: 2000
                     example: Cache frequently requested movie data to reduce latency.
+        OrderCustomer:
+            type: object
+            properties:
+                salutation:
+                    type: string
+                    example: Mr.
+                firstName:
+                    type: string
+                    example: Alex
+                lastName:
+                    type: string
+                    example: Engelrelst
+                email:
+                    type: string
+                    format: email
+                    example: alex@example.com
+
+        OrderTicket:
+            type: object
+            properties:
+                ticketId:
+                    type: string
+                    format: uuid
+                seatNumber:
+                    type: string
+                visitorType:
+                    type: string
+                price:
+                    type: number
+                    format: double
+                movieId:
+                    type: string
+                room:
+                    type: string
+                showTime:
+                    type: string
+                    format: date-time
+
+        OrderResponse:
+            type: object
+            required:
+                - id
+                - bookingId
+                - status
+                - price
+                - agreeToTerms
+                - tickets
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bookingId:
+                    $ref: '#/components/schemas/UUID'
+                status:
+                    type: string
+                    example: PENDING
+                price:
+                    type: number
+                    format: double
+                    example: 29.99
+                agreeToTerms:
+                    type: boolean
+                    example: true
+                customer:
+                    $ref: '#/components/schemas/OrderCustomer'
+                    nullable: true
+                tickets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/OrderTicket'
 
         ProblemDetails:
             type: object

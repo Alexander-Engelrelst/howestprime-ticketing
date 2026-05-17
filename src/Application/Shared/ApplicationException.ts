@@ -28,3 +28,9 @@ export class OrderNotFoundApplicationException extends NotFoundApplicationExcept
         super(`Order with id '${orderId}' was not found.`);
     }
 }
+
+export class OrderForBookingNotFoundApplicationException extends NotFoundApplicationException {
+    constructor(bookingId: string) {
+        super(`Order for booking id '${bookingId}' was not found.`);
+    }
+}
