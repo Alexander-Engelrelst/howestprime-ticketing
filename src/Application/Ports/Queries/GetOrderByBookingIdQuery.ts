@@ -19,7 +19,7 @@ export type OrderByBookingIdCustomerReadModel = {
 
 export type OrderByBookingIdTicketReadModel = {
     ticketId: string;
-    seatNumber: number;
+    seatNumber: string; // todo(alexaander): ask if it is correct that this expects a string
     visitorType: string;
     price: number;
     movieId: string;
