@@ -18,9 +18,13 @@ export type OrderByBookingIdCustomerReadModel = {
 };
 
 export type OrderByBookingIdTicketReadModel = {
-    movieTitle: string;
-    showTime: string;
-    seatNumber: string;
+    ticketId: string;
+    seatNumber: number;
+    visitorType: string;
+    price: number;
+    movieId: string;
+    room: string;
+    showTime: Date;
 };
 
 export interface GetOrderByBookingIdQueryPort {
