@@ -1,11 +1,12 @@
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import type { OrderByBookingIdReadModel } from '@/Application/Ports/Queries/mod.ts';
 import {
+RequestValidator,
     type RouterContext,
     type WebApiController,
     WebApiResult,
 } from '@/Infrastructure/WebApi/Shared/mod.ts';
-import { IllegalArgumentException } from '@domaincrafters/std';
+import { Guard } from '@domaincrafters/std';
 import { GetOrderByBookingIdInput } from '@/Application/Ticketing/Orders/GetOrderByBookingIdUseCase.ts';
 
 export class GetOrderByBookingIdController implements WebApiController {
@@ -27,10 +28,18 @@ export class GetOrderByBookingIdController implements WebApiController {
 
     private extractBookingId(ctx: RouterContext<string>): string {
         const bookingId = ctx.params.bookingId;
-        if (typeof bookingId !== 'string' || bookingId.trim().length === 0) {
-            throw new IllegalArgumentException('Route parameter bookingId is required.');
-        }
+               
+        const validator = RequestValidator.create([
+            () => Guard.check(bookingId, 'bookingId')
+            .isType('string')
+            .againstWhitespace(),
+        ]);
 
-        return bookingId;
+        validator
+            .onValidationFailure("invalid booking id")
+            .validate();
+
+
+        return bookingId as string;
     }
 }
