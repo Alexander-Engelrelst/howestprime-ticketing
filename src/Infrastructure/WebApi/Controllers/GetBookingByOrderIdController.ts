@@ -39,7 +39,6 @@ export class GetOrderByBookingIdController implements WebApiController {
             .onValidationFailure("invalid booking id")
             .validate();
 
-
         return bookingId as string;
     }
 }
