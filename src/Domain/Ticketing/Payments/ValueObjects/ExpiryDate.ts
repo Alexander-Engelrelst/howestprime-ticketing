@@ -1,8 +1,8 @@
-import { ValueObject } from '@/Domain/Shared/mod.ts';
+import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
-export class InvalidExpiryDateException extends Error {
+export class InvalidExpiryDateException extends DomainException {
     constructor(reason: string) {
-        super(reason);
+        super(`Expiry date has invalid value: '${reason}'`);
     }
 }
 

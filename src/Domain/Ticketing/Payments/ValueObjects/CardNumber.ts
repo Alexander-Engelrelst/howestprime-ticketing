@@ -9,7 +9,7 @@ export class InvalidCardNumberException extends DomainException {
 export class CardNumber extends ValueObject {
     static MIN_LENGTH = 13;
     static MAX_LENGTH = 19;
-    static VALIDATION_REGEX = /^\d+$/;
+    static ONLY_DIGITS_REGEX = /^\d+$/;
 
     private readonly _value: string;
 
@@ -34,9 +34,11 @@ export class CardNumber extends ValueObject {
             throw new InvalidCardNumberException(`Card number must be between ${CardNumber.MIN_LENGTH} and ${CardNumber.MAX_LENGTH} characters long`);
         }
 
-        if (!CardNumber.VALIDATION_REGEX.test(this._value)) {
+        if (!CardNumber.ONLY_DIGITS_REGEX.test(this._value)) {
             throw new InvalidCardNumberException('Card number contains invalid characters (only digits are allowed)');
         }
+
+        // for simplicity we are not implementing the Luhn algorithm check here
     }
 
     override equals(other: ValueObject): boolean {

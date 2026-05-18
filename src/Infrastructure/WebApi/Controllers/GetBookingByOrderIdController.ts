@@ -34,6 +34,8 @@ export class GetOrderByBookingIdController implements WebApiController {
             .isType('string')
             .againstWhitespace(),
         ]);
+        
+        // TODO(alexander): does this require a check for a valid UUID format?
 
         validator
             .onValidationFailure("invalid booking id")
