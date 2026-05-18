@@ -4,3 +4,5 @@ export { CardNumber, InvalidCardNumberException } from './ValueObjects/CardNumbe
 export { PaymentAmount, InvalidPaymentAmountException } from './ValueObjects/PaymentAmount.ts';
 export { CCV, InvalidCCVException } from './ValueObjects/CCV.ts';
 export { InvalidPaymentStatusTransitionException } from './PaymentExceptions.ts';
+export { PaymentDomainEvent } from './Events/PaymentDomainEvent.ts';
+export { PaymentSucceededDomainEvent } from './Events/PaymentSucceededDomainEvent.ts';
