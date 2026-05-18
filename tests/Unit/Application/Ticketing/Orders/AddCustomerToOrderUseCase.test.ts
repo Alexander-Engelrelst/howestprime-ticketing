@@ -38,7 +38,7 @@ const createTestOrder = (id: string): Order => {
         [Genre.create('Action')], // genres
         AgeRating.create(12),
         PosterUrl.create('https://example.com/poster.jpg'),
-        Money.create(15.0)
+        Money.create(1500)
     );
 
     const tickets = TicketMappingService.mapToTickets(

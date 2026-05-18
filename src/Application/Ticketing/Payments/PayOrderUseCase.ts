@@ -42,7 +42,10 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
                 throw new OrderNotFoundApplicationException(orderId.value);
             }
             
-            console.log("teeeeeeeeeeeeeeeeeeeeeeeeeeest", input.amount);
+            // TODO(alexander): what exactly must be checked here?
+            // what data must be read from the order?
+            // any form of idempotency?
+            // i am utterly clueless about what the spec is asking
             const payment = Payment.create(
                 PaymentId.create(),
                 ExternalId.create(input.externalId),

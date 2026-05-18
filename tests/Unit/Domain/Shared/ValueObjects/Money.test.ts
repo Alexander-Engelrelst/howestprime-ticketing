@@ -3,13 +3,13 @@ import { InvalidMoneyException, Money } from '@/Domain/Shared/mod.ts';
 
 Deno.test('[Unit] - Money - create - valid positive value - returns value object', () => {
     // Arrange
-    const rawValue = 100.50;
+    const rawValue = 10050;
 
     // Act
     const money = Money.create(rawValue);
 
     // Assert
-    assertEquals(money.value, 100.50);
+    assertEquals(money.value, 10050);
 });
 
 Deno.test('[Unit] - Money - create - zero value - returns value object', () => {
@@ -31,7 +31,7 @@ Deno.test('[Unit] - Money - create - negative value - throws InvalidMoneyExcepti
     assertThrows(
         () => Money.create(invalidValue),
         InvalidMoneyException,
-        "Money must be a positive number"
+        "Money must be a non-negative safe integer representing cents"
     );
 });
 

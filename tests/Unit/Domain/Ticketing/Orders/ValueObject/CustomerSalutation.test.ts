@@ -10,7 +10,7 @@ Deno.test('[Unit] - CustomerSalutation - create - empty salutation - throws Inva
     assertThrows(
         () => CustomerSalutation.create('   '),
         InvalidCustomerSalutationException,
-        `Invalid salutation: Received [empty or whitespace]. Must be one of the following: Mr., Ms., Mx.`
+        `CustomerSalutation has invalid value. Allowed values are: Mr., Ms., Mx`
     );
 });
 
@@ -18,7 +18,7 @@ Deno.test('[Unit] - CustomerSalutation - create - invalid salutation - throws In
     assertThrows(
         () => CustomerSalutation.create('Dr.'),
         InvalidCustomerSalutationException,
-        `Invalid salutation: Received "Dr.". Must be one of the following: Mr., Ms., Mx.`
+        `CustomerSalutation has invalid value. Allowed values are: Mr., Ms., Mx`
     );
 });
 

@@ -11,7 +11,7 @@ Deno.test('[Unit] - CustomerEmail - create - empty email - throws InvalidCustome
     assertThrows(
         () => CustomerEmail.create('   '),
         InvalidCustomerEmailException,
-        `CustomerEmail has invalid value: '[Empty or Whitespace]'`
+        `CustomerEmail has invalid value: 'Email is empty or contains only whitespace'`
     );
 });
 
@@ -19,7 +19,7 @@ Deno.test('[Unit] - CustomerEmail - create - invalid email format - throws Inval
     assertThrows(
         () => CustomerEmail.create('invalid-email'),
         InvalidCustomerEmailException,
-        `CustomerEmail has invalid value: 'invalid-email'`
+        `CustomerEmail has invalid value: 'Email has invalid format'`
     );
 });
 

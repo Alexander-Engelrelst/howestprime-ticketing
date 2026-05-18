@@ -39,7 +39,7 @@ Deno.test('[Unit] - Movie - create - valid input - returns movie aggregate', () 
 Deno.test('[Unit] - Movie - create - calculation logic - sets correct price based on duration', () => {
     // Arrange
     const duration = 100;
-    const expectedPrice = 100 * 0.15; // 15.0
+    const expectedPrice = 100 * 15; // 1500 cents
 
     // Act
     const movie = Movie.create(
