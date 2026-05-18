@@ -7,3 +7,4 @@ export { InvalidPaymentStatusTransitionException } from './PaymentExceptions.ts'
 export { PaymentDomainEvent } from './Events/PaymentDomainEvent.ts';
 export { PaymentSucceededDomainEvent } from './Events/PaymentSucceededDomainEvent.ts';
 export { PaymentFailedDomainEvent } from './Events/PaymentFailedDomainEvent.ts';
+export { type PaymentRepository } from './PaymentRepository.ts';
