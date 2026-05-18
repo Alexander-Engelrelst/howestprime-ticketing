@@ -21,7 +21,7 @@ export class PaymentId extends UUIDEntityId {
     }
 }
 
-export class Ticket extends Entity<PaymentId> {
+export class Payment extends Entity<PaymentId> {
     private constructor(
         id: PaymentId,
     ) {
@@ -30,7 +30,7 @@ export class Ticket extends Entity<PaymentId> {
 
     static create(
         paymentId: PaymentId,
-    ): Ticket {
-        return new Ticket(paymentId);
+    ): Payment {
+        return new Payment(paymentId);
     }
 }
