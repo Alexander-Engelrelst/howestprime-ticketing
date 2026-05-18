@@ -6,6 +6,9 @@ export class InvalidMoneyException extends DomainException {
     }
 }
 
+/**
+ * Represents a monetary amount in cents (e.g., 1500 for €15.00). Must be a non-negative safe integer.
+ */
 export class Money extends ValueObject {
     private readonly _value: number;
 

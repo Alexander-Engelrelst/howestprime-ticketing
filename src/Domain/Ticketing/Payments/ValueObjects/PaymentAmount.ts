@@ -1,3 +1,14 @@
+import { DomainException } from '@/Domain/Shared/mod.ts';
+
+export class InvalidPaymentAmountException extends DomainException {
+    constructor(value: number) {
+        super(`Payment amount must be a positive safe integer representing cents, but got: '${String(value)}'`);
+    }
+}
+
+/**
+ * Represents a payment amount in cents (e.g., 1500 for €15.00). Must be a positive safe integer.
+ */
 export class PaymentAmount {
     private readonly _value: number;
 
@@ -16,7 +27,7 @@ export class PaymentAmount {
 
     private validate(): void {
         if (!Number.isSafeInteger(this._value) || this._value <= 0) {
-            throw new Error(`Payment amount must be a positive safe integer representing cents, but got: '${String(this._value)}'`);
+            throw new InvalidPaymentAmountException(this._value);
         }
     }
 
