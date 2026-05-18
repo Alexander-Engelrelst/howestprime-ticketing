@@ -36,4 +36,8 @@ export class CVV extends ValueObject {
     override equals(other: ValueObject): boolean {
         return other instanceof CVV && other._value === this._value;
     }
+
+    get value(): string {
+        return this._value;
+    }
 }

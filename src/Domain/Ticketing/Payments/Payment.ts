@@ -29,7 +29,7 @@ export class Payment extends AggregateRoot<PaymentId> {
     private readonly _paymentMethod: PaymentMethod;
     private readonly _cardNumber: CardNumber;
     private readonly _expiryDate: ExpiryDate;
-    private readonly _ccv: CVV;
+    private readonly _cvv: CVV;
     private readonly _orderId: OrderId;
     private readonly _bookingId: BookingId;
     private readonly _amount: PaymentAmount;
@@ -52,7 +52,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         this._paymentMethod = paymentMethod;
         this._cardNumber = cardNumber;
         this._expiryDate = expiryDate;
-        this._ccv = ccv;
+        this._cvv = ccv;
         this._orderId = orderId;
         this._bookingId = bookingId;
         this._amount = amount;
@@ -65,7 +65,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         paymentMethod: PaymentMethod,
         cardNumber: CardNumber,
         expiryDate: ExpiryDate,
-        ccv: CVV,
+        cvv: CVV,
         orderId: OrderId,
         bookingId: BookingId,
         amount: PaymentAmount,
@@ -76,7 +76,7 @@ export class Payment extends AggregateRoot<PaymentId> {
             paymentMethod,
             cardNumber,
             expiryDate,
-            ccv,
+            cvv,
             orderId,
             bookingId,
             amount,
@@ -100,8 +100,8 @@ export class Payment extends AggregateRoot<PaymentId> {
         return this._expiryDate;
     }
 
-    get ccv(): CVV {
-        return this._ccv;
+    get cvv(): CVV {
+        return this._cvv;
     }
 
     get orderId(): OrderId {
