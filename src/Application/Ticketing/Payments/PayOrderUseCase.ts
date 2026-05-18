@@ -41,7 +41,8 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
             if (!orderOpt.isPresent) {
                 throw new OrderNotFoundApplicationException(orderId.value);
             }
-
+            
+            console.log("teeeeeeeeeeeeeeeeeeeeeeeeeeest", input.amount);
             const payment = Payment.create(
                 PaymentId.create(),
                 ExternalId.create(input.externalId),
