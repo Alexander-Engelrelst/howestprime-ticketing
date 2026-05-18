@@ -4,7 +4,9 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export class InvalidEmailException extends DomainException {
     constructor(value: string) {
-        super(`Email has invalid value: '${String(value)}'`);
+        const displayValue = value.trim().length === 0 ? '[Empty or Whitespace]' : value;
+
+        super(`Email has invalid value: '${displayValue}'`);
     }
 }
 

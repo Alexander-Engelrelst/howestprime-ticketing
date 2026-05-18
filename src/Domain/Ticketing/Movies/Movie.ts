@@ -23,7 +23,7 @@ export class MovieId extends UUIDEntityId {
 // I feel like the bounded context should be agnostic to the fact that this other lens even exists
 // the UUID boilerplate was modified to be version agnostic
 export class Movie extends AggregateRoot<MovieId> {
-    private static readonly PRICE_PER_MINUTE = 0.15;
+    private static readonly PRICE_PER_MINUTE_IN_CENTS = 15;
 
     private readonly _title: MovieTitle;
     private readonly _duration: MovieDuration;
@@ -65,7 +65,7 @@ export class Movie extends AggregateRoot<MovieId> {
             genres,
             ageRating,
             posterUrl,
-            Money.create(duration.value * Movie.PRICE_PER_MINUTE),
+            Money.create(duration.value * Movie.PRICE_PER_MINUTE_IN_CENTS),
         );
 
         movie.validateState();
