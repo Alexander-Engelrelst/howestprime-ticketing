@@ -7,7 +7,7 @@ export class InvalidCardNumberException extends DomainException {
 }
 
 export class CardNumber extends ValueObject {
-    static MIN_LENGTH = 13;
+    static MIN_LENGTH = 12;
     static MAX_LENGTH = 19;
     static ONLY_DIGITS_REGEX = /^\d+$/;
 

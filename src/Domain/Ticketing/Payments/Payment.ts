@@ -1,6 +1,6 @@
 import { AggregateRoot, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import { ExternalId } from '@/Domain/Shared/ValueObjects/ExternalId.ts';
-import { CardNumber, CCV, ExpiryDate, InvalidPaymentStatusTransitionException, PaymentAmount } from '@/Domain/Ticketing/Payments/mod.ts';
+import { CardNumber, CVV, ExpiryDate, InvalidPaymentStatusTransitionException, PaymentAmount, PaymentFailedDomainEvent, PaymentSucceededDomainEvent } from '@/Domain/Ticketing/Payments/mod.ts';
 import { BookingId, OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
 
 export enum PaymentStatus {
@@ -10,8 +10,8 @@ export enum PaymentStatus {
 }
 
 export enum PaymentMethod {
-    CreditCard = "CreditCard",
-    BankTransfer = "BankTransfer",
+    CreditCard = "Credit Card",
+    BankTransfer = "Bank Transfer",
 }
 
 export class PaymentId extends UUIDEntityId {
@@ -29,7 +29,7 @@ export class Payment extends AggregateRoot<PaymentId> {
     private readonly _paymentMethod: PaymentMethod;
     private readonly _cardNumber: CardNumber;
     private readonly _expiryDate: ExpiryDate;
-    private readonly _ccv: CCV;
+    private readonly _ccv: CVV;
     private readonly _orderId: OrderId;
     private readonly _bookingId: BookingId;
     private readonly _amount: PaymentAmount;
@@ -41,7 +41,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         paymentMethod: PaymentMethod,
         cardNumber: CardNumber,
         expiryDate: ExpiryDate,
-        ccv: CCV,
+        ccv: CVV,
         orderId: OrderId,
         bookingId: BookingId,
         amount: PaymentAmount,
@@ -65,7 +65,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         paymentMethod: PaymentMethod,
         cardNumber: CardNumber,
         expiryDate: ExpiryDate,
-        ccv: CCV,
+        ccv: CVV,
         orderId: OrderId,
         bookingId: BookingId,
         amount: PaymentAmount,
@@ -100,7 +100,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         return this._expiryDate;
     }
 
-    get ccv(): CCV {
+    get ccv(): CVV {
         return this._ccv;
     }
 
@@ -125,12 +125,23 @@ export class Payment extends AggregateRoot<PaymentId> {
             throw new InvalidPaymentStatusTransitionException(this._status, PaymentStatus.Success);
         }
         this._status = PaymentStatus.Success;
+        this.raise(PaymentSucceededDomainEvent.create(
+            this.id.value,
+            this._orderId.value,
+            this._bookingId.value,
+        ));
     }
 
-    markAsFailed(): void {
+    markAsFailed(reason: string): void {
         if (this._status !== PaymentStatus.Pending) {
             throw new InvalidPaymentStatusTransitionException(this._status, PaymentStatus.Failed);
         }
         this._status = PaymentStatus.Failed;
+        this.raise(PaymentFailedDomainEvent.create(
+            this.id.value,
+            this._orderId.value,
+            this._bookingId.value,
+            reason
+        ));
     }
 }
