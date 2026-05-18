@@ -80,6 +80,34 @@ channels:
                     type: topic
                     routingKey: howestprime.movies.movieevent.bookingopened
 
+    howestprime.ticketing.payment.paymentsuccess:
+        address: howestprime.ticketing.payment.paymentsuccess
+        title: Payment Success
+        messages:
+            PaymentSuccess:
+                $ref: '#/components/messages/PaymentSuccess'
+        bindings:
+            amqp:
+                is: routingKey
+                exchange:
+                    name: howestprime
+                    type: topic
+                    routingKey: howestprime.ticketing.payment.paymentsuccess
+
+    howestprime.ticketing.payment.paymentfailed:
+        address: howestprime.ticketing.payment.paymentfailed
+        title: Payment Failed
+        messages:
+            PaymentFailed:
+                $ref: '#/components/messages/PaymentFailed'
+        bindings:
+            amqp:
+                is: routingKey
+                exchange:
+                    name: howestprime
+                    type: topic
+                    routingKey: howestprime.ticketing.payment.paymentfailed
+
 operations:
     WhenSuggestionSendCreateSuggestion:
         action: receive
@@ -121,6 +149,26 @@ operations:
         messages:
             - $ref: '#/channels/Howestprime.Movies.MovieEvent.BookingOpened/messages/BookingOpened'
 
+    sendPaymentSuccess:
+        action: send
+        channel:
+            $ref: '#/channels/howestprime.ticketing.payment.paymentsuccess'
+        description: |
+            Triggered after a payment is completed successfully.
+            Publishes the payment success payload for downstream consumers.
+        messages:
+            - $ref: '#/channels/howestprime.ticketing.payment.paymentsuccess/messages/PaymentSuccess'
+
+    sendPaymentFailed:
+        action: send
+        channel:
+            $ref: '#/channels/howestprime.ticketing.payment.paymentfailed'
+        description: |
+            Triggered after a payment fails.
+            Publishes the payment failure payload including the failure reason.
+        messages:
+            - $ref: '#/channels/howestprime.ticketing.payment.paymentfailed/messages/PaymentFailed'
+
 components:
     messages:
         SuggestionSendCreateSuggestion:
@@ -150,6 +198,20 @@ components:
             summary: Indicates booking has been opened for a movie event.
             payload:
                 $ref: '#/components/schemas/BookingOpenedPayload'
+
+        PaymentSuccess:
+            name: PaymentSuccess
+            title: Payment Success
+            summary: Event message emitted after a payment succeeds.
+            payload:
+                $ref: '#/components/schemas/PaymentSuccessPayload'
+
+        PaymentFailed:
+            name: PaymentFailed
+            title: Payment Failed
+            summary: Event message emitted after a payment fails.
+            payload:
+                $ref: '#/components/schemas/PaymentFailedPayload'
 
     schemas:
         SuggestionSendCreateSuggestionPayload:
@@ -305,3 +367,55 @@ components:
                         type: integer
                     description: List of reserved seat numbers.
                     example: [1, 2, 3]
+
+        PaymentSuccessPayload:
+            type: object
+            required:
+                - paymentId
+                - orderId
+                - bookingId
+            properties:
+                paymentId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the payment.
+                    example: 4a8a6456-f7d7-40d9-81ab-9414d7eeff7f
+                orderId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the order.
+                    example: 4957d902-8925-4129-8442-638327579c5b
+                bookingId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the booking.
+                    example: 8043017b-6523-4f5f-a3ee-8f80b8f421e9
+
+        PaymentFailedPayload:
+            type: object
+            required:
+                - paymentId
+                - orderId
+                - bookingId
+                - reason
+            properties:
+                paymentId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the payment.
+                    example: 4a8a6456-f7d7-40d9-81ab-9414d7eeff7f
+                orderId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the order.
+                    example: 4957d902-8925-4129-8442-638327579c5b
+                bookingId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the booking.
+                    example: 8043017b-6523-4f5f-a3ee-8f80b8f421e9
+                reason:
+                    type: string
+                    minLength: 1
+                    description: Reason why the payment failed.
+                    example: Payment declined by provider
