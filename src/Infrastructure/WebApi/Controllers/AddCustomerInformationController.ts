@@ -8,7 +8,7 @@ import {
 } from '@/Infrastructure/WebApi/Shared/mod.ts';
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
-type AddCustomerRequest = {
+interface AddCustomerRequest {
     salutation: string;
     firstName: string;
     lastName: string;

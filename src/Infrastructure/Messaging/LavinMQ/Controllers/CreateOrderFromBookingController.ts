@@ -3,7 +3,7 @@ import { CreateOrderFromBookingUseCaseInput } from '@/Application/Ticketing/Orde
 import { UseCase } from '@/Application/Ports/mod.ts';
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
-export type CreateOrderFromBookingRequest = {
+export interface CreateOrderFromBookingRequest {
     bookingId: string;
     movieId: string;
     room: string;
