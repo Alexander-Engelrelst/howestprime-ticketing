@@ -12,11 +12,11 @@ export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInp
     ) {}
 
     async execute(input: MarkOrderAsPaidUseCaseInput): Promise<void> {
-        await this._unitOfWork.do(async () => {
-            this._logger.debug('Marking order as paid', {
+        this._logger.debug('Marking order as paid', {
                 orderId: input.orderId,
-            });
+        });
 
+        await this._unitOfWork.do(async () => {
             const orderRepository = this._unitOfWork.getRepository<OrderRepository>(Order.name);
             const orderOpt = await orderRepository.byId(OrderId.create(input.orderId));
 
@@ -24,11 +24,13 @@ export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInp
                 this._logger.error('Order not found', {
                     orderId: input.orderId,
                 });
-                // for simplicity no rollback mechanism is implemented
+
                 return;
             }
 
             const order = orderOpt.value;
+
+            // for simplicity no rollback is implemented if the confirmation fails because i don't even know if it is possible
             order.confirmPayment();
             await this._unitOfWork.save(order);
 

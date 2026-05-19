@@ -44,6 +44,8 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
 
             // I don't like this, I don't really know what the spec expects,
             // but since this isn't what a payment flow looks like anyway, I'll leave it as is.
+            // I also have no idea whether it is expected of me to verify whether 
+            // the user has accepted the terms and conditions
             const payment = Payment.create(
                 PaymentId.create(),
                 ExternalId.create(input.externalId),
