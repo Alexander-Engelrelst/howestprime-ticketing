@@ -8,6 +8,7 @@ import { OrderForBookingNotFoundApplicationException } from '@/Application/Share
 import type { Logger } from '@/Application/Ports/mod.ts';
 import type { 
     GetOrderByBookingIdQueryPort, 
+    OrderByBookingIdCustomerReadModel, 
     OrderByBookingIdReadModel 
 } from '@/Application/Ports/Queries/mod.ts';
 
@@ -29,16 +30,16 @@ const createMockReadModel = (bookingId: string): OrderByBookingIdReadModel => {
         status: 'Confirmed',
         price: 30.00,
         agreeToTerms: true,
-        customer: {
+        customer: Optional.of<OrderByBookingIdCustomerReadModel>({
             salutation: 'Mr.',
             firstName: 'John',
             lastName: 'Doe',
             email: 'john.doe@example.com',
-        },
+        }),
         tickets: [
             {
                 ticketId: 't1-uuid-string',
-                seatNumber: '10',
+                seatNumber: 10,
                 visitorType: 'Standard',
                 price: 15.00,
                 movieId: 'movie-uuid-123',
@@ -47,7 +48,7 @@ const createMockReadModel = (bookingId: string): OrderByBookingIdReadModel => {
             },
             {
                 ticketId: 't2-uuid-string',
-                seatNumber: '11',
+                seatNumber: 11,
                 visitorType: 'Standard',
                 price: 15.00,
                 movieId: 'movie-uuid-123',

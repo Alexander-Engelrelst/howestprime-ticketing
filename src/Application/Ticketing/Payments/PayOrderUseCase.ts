@@ -9,7 +9,7 @@ import {
     PaymentMethod,
 } from '@/Domain/Ticketing/Payments/mod.ts';
 import { ExternalId } from '@/Domain/Shared/mod.ts';
-import { IllegalArgumentException } from '@domaincrafters/std';
+import { DomainException } from '@domaincrafters/std';
 import { BookingId, OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
 import { PaymentService } from '@/Application/Ports/Gateways/mod.ts';
 
@@ -37,7 +37,7 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
         return await this._unitOfWork.do(async () => {
             // TODO(alexander): ask how to handle this properly
             if (!Object.values(PaymentMethod).includes(input.paymentMethod as PaymentMethod)) {
-                throw new IllegalArgumentException(
+                throw new DomainException(
                     `Unsupported payment method: ${input.paymentMethod}`,
                 );
             }

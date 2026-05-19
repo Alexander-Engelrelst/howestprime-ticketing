@@ -29,3 +29,5 @@ export {
 } from './OrderExceptions.ts';
 export { TicketMappingService } from './TicketMappingService.ts';
 export type { OrderRepository } from './OrderRepository.ts';
+export { OrderPaidDomainEvent } from './Events/OrderPaidDomainEvent.ts';
+export { OrderDomainEvent } from './Events/OrderDomainEvent.ts';

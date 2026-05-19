@@ -22,7 +22,7 @@ import {
 } from '@/Domain/Ticketing/Payments/mod.ts';
 import { Money } from '@/Domain/Shared/mod.ts';
 import { AgeRating, Genre, MovieDuration, MovieId, MovieTitle, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
-import { IllegalArgumentException } from '@domaincrafters/std';
+import { DomainException } from '@domaincrafters/std';
 
 const mockLogger: Logger = {
     debug: () => {},
@@ -230,7 +230,7 @@ Deno.test('[Unit] - PayOrderUseCase - execute - unsupported payment method - thr
 
     await assertRejects(
         () => useCase.execute(invalidInput),
-        IllegalArgumentException,
+        DomainException,
     );
 
     assertEquals(paymentService.payCallCount, 0);

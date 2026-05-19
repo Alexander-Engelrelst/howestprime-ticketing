@@ -1,31 +1,31 @@
 import type { Optional } from '@domaincrafters/std';
 
-export type OrderByBookingIdReadModel = {
+export interface OrderByBookingIdReadModel {
     id: string;
     bookingId: string;
     status: string;
     price: number;
     agreeToTerms: boolean;
-    customer: OrderByBookingIdCustomerReadModel | null;
+    customer: Optional<OrderByBookingIdCustomerReadModel>;
     tickets: OrderByBookingIdTicketReadModel[];
-};
+}
 
-export type OrderByBookingIdCustomerReadModel = {
+export interface OrderByBookingIdCustomerReadModel {
     firstName: string;
     lastName: string;
     email: string;
     salutation: string;
-};
+}
 
-export type OrderByBookingIdTicketReadModel = {
+export interface OrderByBookingIdTicketReadModel {
     ticketId: string;
-    seatNumber: string; // todo(alexaander): ask if it is correct that this expects a string
+    seatNumber: number;
     visitorType: string;
     price: number;
     movieId: string;
     room: string;
     showTime: Date;
-};
+}
 
 export interface GetOrderByBookingIdQueryPort {
     getOrderByBookingId(bookingId: string): Promise<Optional<OrderByBookingIdReadModel>>;

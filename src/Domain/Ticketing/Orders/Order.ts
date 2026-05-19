@@ -10,6 +10,7 @@ import {
     Ticket,
 } from '@/Domain/Ticketing/Orders/mod.ts';
 import { Optional } from '@domaincrafters/std';
+import { OrderPaidDomainEvent } from '@/Domain/Ticketing/Orders/Events/OrderPaidDomainEvent.ts';
 
 export enum OrderStatus {
     Open = 'open',
@@ -116,6 +117,10 @@ export class Order extends AggregateRoot<OrderId> {
         }
 
         this._status = OrderStatus.Paid;
+        this.raise(OrderPaidDomainEvent.create(
+            this.id.value,
+            this._bookingId.value,
+        ));
     }
 
     public cancel(): void {
