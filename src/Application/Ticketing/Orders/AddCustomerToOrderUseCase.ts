@@ -37,16 +37,17 @@ export class AddCustomerToOrderUseCase implements UseCase<AddCustomerToOrderUseC
         }
 
         const order = orderOpt.value;
+
+        if (input.agreeToTerms) {
+            order.acceptTerms();
+        }
+
         const customer = Customer.create(
             CustomerFirstName.create(input.firstName),
             CustomerLastName.create(input.lastName),
             CustomerEmail.create(input.email),
             CustomerSalutation.create(input.salutation),
         );
-
-        if (input.agreeToTerms) {
-            order.acceptTerms();
-        }
 
         order.assignCustomer(customer);
 

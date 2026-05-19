@@ -13,7 +13,7 @@ const createDefaultProps = () => ({
     genres: [Genre.create("Action"), Genre.create("Sci-Fi")],
     ageRating: AgeRating.create(18),
     posterUrl: PosterUrl.create("https://example.com/poster.jpg"),
-    price: Money.create(12.50)
+    price: Money.create(1250)
 });
 
 Deno.test("MovieInfo - should create a valid MovieInfo instance", () => {

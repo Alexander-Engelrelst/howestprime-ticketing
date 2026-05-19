@@ -20,7 +20,7 @@ const createValidMovieInfo = () => MovieInfo.create(
     [Genre.create('Sci-Fi')],
     AgeRating.create(12),
     PosterUrl.create('https://example.com/poster.jpg'),
-    Money.create(15.0)
+    Money.create(1500)
 );
 
 Deno.test('[Unit] - TicketMappingService - mapToTickets - successful mapping', () => {

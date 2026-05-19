@@ -20,7 +20,7 @@ Deno.test('[Unit] - CustomerLastName - create - empty name - throws InvalidCusto
     assertThrows(
         () => CustomerLastName.create(emptyName),
         InvalidCustomerLastNameException,
-        `CustomerLastName has invalid value: '[Empty or Whitespace]'`
+        `CustomerLastName has invalid value: 'Last name is empty or contains only whitespace'`
     );
 });
 
@@ -44,7 +44,7 @@ Deno.test('[Unit] - CustomerLastName - equals - different value - returns false'
 
 Deno.test('[Unit] - InvalidCustomerLastNameException - constructor - empty or whitespace - formats message correctly', () => {
     const exception = new InvalidCustomerLastNameException('   ');
-    assertEquals(exception.message, "CustomerLastName has invalid value: '[Empty or Whitespace]'");
+    assertEquals(exception.message, "CustomerLastName has invalid value: '   '");
 });
 
 Deno.test('[Unit] - InvalidCustomerLastNameException - constructor - string with content - formats message correctly', () => {

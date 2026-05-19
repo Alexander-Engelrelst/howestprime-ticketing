@@ -16,9 +16,11 @@ import {
 import {
     MongoDbMovieRepository,
     MongoDbOrderRepository,
+    MongoDbPaymentRepository,
     MongoDbSuggestionRepository,
     MovieDocumentMapper,
     OrderDocumentMapper,
+    PaymentDocumentMapper,
     SuggestionDocumentMapper,
 } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 import {
@@ -122,6 +124,13 @@ export class Persistence implements Module {
                 )).getOrThrow();
                 unitOfWork.registerRepository(orderRepository);
 
+                const paymentRepository = (await serviceProvider.getService<
+                    MongoDbPaymentRepository
+                >(
+                    MongoDbPaymentRepository.name,
+                )).getOrThrow();
+                unitOfWork.registerRepository(paymentRepository);
+
                 const interceptors = [
                     new PublishDomainEventsMongoDbUnitOfWorkInterceptor(
                         unitOfWork,
@@ -166,6 +175,16 @@ export class Persistence implements Module {
 
                 const mapper = new OrderDocumentMapper();
                 return new MongoDbOrderRepository(mongoClient, mapper);
+            },
+        );
+        serviceCollection.addScoped(
+            MongoDbPaymentRepository.name,
+            async (serviceProvider: ServiceProvider) => {
+                const mongoClient =
+                    (await serviceProvider.getService<MongoDbClient>('MongoDbClient')).getOrThrow();
+                const mapper = new PaymentDocumentMapper();
+
+                return new MongoDbPaymentRepository(mongoClient, mapper);
             },
         );
         /*

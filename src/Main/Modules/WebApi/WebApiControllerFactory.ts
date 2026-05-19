@@ -8,6 +8,10 @@ import {
     ListSuggestionsQueryUseCase,
 } from '@/Application/Ticketing/Suggestions/mod.ts';
 import {
+    PayOrderUseCase,
+    type PayOrderUseCaseInput,
+} from '@/Application/Ticketing/Payments/mod.ts';
+import {
     AddCustomerToOrderUseCase,
     type AddCustomerToOrderUseCaseInput,
 } from '@/Application/Ticketing/Orders/mod.ts';
@@ -25,6 +29,7 @@ import {
     GetSuggestionByIdController,
     ListSuggestionsController,
 } from '@/Infrastructure/WebApi/Controllers/mod.ts';
+import { PayOrderController } from '@/Infrastructure/WebApi/Controllers/mod.ts';
 import { GetOrderByBookingIdController } from '@/Infrastructure/WebApi/Controllers/GetBookingByOrderIdController.ts';
 import {
     type ControllerFactory,
@@ -54,6 +59,8 @@ export class WebApiControllerFactory implements ControllerFactory {
                 return await this.createGetSuggestionByIdController();
             case AddCustomerInformationController.name:
                 return await this.createAddCustomerInformationController();
+            case PayOrderController.name:
+                return await this.createPayOrderController();
             case GetOrderByBookingIdController.name:
                 return await this.createGetOrderByBookingIdController();
 
@@ -106,5 +113,13 @@ export class WebApiControllerFactory implements ControllerFactory {
         >(GetOrderByBookingIdUseCase.name)).getOrThrow();
 
         return new GetOrderByBookingIdController(useCase);
+    }
+
+    private async createPayOrderController(): Promise<PayOrderController> {
+        const useCase = (await this._serviceProvider.getService<
+            UseCase<PayOrderUseCaseInput, string>
+        >(PayOrderUseCase.name)).getOrThrow();
+
+        return new PayOrderController(useCase);
     }
 }

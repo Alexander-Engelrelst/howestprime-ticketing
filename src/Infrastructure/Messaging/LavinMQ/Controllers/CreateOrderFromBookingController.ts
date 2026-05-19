@@ -3,7 +3,7 @@ import { CreateOrderFromBookingUseCaseInput } from '@/Application/Ticketing/Orde
 import { UseCase } from '@/Application/Ports/mod.ts';
 import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
-export type CreateOrderFromBookingRequest = {
+export interface CreateOrderFromBookingRequest {
     bookingId: string;
     movieId: string;
     room: string;
@@ -11,7 +11,7 @@ export type CreateOrderFromBookingRequest = {
     standardVisitors: number;
     discountedVisitors: number;
     seatNumbers: number[];
-};
+}
 
 export class CreateOrderFromBookingController
     implements AmqpController<CreateOrderFromBookingRequest> {
@@ -60,10 +60,8 @@ export class CreateOrderFromBookingController
         Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
         Guard.check(payload.room, 'room').isType('string').againstEmpty();
         Guard.check(payload.showtime, 'showtime').isType('string').againstEmpty();
-        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number')
-            .againstNegative();
-        Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number')
-            .againstNegative();
+        Guard.check(payload.standardVisitors, 'standardVisitors').isType('number');
+        Guard.check(payload.discountedVisitors, 'discountedVisitors').isType('number');
         Guard.check(payload.seatNumbers, 'seatNumbers').againstNullOrUndefined();
 
         if (!Array.isArray(payload.seatNumbers)) {

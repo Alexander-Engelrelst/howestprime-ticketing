@@ -32,7 +32,18 @@ import {
     PosterUrl,
 } from '@/Domain/Ticketing/Movies/mod.ts';
 
-type movieInfoDocument = {
+interface orderDocumentShape {
+    _id?: string;
+    id?: string;
+    bookingId: string;
+    price: number;
+    status: OrderStatus;
+    agreeToTerms: boolean;
+    tickets: ticketDocument[];
+    customer?: customerDocument;
+}
+
+interface movieInfoDocument {
     movieId: string;
     title: string;
     duration: number;
@@ -40,9 +51,9 @@ type movieInfoDocument = {
     ageRating: number;
     posterUrl: string;
     price: number;
-};
+}
 
-type ticketDocument = {
+interface ticketDocument {
     id: string;
     seat: {
         visitorType: string;
@@ -52,19 +63,19 @@ type ticketDocument = {
     showTime: Date;
     room: string;
     movieInfo: movieInfoDocument;
-};
+}
 
-type customerDocument = {
+interface customerDocument {
     firstName: string;
     lastName: string;
     email: string;
     salutation: string;
-};
+}
 
 export class OrderDocumentMapper implements DocumentMapper<Order> {
     toDocument(order: Order): Document {
         const document = serializeObjectToDocument({
-            _id: order.id.toString(),
+            _id: order.id.value,
             bookingId: order.bookingId.value,
             agreeToTerms: order.agreeToTerms,
             price: order.price.value,
@@ -85,21 +96,13 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
     }
 
     reconstitute(document: Document): Order {
-        const orderData = document as unknown as {
-            _id: string;
-            bookingId: string;
-            price: number;
-            status: OrderStatus;
-            agreeToTerms: boolean;
-            tickets: ticketDocument[];
-            customer?: customerDocument;
-        };
+        const orderData = document as orderDocumentShape;
 
         const ticketsData = Array.isArray(orderData.tickets) ? orderData.tickets : [];
         const tickets = ticketsData.map((ticket) => this.reconstituteTicket(ticket));
 
         const order = Object.create(Order.prototype);
-        order['_id'] = OrderId.create(document.id ?? document._id);
+        order['_id'] = OrderId.create(document._id ?? document.id);
         order['_bookingId'] = BookingId.create(orderData.bookingId);
         order['_price'] = Money.create(orderData.price);
         order['_status'] = orderData.status;
@@ -117,7 +120,7 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
     }
 
     private reconstituteCustomer(data: unknown): Customer {
-        const customerData = data as customerDocument;
+        const customerData = data as unknown as customerDocument;
         const customer = Object.create(Customer.prototype);
         customer['_firstName'] = CustomerFirstName.create(customerData.firstName);
         customer['_lastName'] = CustomerLastName.create(customerData.lastName);

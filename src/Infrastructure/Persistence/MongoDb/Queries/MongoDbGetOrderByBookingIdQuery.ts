@@ -35,11 +35,9 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
         const ticketsRaw = Array.isArray(source.tickets) ? source.tickets : [];
         const mappedTickets = ticketsRaw.map((t) => this.mapTicket(t));
 
-        let mappedCustomer = Optional.empty<OrderByBookingIdCustomerReadModel>();
+        let mappedCustomer = null;
         if (source.customer && typeof source.customer === 'object') {
-            mappedCustomer = Optional.of<OrderByBookingIdCustomerReadModel>(
-                this.mapCustomer(source.customer),
-            );
+            mappedCustomer = this.mapCustomer(source.customer);
         }
 
         return {
@@ -48,7 +46,7 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
             status: this.asString(source.status),
             price: this.asNumber(source.price),
             agreeToTerms: Boolean(source.agreeToTerms),
-            customer: mappedCustomer.isPresent ? mappedCustomer.value : null,
+            customer: mappedCustomer,
             tickets: mappedTickets,
         };
     }

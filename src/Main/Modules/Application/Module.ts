@@ -28,6 +28,11 @@ import { Module } from '@/Main/Modules/Shared/mod.ts';
 import { OnlinePaymentService } from '@/Infrastructure/Payment/mod.ts';
 import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
 import {
+    PayOrderUseCase,
+    type PayOrderUseCaseInput,
+} from '@/Application/Ticketing/Payments/mod.ts';
+import type { PaymentService } from '@/Application/Ports/Gateways/PaymentService.ts';
+import {
     AddCustomerToOrderUseCase,
     AddCustomerToOrderUseCaseInput,
     CreateOrderFromBookingUseCase,
@@ -186,6 +191,30 @@ export class Application implements Module {
                 > = new GetOrderByBookingIdUseCase(
                     query,
                     logger,
+                );
+
+                return useCase;
+            },
+        );
+
+        serviceCollection.addScoped(
+            PayOrderUseCase.name,
+            async (serviceProvider: ServiceProvider) => {
+                const unitOfWork = (await serviceProvider.getService<MongoDbUnitOfWork>(
+                    MongoDbUnitOfWork.name,
+                )).getOrThrow();
+
+                const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
+                    .getOrThrow();
+
+                const paymentService = (await serviceProvider.getService<PaymentService>(
+                    OnlinePaymentService.name,
+                )).getOrThrow();
+
+                const useCase: UseCase<PayOrderUseCaseInput, string> = new PayOrderUseCase(
+                    unitOfWork,
+                    logger,
+                    paymentService,
                 );
 
                 return useCase;

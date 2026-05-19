@@ -137,6 +137,37 @@ paths:
                 '500':
                     $ref: '#/components/responses/InternalServerErrorProblem'
 
+    /api/orders/{orderId}/payments:
+        post:
+            tags:
+                - Orders
+            summary: Pay an order
+            operationId: payOrder
+            parameters:
+                - $ref: '#/components/parameters/OrderId'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PayOrderRequest'
+            responses:
+                '201':
+                    description: Payment created
+                    headers:
+                        Location:
+                            $ref: '#/components/headers/Location'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PayOrderResponse'
+                '400':
+                    $ref: '#/components/responses/BadRequestProblem'
+                '404':
+                    $ref: '#/components/responses/NotFoundProblem'
+                '500':
+                    $ref: '#/components/responses/InternalServerErrorProblem'
+
     /api/orders/{bookingId}:
         get:
             tags:
@@ -399,4 +430,49 @@ components:
         UUID:
             type: string
             format: uuid
+
+        PayOrderRequest:
+            type: object
+            required:
+                - externalId
+                - paymentMethod
+                - paymentDetails
+                - bookingId
+                - amount
+            properties:
+                externalId:
+                    $ref: '#/components/schemas/UUID'
+                paymentMethod:
+                    type: string
+                    example: CREDITCARD
+                paymentDetails:
+                    type: object
+                    required:
+                        - cardNumber
+                        - expiryDate
+                        - cvv
+                    properties:
+                        cardNumber:
+                            type: string
+                            example: '4111111111111111'
+                        expiryDate:
+                            type: string
+                            example: '2026-12'
+                        cvv:
+                            type: string
+                            example: '123'
+                bookingId:
+                    $ref: '#/components/schemas/UUID'
+                amount:
+                    type: number
+                    format: double
+                    example: 29.99
+
+        PayOrderResponse:
+            type: object
+            required:
+                - paymentId
+            properties:
+                paymentId:
+                    $ref: '#/components/schemas/UUID'
 
