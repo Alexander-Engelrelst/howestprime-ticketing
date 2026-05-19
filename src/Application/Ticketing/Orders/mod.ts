@@ -10,3 +10,7 @@ export {
     type GetOrderByBookingIdInput,
     GetOrderByBookingIdUseCase,
 } from './GetOrderByBookingIdUseCase.ts';
+export {
+    type MarkOrderAsPaidUseCaseInput,
+    MarkOrderAsPaidUseCase,
+} from './MarkOrderAsPaidUseCase.ts';
