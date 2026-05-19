@@ -25,11 +25,15 @@ export class ExpiryDate extends ValueObject {
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidExpiryDateException('Expiry date is empty or contains only whitespace');
+            throw new InvalidExpiryDateException(
+                'Expiry date is empty or contains only whitespace',
+            );
         }
 
         if (!ExpiryDate.VALIDATION_REGEX.test(this._value)) {
-            throw new InvalidExpiryDateException('Expiry date must be in the format MM/YY or MM/YYYY');
+            throw new InvalidExpiryDateException(
+                'Expiry date must be in the format MM/YY or MM/YYYY',
+            );
         }
     }
 

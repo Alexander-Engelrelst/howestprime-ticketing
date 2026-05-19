@@ -27,7 +27,10 @@ import { Config, ConsoleLogger } from '@/Infrastructure/Shared/mod.ts';
 import { Module } from '@/Main/Modules/Shared/mod.ts';
 import { OnlinePaymentService } from '@/Infrastructure/Payment/mod.ts';
 import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
-import { PayOrderUseCase, type PayOrderUseCaseInput } from '@/Application/Ticketing/Payments/mod.ts';
+import {
+    PayOrderUseCase,
+    type PayOrderUseCaseInput,
+} from '@/Application/Ticketing/Payments/mod.ts';
 import type { PaymentService } from '@/Application/Ports/Gateways/PaymentService.ts';
 import {
     AddCustomerToOrderUseCase,
@@ -193,7 +196,7 @@ export class Application implements Module {
                 return useCase;
             },
         );
-        
+
         serviceCollection.addScoped(
             PayOrderUseCase.name,
             async (serviceProvider: ServiceProvider) => {

@@ -11,7 +11,7 @@ export interface CreateOrderFromBookingRequest {
     standardVisitors: number;
     discountedVisitors: number;
     seatNumbers: number[];
-};
+}
 
 export class CreateOrderFromBookingController
     implements AmqpController<CreateOrderFromBookingRequest> {

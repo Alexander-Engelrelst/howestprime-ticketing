@@ -25,7 +25,6 @@ export class PaymentFailedDomainEvent extends PaymentDomainEvent {
         this._reason = reason;
         this._occurredOn = new Date();
     }
-    
 
     static create(
         paymentId: string,

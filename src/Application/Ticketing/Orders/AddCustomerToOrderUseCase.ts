@@ -37,7 +37,7 @@ export class AddCustomerToOrderUseCase implements UseCase<AddCustomerToOrderUseC
         }
 
         const order = orderOpt.value;
-        
+
         if (input.agreeToTerms) {
             order.acceptTerms();
         }

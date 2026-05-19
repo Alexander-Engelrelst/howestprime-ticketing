@@ -23,7 +23,9 @@ export class CustomerLastName extends ValueObject {
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidCustomerLastNameException('Last name is empty or contains only whitespace');
+            throw new InvalidCustomerLastNameException(
+                'Last name is empty or contains only whitespace',
+            );
         }
     }
 

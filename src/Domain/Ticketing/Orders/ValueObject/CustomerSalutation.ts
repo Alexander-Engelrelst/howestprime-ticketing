@@ -2,7 +2,11 @@ import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidCustomerSalutationException extends DomainException {
     constructor() {
-        super(`CustomerSalutation has invalid value. Allowed values are: ${CustomerSalutation.ALLOWED_SALUTATIONS.join(', ')}`);
+        super(
+            `CustomerSalutation has invalid value. Allowed values are: ${
+                CustomerSalutation.ALLOWED_SALUTATIONS.join(', ')
+            }`,
+        );
     }
 }
 

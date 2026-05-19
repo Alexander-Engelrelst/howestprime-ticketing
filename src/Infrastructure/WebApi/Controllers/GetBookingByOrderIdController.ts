@@ -1,7 +1,7 @@
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import type { OrderByBookingIdReadModel } from '@/Application/Ports/Queries/mod.ts';
 import {
-RequestValidator,
+    RequestValidator,
     type RouterContext,
     type WebApiController,
     WebApiResult,
@@ -28,17 +28,18 @@ export class GetOrderByBookingIdController implements WebApiController {
 
     private extractBookingId(ctx: RouterContext<string>): string {
         const bookingId = ctx.params.bookingId;
-               
+
         const validator = RequestValidator.create([
-            () => Guard.check(bookingId, 'bookingId')
-            .isType('string')
-            .againstWhitespace(),
+            () =>
+                Guard.check(bookingId, 'bookingId')
+                    .isType('string')
+                    .againstWhitespace(),
         ]);
-        
+
         // TODO(alexander): does this require a check for a valid UUID format?
 
         validator
-            .onValidationFailure("invalid booking id")
+            .onValidationFailure('invalid booking id')
             .validate();
 
         return bookingId as string;

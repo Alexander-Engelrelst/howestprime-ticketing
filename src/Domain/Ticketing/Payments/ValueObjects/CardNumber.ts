@@ -27,15 +27,23 @@ export class CardNumber extends ValueObject {
 
     private validate(): void {
         if (!this._value || this._value.length === 0) {
-            throw new InvalidCardNumberException('Card number is empty or contains only whitespace');
+            throw new InvalidCardNumberException(
+                'Card number is empty or contains only whitespace',
+            );
         }
 
-        if (this._value.length < CardNumber.MIN_LENGTH || this._value.length > CardNumber.MAX_LENGTH) {
-            throw new InvalidCardNumberException(`Card number must be between ${CardNumber.MIN_LENGTH} and ${CardNumber.MAX_LENGTH} characters long`);
+        if (
+            this._value.length < CardNumber.MIN_LENGTH || this._value.length > CardNumber.MAX_LENGTH
+        ) {
+            throw new InvalidCardNumberException(
+                `Card number must be between ${CardNumber.MIN_LENGTH} and ${CardNumber.MAX_LENGTH} characters long`,
+            );
         }
 
         if (!CardNumber.ONLY_DIGITS_REGEX.test(this._value)) {
-            throw new InvalidCardNumberException('Card number contains invalid characters (only digits are allowed)');
+            throw new InvalidCardNumberException(
+                'Card number contains invalid characters (only digits are allowed)',
+            );
         }
 
         // for simplicity we are not implementing the Luhn algorithm check here

@@ -14,7 +14,7 @@ interface AddCustomerRequest {
     lastName: string;
     email: string;
     agreeToTerms: boolean;
-};
+}
 
 export class AddCustomerInformationController implements WebApiController {
     constructor(
@@ -35,17 +35,17 @@ export class AddCustomerInformationController implements WebApiController {
 
     private extractOrderId(ctx: RouterContext<string>): string {
         const orderId = ctx.params.orderId;
-        
+
         const validator = RequestValidator.create([
-            () => Guard.check(orderId, 'orderId')
-            .isType('string')
-            .againstWhitespace(),
+            () =>
+                Guard.check(orderId, 'orderId')
+                    .isType('string')
+                    .againstWhitespace(),
         ]);
 
         validator
-            .onValidationFailure("invalid add customer id")
+            .onValidationFailure('invalid add customer id')
             .validate();
-
 
         return orderId as string;
     }
@@ -79,7 +79,7 @@ export class AddCustomerInformationController implements WebApiController {
         ]);
 
         validator
-            .onValidationFailure("invalid add customer information request payload")
+            .onValidationFailure('invalid add customer information request payload')
             .validate();
 
         return body;

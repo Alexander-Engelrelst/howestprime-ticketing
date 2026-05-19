@@ -1,17 +1,25 @@
 import { AggregateRoot, UUIDEntityId } from '@/Domain/Shared/mod.ts';
 import { ExternalId } from '@/Domain/Shared/ValueObjects/ExternalId.ts';
-import { CardNumber, CVV, ExpiryDate, InvalidPaymentStatusTransitionException, PaymentAmount, PaymentFailedDomainEvent, PaymentSucceededDomainEvent } from '@/Domain/Ticketing/Payments/mod.ts';
+import {
+    CardNumber,
+    CVV,
+    ExpiryDate,
+    InvalidPaymentStatusTransitionException,
+    PaymentAmount,
+    PaymentFailedDomainEvent,
+    PaymentSucceededDomainEvent,
+} from '@/Domain/Ticketing/Payments/mod.ts';
 import { BookingId, OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
 
 export enum PaymentStatus {
-    Pending = "Pending",
-    Success = "Success",
-    Failed = "Failed",
+    Pending = 'Pending',
+    Success = 'Success',
+    Failed = 'Failed',
 }
 
 export enum PaymentMethod {
-    CreditCard = "Credit Card",
-    BankTransfer = "Bank Transfer",
+    CreditCard = 'Credit Card',
+    BankTransfer = 'Bank Transfer',
 }
 
 export class PaymentId extends UUIDEntityId {
@@ -45,7 +53,7 @@ export class Payment extends AggregateRoot<PaymentId> {
         orderId: OrderId,
         bookingId: BookingId,
         amount: PaymentAmount,
-        status: PaymentStatus
+        status: PaymentStatus,
     ) {
         super(id);
         this._externalId = externalId;
@@ -80,7 +88,7 @@ export class Payment extends AggregateRoot<PaymentId> {
             orderId,
             bookingId,
             amount,
-            PaymentStatus.Pending
+            PaymentStatus.Pending,
         );
     }
 
@@ -141,7 +149,7 @@ export class Payment extends AggregateRoot<PaymentId> {
             this.id.value,
             this._orderId.value,
             this._bookingId.value,
-            reason
+            reason,
         ));
     }
 }

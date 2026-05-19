@@ -1,11 +1,18 @@
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
-import { CardNumber, CVV, ExpiryDate, Payment, PaymentAmount, PaymentId, PaymentMethod } from '@/Domain/Ticketing/Payments/mod.ts';
+import {
+    CardNumber,
+    CVV,
+    ExpiryDate,
+    Payment,
+    PaymentAmount,
+    PaymentId,
+    PaymentMethod,
+} from '@/Domain/Ticketing/Payments/mod.ts';
 import { ExternalId } from '@/Domain/Shared/mod.ts';
 import { IllegalArgumentException } from '@domaincrafters/std';
 import { BookingId, Order, OrderId, OrderRepository } from '@/Domain/Ticketing/Orders/mod.ts';
 import { PaymentService } from '@/Application/Ports/Gateways/mod.ts';
 import { OrderNotFoundApplicationException } from '@/Application/Shared/mod.ts';
-
 
 export interface PayOrderUseCaseInput {
     orderId: string;
@@ -22,7 +29,7 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
     constructor(
         private readonly _unitOfWork: UnitOfWork,
         private readonly _logger: Logger,
-        private readonly _paymentService: PaymentService
+        private readonly _paymentService: PaymentService,
     ) {}
 
     async execute(input: PayOrderUseCaseInput): Promise<string> {
@@ -31,17 +38,21 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
         return await this._unitOfWork.do(async () => {
             // TODO(alexander): ask how to handle this properly
             if (!Object.values(PaymentMethod).includes(input.paymentMethod as PaymentMethod)) {
-                throw new IllegalArgumentException(`Unsupported payment method: ${input.paymentMethod}`);
+                throw new IllegalArgumentException(
+                    `Unsupported payment method: ${input.paymentMethod}`,
+                );
             }
 
             const orderId = OrderId.create(input.orderId);
-            
-            const orderOpt = await this._unitOfWork.getRepository<OrderRepository>(Order.name).byId(orderId);
+
+            const orderOpt = await this._unitOfWork.getRepository<OrderRepository>(Order.name).byId(
+                orderId,
+            );
 
             if (!orderOpt.isPresent) {
                 throw new OrderNotFoundApplicationException(orderId.value);
             }
-            
+
             // TODO(alexander): what exactly must be checked here?
             // what data must be read from the order?
             // any form of idempotency?
@@ -55,7 +66,7 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
                 CVV.create(input.cvv),
                 orderId,
                 BookingId.create(input.bookingId),
-                PaymentAmount.create(input.amount)
+                PaymentAmount.create(input.amount),
             );
 
             await this._unitOfWork.save<PaymentId>(payment);
@@ -79,10 +90,10 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
             this._logger.info('Payment processed for order', {
                 orderId: payment.orderId.value,
                 paymentId: payment.id.value,
-                status: payment.status
+                status: payment.status,
             });
 
             return payment.id.value;
-        })
+        });
     }
 }

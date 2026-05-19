@@ -1,5 +1,8 @@
 import { Payment, PaymentId, PaymentRepository } from '@/Domain/Ticketing/Payments/mod.ts';
-import { MongoDbClient, MongoDbRepository } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
+import {
+    MongoDbClient,
+    MongoDbRepository,
+} from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { PaymentDocumentMapper } from '@/Infrastructure/Persistence/MongoDb/Repositories/mod.ts';
 
 export class MongoDbPaymentRepository extends MongoDbRepository<Payment, PaymentId>

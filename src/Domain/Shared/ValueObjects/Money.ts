@@ -2,7 +2,11 @@ import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 
 export class InvalidMoneyException extends DomainException {
     constructor(value: number) {
-        super(`Money must be a non-negative safe integer representing cents, but got: '${String(value)}'`);
+        super(
+            `Money must be a non-negative safe integer representing cents, but got: '${
+                String(value)
+            }'`,
+        );
     }
 }
 

@@ -41,7 +41,7 @@ interface orderDocumentShape {
     agreeToTerms: boolean;
     tickets: ticketDocument[];
     customer?: customerDocument;
-};
+}
 
 interface movieInfoDocument {
     movieId: string;
@@ -51,7 +51,7 @@ interface movieInfoDocument {
     ageRating: number;
     posterUrl: string;
     price: number;
-};
+}
 
 interface ticketDocument {
     id: string;
@@ -63,14 +63,14 @@ interface ticketDocument {
     showTime: Date;
     room: string;
     movieInfo: movieInfoDocument;
-};
+}
 
 interface customerDocument {
     firstName: string;
     lastName: string;
     email: string;
     salutation: string;
-};
+}
 
 export class OrderDocumentMapper implements DocumentMapper<Order> {
     toDocument(order: Order): Document {

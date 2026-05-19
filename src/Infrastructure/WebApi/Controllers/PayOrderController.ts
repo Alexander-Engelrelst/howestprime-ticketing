@@ -1,4 +1,9 @@
-import { RequestValidator, RouterContext, WebApiController, WebApiResult } from '@/Infrastructure/WebApi/Shared/mod.ts';
+import {
+    RequestValidator,
+    RouterContext,
+    WebApiController,
+    WebApiResult,
+} from '@/Infrastructure/WebApi/Shared/mod.ts';
 import { UseCase } from '@/Application/Ports/mod.ts';
 import { PayOrderUseCaseInput } from '@/Application/Ticketing/Payments/mod.ts';
 import { Guard } from '@domaincrafters/std';
@@ -34,13 +39,14 @@ export class PayOrderController implements WebApiController {
         const orderId = ctx.params.orderId;
 
         const validator = RequestValidator.create([
-            () => Guard.check(orderId, 'orderId')
-            .isType('string')
-            .againstWhitespace(),
+            () =>
+                Guard.check(orderId, 'orderId')
+                    .isType('string')
+                    .againstWhitespace(),
         ]);
 
         validator
-            .onValidationFailure("invalid order id")
+            .onValidationFailure('invalid order id')
             .validate();
 
         return orderId as string;
@@ -70,15 +76,19 @@ export class PayOrderController implements WebApiController {
         const validator = RequestValidator.create([
             () => Guard.check(body.externalId, 'externalId').isType('string').againstEmpty(),
             () => Guard.check(body.paymentMethod, 'paymentMethod').isType('string').againstEmpty(),
-            () => Guard.check(body.paymentDetails.cardNumber, 'cardNumber').isType('string').againstEmpty(),
-            () => Guard.check(body.paymentDetails.expiryDate, 'expiryDate').isType('string').againstEmpty(),
+            () =>
+                Guard.check(body.paymentDetails.cardNumber, 'cardNumber').isType('string')
+                    .againstEmpty(),
+            () =>
+                Guard.check(body.paymentDetails.expiryDate, 'expiryDate').isType('string')
+                    .againstEmpty(),
             () => Guard.check(body.paymentDetails.cvv, 'cvv').isType('string').againstEmpty(),
             () => Guard.check(body.bookingId, 'bookingId').isType('string').againstEmpty(),
             () => Guard.check(body.amount, 'amount').isType('number'),
         ]);
 
         validator
-            .onValidationFailure("invalid payment request")
+            .onValidationFailure('invalid payment request')
             .validate();
 
         return body;

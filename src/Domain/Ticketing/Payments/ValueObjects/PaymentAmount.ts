@@ -2,7 +2,11 @@ import { DomainException } from '@/Domain/Shared/mod.ts';
 
 export class InvalidPaymentAmountException extends DomainException {
     constructor(value: number) {
-        super(`Payment amount must be a positive safe integer representing cents, but got: '${String(value)}'`);
+        super(
+            `Payment amount must be a positive safe integer representing cents, but got: '${
+                String(value)
+            }'`,
+        );
     }
 }
 

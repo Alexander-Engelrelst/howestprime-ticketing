@@ -7,7 +7,10 @@ import {
     type GetSuggestionByIdQueryUseCaseInput,
     ListSuggestionsQueryUseCase,
 } from '@/Application/Ticketing/Suggestions/mod.ts';
-import { PayOrderUseCase, type PayOrderUseCaseInput } from '@/Application/Ticketing/Payments/mod.ts';
+import {
+    PayOrderUseCase,
+    type PayOrderUseCaseInput,
+} from '@/Application/Ticketing/Payments/mod.ts';
 import {
     AddCustomerToOrderUseCase,
     type AddCustomerToOrderUseCaseInput,

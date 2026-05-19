@@ -22,7 +22,6 @@ export class PaymentSucceededDomainEvent extends PaymentDomainEvent {
         this._bookingId = bookingId;
         this._occurredOn = new Date();
     }
-    
 
     static create(
         paymentId: string,

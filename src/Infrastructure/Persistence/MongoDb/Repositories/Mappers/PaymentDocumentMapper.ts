@@ -1,4 +1,11 @@
-import { CardNumber, CVV, ExpiryDate, Payment, PaymentAmount, PaymentId } from '@/Domain/Ticketing/Payments/mod.ts';
+import {
+    CardNumber,
+    CVV,
+    ExpiryDate,
+    Payment,
+    PaymentAmount,
+    PaymentId,
+} from '@/Domain/Ticketing/Payments/mod.ts';
 import { Document } from '@mongodb';
 import { DocumentMapper } from '@/Infrastructure/Persistence/MongoDb/Shared/mod.ts';
 import { BookingId, OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
