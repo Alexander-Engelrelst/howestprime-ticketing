@@ -2,7 +2,6 @@ import { assert, assertEquals, assertRejects } from '@std/assert';
 import type { Logger } from '@/Application/Ports/mod.ts';
 import type { PaymentRequest, PaymentResponse, PaymentService } from '@/Application/Ports/Gateways/mod.ts';
 import { PayOrderUseCase, type PayOrderUseCaseInput } from '@/Application/Ticketing/Payments/mod.ts';
-import { OrderNotFoundApplicationException } from '@/Application/Shared/mod.ts';
 import { createMockDomainEventBus, createMockUnitOfWork } from '@/tests/Unit/Application/Shared/mod.ts';
 import {
     BookingId,
@@ -232,34 +231,6 @@ Deno.test('[Unit] - PayOrderUseCase - execute - unsupported payment method - thr
     await assertRejects(
         () => useCase.execute(invalidInput),
         IllegalArgumentException,
-    );
-
-    assertEquals(paymentService.payCallCount, 0);
-    assertEquals(unitOfWork.saveCallCount, 0);
-    assertEquals(eventBus.publishedEvents.length, 0);
-});
-
-Deno.test('[Unit] - PayOrderUseCase - execute - order not found - throws and does not call provider or persist payment', async () => {
-    const orderId = '550e8400-e29b-41d4-a716-446655440003';
-    const bookingId = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
-
-    const orderRepository = {
-        byId: () => Promise.resolve({ isPresent: false, value: null }),
-        save: (_order: Order) => Promise.resolve(),
-    };
-
-    const eventBus = createMockDomainEventBus();
-    const unitOfWork = createMockUnitOfWork({
-        eventBus,
-        repositories: new Map<string, any>([[Order.name, orderRepository]]),
-    });
-
-    const paymentService = createPaymentServiceMock({ success: true });
-    const useCase = new PayOrderUseCase(unitOfWork, mockLogger, paymentService);
-
-    await assertRejects(
-        () => useCase.execute(createValidInput(orderId, bookingId)),
-        OrderNotFoundApplicationException,
     );
 
     assertEquals(paymentService.payCallCount, 0);

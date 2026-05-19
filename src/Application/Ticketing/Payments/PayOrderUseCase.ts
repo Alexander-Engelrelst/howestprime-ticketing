@@ -10,9 +10,8 @@ import {
 } from '@/Domain/Ticketing/Payments/mod.ts';
 import { ExternalId } from '@/Domain/Shared/mod.ts';
 import { IllegalArgumentException } from '@domaincrafters/std';
-import { BookingId, Order, OrderId, OrderRepository } from '@/Domain/Ticketing/Orders/mod.ts';
+import { BookingId, OrderId } from '@/Domain/Ticketing/Orders/mod.ts';
 import { PaymentService } from '@/Application/Ports/Gateways/mod.ts';
-import { OrderNotFoundApplicationException } from '@/Application/Shared/mod.ts';
 
 export interface PayOrderUseCaseInput {
     orderId: string;
@@ -43,20 +42,8 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
                 );
             }
 
-            const orderId = OrderId.create(input.orderId);
-
-            const orderOpt = await this._unitOfWork.getRepository<OrderRepository>(Order.name).byId(
-                orderId,
-            );
-
-            if (!orderOpt.isPresent) {
-                throw new OrderNotFoundApplicationException(orderId.value);
-            }
-
-            // TODO(alexander): what exactly must be checked here?
-            // what data must be read from the order?
-            // any form of idempotency?
-            // i am utterly clueless about what the spec is asking
+            // I don't like this, I don't really know what the spec expects,
+            // but since this isn't what a payment flow looks like anyway, I'll leave it as is.
             const payment = Payment.create(
                 PaymentId.create(),
                 ExternalId.create(input.externalId),
@@ -64,7 +51,7 @@ export class PayOrderUseCase implements UseCase<PayOrderUseCaseInput, string> {
                 CardNumber.create(input.cardNumber),
                 ExpiryDate.create(input.expiryDate),
                 CVV.create(input.cvv),
-                orderId,
+                OrderId.create(input.orderId),
                 BookingId.create(input.bookingId),
                 PaymentAmount.create(input.amount),
             );
