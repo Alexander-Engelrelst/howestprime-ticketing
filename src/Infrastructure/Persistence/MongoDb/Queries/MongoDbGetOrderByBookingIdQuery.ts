@@ -37,7 +37,9 @@ export class MongoDbGetOrderByBookingIdQuery implements GetOrderByBookingIdQuery
 
         let mappedCustomer = Optional.empty<OrderByBookingIdCustomerReadModel>();
         if (source.customer && typeof source.customer === 'object') {
-            mappedCustomer = Optional.of<OrderByBookingIdCustomerReadModel>(this.mapCustomer(source.customer));
+            mappedCustomer = Optional.of<OrderByBookingIdCustomerReadModel>(
+                this.mapCustomer(source.customer),
+            );
         }
 
         return {

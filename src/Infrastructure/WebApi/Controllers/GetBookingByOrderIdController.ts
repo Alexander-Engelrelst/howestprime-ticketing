@@ -59,16 +59,17 @@ export class GetOrderByBookingIdController implements WebApiController {
                 room: t.room,
                 showTime: t.showTime,
             })),
-            customer: order.customer.isPresent ? {
-                firstName: order.customer.value.firstName,
-                lastName: order.customer.value.lastName,
-                email: order.customer.value.email,
-                salutation: order.customer.value.salutation,
-            } : null,
+            customer: order.customer.isPresent
+                ? {
+                    firstName: order.customer.value.firstName,
+                    lastName: order.customer.value.lastName,
+                    email: order.customer.value.email,
+                    salutation: order.customer.value.salutation,
+                }
+                : null,
         };
     }
 }
-
 
 interface OrderByBookingIdDto {
     id: string;
@@ -78,14 +79,14 @@ interface OrderByBookingIdDto {
     agreeToTerms: boolean;
     customer: OrderByBookingIdCustomerDto | null;
     tickets: OrderByBookingIdTicketDto[];
-};
+}
 
 interface OrderByBookingIdCustomerDto {
     firstName: string;
     lastName: string;
     email: string;
     salutation: string;
-};
+}
 
 interface OrderByBookingIdTicketDto {
     ticketId: string;
@@ -95,4 +96,4 @@ interface OrderByBookingIdTicketDto {
     movieId: string;
     room: string;
     showTime: Date;
-};
+}
