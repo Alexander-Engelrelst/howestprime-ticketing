@@ -10,8 +10,8 @@ COPY --chown=deno:deno config/asyncapi.yaml ./config/asyncapi.yaml
 
 COPY --chown=deno:deno src/ ./src
 
-RUN deno cache src/main.ts
+RUN deno cache src/Main/Main.ts
 
 EXPOSE 8000
 
-CMD ["run", "--allow-net", "--allow-env", "--allow-sys=osRelease", "src/main.ts"]
+CMD ["run", "--allow-net", "--allow-env", "--allow-sys=osRelease", "src/Main/Main.ts"]
