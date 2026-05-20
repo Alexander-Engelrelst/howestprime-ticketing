@@ -31,7 +31,7 @@
         "include": ["tests/"]
     },
     "tasks": {
-        "run": "deno run --env-file=config/.env --allow-env --allow-net --allow-read --allow-write --allow-sys src/Main/Main.ts ",                     
+        "run": "deno run --env-file=config/.env --allow-env --allow-net --allow-read --allow-write --allow-sys=osRelease src/Main/Main.ts ",                     
         "test": "deno test  -A --clean --coverage --coverage-raw-data-only; deno coverage --exclude=tests; deno coverage --exclude=tests --html",
         "qa": "deno upgrade; deno check src/ && deno fmt && deno lint && deno task  test",
         "qanc": "deno upgrade; deno fmt && deno lint && deno task  test"
