@@ -94,7 +94,9 @@ export class AmqpControllerFactory implements ControllerFactory {
             UseCase<ChangeMovieDetailsUseCaseInput, void>
         >(ChangeMovieDetailsUseCase.name)).getOrThrow();
 
-        return new ChangeMovieDetailsController(useCase) as AmqpController<ChangeMovieDetailsRequest>;
+        return new ChangeMovieDetailsController(useCase) as AmqpController<
+            ChangeMovieDetailsRequest
+        >;
     }
 
     private async createCreateOrderFromBookingController(): Promise<AmqpController<unknown>> {

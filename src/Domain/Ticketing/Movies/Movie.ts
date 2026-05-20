@@ -105,7 +105,7 @@ export class Movie extends AggregateRoot<MovieId> {
         posterUrl: PosterUrl,
     ): void {
         this.validateInput(genres);
-        
+
         this._title = title;
         this._duration = duration;
         this._genres = genres;

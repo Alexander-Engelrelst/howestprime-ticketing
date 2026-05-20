@@ -1,5 +1,13 @@
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
-import { AgeRating, Genre, Movie, MovieDuration, MovieId, MovieRepository, PosterUrl } from '@/Domain/Ticketing/Movies/mod.ts';
+import {
+    AgeRating,
+    Genre,
+    Movie,
+    MovieDuration,
+    MovieId,
+    MovieRepository,
+    PosterUrl,
+} from '@/Domain/Ticketing/Movies/mod.ts';
 import { MovieTitle } from '@/Domain/Ticketing/Movies/ValueObjects/MovieTitle.ts';
 
 export interface ChangeMovieDetailsUseCaseInput {
@@ -22,7 +30,9 @@ export class ChangeMovieDetailsUseCase implements UseCase<ChangeMovieDetailsUseC
 
         await this._unitOfWork.do(async () => {
             const movieId = MovieId.create(input.movieId);
-            const movieRepository = await this._unitOfWork.getRepository<MovieRepository>(Movie.name)
+            const movieRepository = await this._unitOfWork.getRepository<MovieRepository>(
+                Movie.name,
+            );
             const movieOpt = await movieRepository.byId(movieId);
 
             if (!movieOpt.isPresent) {
