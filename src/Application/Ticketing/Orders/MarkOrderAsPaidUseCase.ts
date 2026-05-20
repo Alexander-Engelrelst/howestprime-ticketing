@@ -17,6 +17,7 @@ export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInp
         });
 
         await this._unitOfWork.do(async () => {
+            console.log('AAAAAAAAAAAAA', input.orderId);
             const orderRepository = this._unitOfWork.getRepository<OrderRepository>(Order.name);
             const orderOpt = await orderRepository.byId(OrderId.create(input.orderId));
 

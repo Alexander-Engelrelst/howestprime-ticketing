@@ -20,6 +20,7 @@ import {
     RoomName,
     ShowTime,
     Ticket,
+    TicketId,
     TicketMappingService,
     TicketsReleasedDomainEvent,
     VisitorType,
@@ -35,9 +36,28 @@ import {
 
 // Helper to create a dummy ticket
 const createMockTicket = (priceValue: number): Ticket => {
-    return {
-        price: Money.create(priceValue)
-    } as Ticket;
+    const movieInfo = MovieInfo.create(
+        MovieId.create('123e4567-e89b-12d3-a456-426614174000'),
+        MovieTitle.create('Inception'),
+        MovieDuration.create(148),
+        [Genre.create('Action')],
+        AgeRating.create(12),
+        PosterUrl.create('https://example.com/poster.jpg'),
+        Money.create(priceValue),
+    );
+
+    const ticket = Object.create(Ticket.prototype);
+    ticket['_id'] = TicketId.create();
+    ticket['_movieInfo'] = movieInfo;
+    ticket['_seat'] = {
+        seatNumber: priceValue,
+        visitorType: VisitorType.Discounted,
+    };
+    ticket['_room'] = RoomName.create('Screen 1');
+    ticket['_price'] = Money.create(priceValue);
+    ticket['_showTime'] = ShowTime.create(new Date('2025-06-15T19:30:00Z'));
+
+    return ticket as Ticket;
 };
 
 const createDetailedOrder = (withCustomer: boolean): Order => {
@@ -79,6 +99,7 @@ const createDetailedOrder = (withCustomer: boolean): Order => {
     }
 
     order.confirmPayment();
+    order.pullDomainEvents();
     return order;
 };
 
