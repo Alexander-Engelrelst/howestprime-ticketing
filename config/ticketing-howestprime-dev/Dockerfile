@@ -6,6 +6,8 @@ USER deno
 
 COPY --chown=deno:deno deno.json ./
 
+COPY --chown=deno:deno config/asyncapi.yaml ./config/asyncapi.yaml
+
 COPY --chown=deno:deno src/ ./src
 
 RUN deno cache src/main.ts
