@@ -3,7 +3,10 @@ import { WhenPaymentSucceededThenMarkOrderAsPaid } from '@/Application/Ticketing
 import { WhenPaymentFailedThenCancelOrder } from '@/Application/Ticketing/Orders/WhenPaymentFailedThenCancelOrder.ts';
 import { WhenOrderPaidThenReleaseTickets } from '@/Application/Ticketing/Orders/WhenOrderPaidThenReleaseTickets.ts';
 import { SuggestionCreatedDomainEvent } from '@/Domain/Ticketing/Suggestions/mod.ts';
-import { PaymentFailedDomainEvent, PaymentSucceededDomainEvent } from '@/Domain/Ticketing/Payments/mod.ts';
+import {
+    PaymentFailedDomainEvent,
+    PaymentSucceededDomainEvent,
+} from '@/Domain/Ticketing/Payments/mod.ts';
 import { OrderPaidDomainEvent } from '@/Domain/Ticketing/Orders/mod.ts';
 
 export const domainEventPolicies: Map<string, string[]> = new Map([

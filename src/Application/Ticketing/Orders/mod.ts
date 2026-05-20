@@ -14,8 +14,5 @@ export {
     MarkOrderAsPaidUseCase,
     type MarkOrderAsPaidUseCaseInput,
 } from './MarkOrderAsPaidUseCase.ts';
-export {
-    CancelOrderUseCase,
-    type CancelOrderUseCaseInput,
-} from './CancelOrderUseCase.ts';
+export { CancelOrderUseCase, type CancelOrderUseCaseInput } from './CancelOrderUseCase.ts';
 export { ReleaseTicketUseCase, type ReleaseTicketUseCaseInput } from './ReleaseTicketUseCase.ts';

@@ -31,7 +31,6 @@ export class CreateOrderFromBookingUseCase
 
     async execute(input: CreateOrderFromBookingUseCaseInput): Promise<void> {
         this._logger.debug('Creating order from booking', { input });
-       
 
         await this._unitOfWork.do(async () => {
             const movieRepository = this._unitOfWork.getRepository<MovieRepository>(Movie.name);
