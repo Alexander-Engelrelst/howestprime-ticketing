@@ -35,6 +35,8 @@ import type { PaymentService } from '@/Application/Ports/Gateways/PaymentService
 import {
     AddCustomerToOrderUseCase,
     AddCustomerToOrderUseCaseInput,
+    CancelOrderUseCase,
+    CancelOrderUseCaseInput,
     CreateOrderFromBookingUseCase,
     CreateOrderFromBookingUseCaseInput,
     GetOrderByBookingIdInput,
@@ -44,6 +46,7 @@ import {
     ReleaseTicketUseCaseInput,
 } from '@/Application/Ticketing/Orders/mod.ts';
 import { WhenPaymentSucceededThenMarkOrderAsPaid } from '@/Application/Ticketing/Orders/WhenPaymentSucceededThenMarkOrderAsPaid.ts';
+import { WhenPaymentFailedThenCancelOrder } from '@/Application/Ticketing/Orders/WhenPaymentFailedThenCancelOrder.ts';
 import { ReleaseTicketUseCase } from '@/Application/Ticketing/Orders/ReleaseTicketUseCase.ts';
 import { WhenOrderPaidThenReleaseTickets } from '@/Application/Ticketing/Orders/WhenOrderPaidThenReleaseTickets.ts';
 
@@ -248,6 +251,25 @@ export class Application implements Module {
         );
 
         serviceCollection.addScoped(
+            CancelOrderUseCase.name,
+            async (serviceProvider: ServiceProvider) => {
+                const unitOfWork = (await serviceProvider.getService<MongoDbUnitOfWork>(
+                    MongoDbUnitOfWork.name,
+                )).getOrThrow();
+
+                const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
+                    .getOrThrow();
+
+                const useCase: UseCase<CancelOrderUseCaseInput, void> = new CancelOrderUseCase(
+                    unitOfWork,
+                    logger,
+                );
+
+                return useCase;
+            },
+        );
+
+        serviceCollection.addScoped(
             ReleaseTicketUseCase.name,
             async (serviceProvider: ServiceProvider) => {
                 const unitOfWork = (await serviceProvider.getService<MongoDbUnitOfWork>(
@@ -296,6 +318,27 @@ export class Application implements Module {
                 return new WhenPaymentSucceededThenMarkOrderAsPaid(
                     logger,
                     markOrderAsPaid,
+                );
+            },
+        );
+
+        serviceCollection.addScoped(
+            WhenPaymentFailedThenCancelOrder.name,
+            async (serviceProvider: ServiceProvider) => {
+                const logger = (await serviceProvider.getService<Logger>(
+                    ConsoleLogger.name,
+                )).getOrThrow();
+
+                const cancelOrder = (await serviceProvider.getService<
+                    UseCase<
+                        CancelOrderUseCaseInput,
+                        void
+                    >
+                >(CancelOrderUseCase.name)).getOrThrow();
+
+                return new WhenPaymentFailedThenCancelOrder(
+                    logger,
+                    cancelOrder,
                 );
             },
         );
