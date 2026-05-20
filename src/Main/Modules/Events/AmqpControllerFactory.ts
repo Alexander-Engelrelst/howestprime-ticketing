@@ -6,11 +6,13 @@ import {
 } from '@/Application/Ticketing/Suggestions/mod.ts';
 import type { UseCase } from '@/Application/Ports/mod.ts';
 import {
+    ChangeMovieDetailsController,
+    type ChangeMovieDetailsRequest,
     CreateOrderFromBookingController,
     CreateSuggestionController,
     type CreateSuggestionRequest,
     SaveMovieController,
-    SaveMovieRequest,
+    type SaveMovieRequest,
 } from '@/Infrastructure/Messaging/LavinMQ/Controllers/mod.ts';
 
 import {
@@ -19,11 +21,16 @@ import {
 } from '@/Infrastructure/Messaging/LavinMQ/Shared/mod.ts';
 import type { ConsumerContext } from '@/Infrastructure/Messaging/LavinMQ/Shared/Amqp/AmqpBrokerConfigurator.ts';
 import { IllegalStateException } from '@domaincrafters/std';
-import { SaveMovieUseCase, SaveMovieUseCaseInput } from '@/Application/Ticketing/Movies/mod.ts';
 import {
     CreateOrderFromBookingUseCase,
     CreateOrderFromBookingUseCaseInput,
 } from '@/Application/Ticketing/Orders/mod.ts';
+import {
+    ChangeMovieDetailsUseCase,
+    type ChangeMovieDetailsUseCaseInput,
+    SaveMovieUseCase,
+    type SaveMovieUseCaseInput,
+} from '@/Application/Ticketing/Movies/mod.ts';
 
 export class AmqpControllerFactory implements ControllerFactory {
     private readonly _serviceProvider: ServiceProvider;
@@ -43,6 +50,8 @@ export class AmqpControllerFactory implements ControllerFactory {
                 return this.createCreateSuggestionController();
             case 'whenmovieregisteredreceivedsavemovie':
                 return this.createSaveMovieController();
+            case 'whenmoviedetailschangedreceivedchangemoviedetails':
+                return this.createChangeMovieDetailsController();
             case 'whenbookingopenedreceivedcreateorder':
                 return this.createCreateOrderFromBookingController();
         }
@@ -53,6 +62,8 @@ export class AmqpControllerFactory implements ControllerFactory {
                 return this.createCreateSuggestionController();
             case 'howestprime.movies.movie.movieregistered':
                 return this.createSaveMovieController();
+            case 'howestprime.movies.movie.moviedetailschanged':
+                return this.createChangeMovieDetailsController();
             case 'howestprime.movies.movieevent.bookingopened':
                 return this.createCreateOrderFromBookingController();
             default:
@@ -77,6 +88,17 @@ export class AmqpControllerFactory implements ControllerFactory {
 
         return new SaveMovieController(useCase) as AmqpController<SaveMovieRequest>;
     }
+
+    private async createChangeMovieDetailsController(): Promise<AmqpController<unknown>> {
+        const useCase = (await this._serviceProvider.getService<
+            UseCase<ChangeMovieDetailsUseCaseInput, void>
+        >(ChangeMovieDetailsUseCase.name)).getOrThrow();
+
+        return new ChangeMovieDetailsController(useCase) as AmqpController<
+            ChangeMovieDetailsRequest
+        >;
+    }
+
     private async createCreateOrderFromBookingController(): Promise<AmqpController<unknown>> {
         const useCase = (await this._serviceProvider.getService<
             UseCase<CreateOrderFromBookingUseCaseInput, void>
