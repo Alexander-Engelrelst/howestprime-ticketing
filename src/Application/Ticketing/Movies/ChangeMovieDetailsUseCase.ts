@@ -42,7 +42,7 @@ export class ChangeMovieDetailsUseCase implements UseCase<ChangeMovieDetailsUseC
 
             await this._unitOfWork.save(movie);
 
-            this._logger.info('Movie saved', {
+            this._logger.info('Movie details changed', {
                 movieId: movie.id.value,
             });
         });

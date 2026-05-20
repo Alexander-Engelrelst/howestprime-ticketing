@@ -108,3 +108,51 @@ Deno.test('[Unit] - Movie - create - invalid value object input - propagates int
         )
     );
 });
+
+Deno.test('[Unit] - Movie - changeDetails - valid input - updates movie details and recalculates price', () => {
+    const movie = Movie.create(
+        MovieId.create(),
+        MovieTitle.create('The Matrix'),
+        MovieDuration.create(136),
+        ['Action', 'Sci-Fi'].map(Genre.create),
+        AgeRating.create(16),
+        PosterUrl.create('https://example.com/poster-original.jpg'),
+    );
+
+    movie.changeDetails(
+        MovieTitle.create('The Matrix Reloaded'),
+        MovieDuration.create(138),
+        ['Action', 'Sci-Fi', 'Thriller'].map(Genre.create),
+        AgeRating.create(16),
+        PosterUrl.create('https://example.com/poster-updated.jpg'),
+    );
+
+    assertEquals(movie.title.value, 'The Matrix Reloaded');
+    assertEquals(movie.duration.value, 138);
+    assertEquals(movie.genres.map((genre) => genre.value), ['Action', 'Sci-Fi', 'Thriller']);
+    assertEquals(movie.ageRating.value, 16);
+    assertEquals(movie.posterUrl.value, 'https://example.com/poster-updated.jpg');
+    assertEquals(movie.price.value, 138 * 15);
+});
+
+Deno.test('[Unit] - Movie - changeDetails - empty genres list - throws EmptyListException', () => {
+    const movie = Movie.create(
+        MovieId.create(),
+        MovieTitle.create('The Matrix'),
+        MovieDuration.create(136),
+        ['Action', 'Sci-Fi'].map(Genre.create),
+        AgeRating.create(16),
+        PosterUrl.create('https://example.com/poster.jpg'),
+    );
+
+    assertThrows(
+        () => movie.changeDetails(
+            MovieTitle.create('The Matrix Reloaded'),
+            MovieDuration.create(138),
+            [],
+            AgeRating.create(16),
+            PosterUrl.create('https://example.com/poster-updated.jpg'),
+        ),
+        EmptyListException,
+    );
+});
