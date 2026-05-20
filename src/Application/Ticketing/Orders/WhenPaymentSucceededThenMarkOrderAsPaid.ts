@@ -14,7 +14,7 @@ export class WhenPaymentSucceededThenMarkOrderAsPaid
             orderId: event.orderId,
         });
 
-        const input : MarkOrderAsPaidUseCaseInput = {
+        const input: MarkOrderAsPaidUseCaseInput = {
             orderId: event.orderId,
         };
         await this._markOrderAsPaid.execute(input);

@@ -13,7 +13,7 @@ export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInp
 
     async execute(input: MarkOrderAsPaidUseCaseInput): Promise<void> {
         this._logger.debug('Marking order as paid', {
-                orderId: input.orderId,
+            orderId: input.orderId,
         });
 
         await this._unitOfWork.do(async () => {

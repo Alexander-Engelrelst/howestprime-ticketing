@@ -13,7 +13,7 @@ export class ReleaseTicketUseCase implements UseCase<ReleaseTicketUseCaseInput, 
 
     async execute(input: ReleaseTicketUseCaseInput): Promise<void> {
         this._logger.debug('Releasing ticket', {
-                orderId: input.orderId,
+            orderId: input.orderId,
         });
 
         await this._unitOfWork.do(async () => {

@@ -31,8 +31,8 @@ export { TicketMappingService } from './TicketMappingService.ts';
 export type { OrderRepository } from './OrderRepository.ts';
 export { OrderPaidDomainEvent } from './Events/OrderPaidDomainEvent.ts';
 export {
-    TicketsReleasedDomainEvent,
     type TicketsReleasedCustomerData,
+    TicketsReleasedDomainEvent,
     type TicketsReleasedTicketData,
 } from './Events/TicketsReleasedDomainEvent.ts';
 export { OrderDomainEvent } from './Events/OrderDomainEvent.ts';

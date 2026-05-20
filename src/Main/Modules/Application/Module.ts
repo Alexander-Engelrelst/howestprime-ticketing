@@ -37,10 +37,10 @@ import {
     AddCustomerToOrderUseCaseInput,
     CreateOrderFromBookingUseCase,
     CreateOrderFromBookingUseCaseInput,
-    MarkOrderAsPaidUseCase,
-    type MarkOrderAsPaidUseCaseInput,
     GetOrderByBookingIdInput,
     GetOrderByBookingIdUseCase,
+    MarkOrderAsPaidUseCase,
+    type MarkOrderAsPaidUseCaseInput,
     ReleaseTicketUseCaseInput,
 } from '@/Application/Ticketing/Orders/mod.ts';
 import { WhenPaymentSucceededThenMarkOrderAsPaid } from '@/Application/Ticketing/Orders/WhenPaymentSucceededThenMarkOrderAsPaid.ts';
@@ -286,10 +286,12 @@ export class Application implements Module {
                     ConsoleLogger.name,
                 )).getOrThrow();
 
-                const markOrderAsPaid = (await serviceProvider.getService<UseCase<
-                    MarkOrderAsPaidUseCaseInput,
-                    void
-                >>(MarkOrderAsPaidUseCase.name)).getOrThrow();
+                const markOrderAsPaid = (await serviceProvider.getService<
+                    UseCase<
+                        MarkOrderAsPaidUseCaseInput,
+                        void
+                    >
+                >(MarkOrderAsPaidUseCase.name)).getOrThrow();
 
                 return new WhenPaymentSucceededThenMarkOrderAsPaid(
                     logger,
@@ -305,10 +307,12 @@ export class Application implements Module {
                     ConsoleLogger.name,
                 )).getOrThrow();
 
-                const releaseTicket = (await serviceProvider.getService<UseCase<
-                    ReleaseTicketUseCaseInput,
-                    void
-                >>(ReleaseTicketUseCase.name)).getOrThrow();
+                const releaseTicket = (await serviceProvider.getService<
+                    UseCase<
+                        ReleaseTicketUseCaseInput,
+                        void
+                    >
+                >(ReleaseTicketUseCase.name)).getOrThrow();
 
                 return new WhenOrderPaidThenReleaseTickets(
                     logger,

@@ -11,11 +11,7 @@ export {
     GetOrderByBookingIdUseCase,
 } from './GetOrderByBookingIdUseCase.ts';
 export {
-    type MarkOrderAsPaidUseCaseInput,
     MarkOrderAsPaidUseCase,
+    type MarkOrderAsPaidUseCaseInput,
 } from './MarkOrderAsPaidUseCase.ts';
-export {
-    type ReleaseTicketUseCaseInput,
-    ReleaseTicketUseCase,
-} from './ReleaseTicketUseCase.ts';
-
+export { ReleaseTicketUseCase, type ReleaseTicketUseCaseInput } from './ReleaseTicketUseCase.ts';
