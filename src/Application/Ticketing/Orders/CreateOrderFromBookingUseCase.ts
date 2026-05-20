@@ -31,45 +31,47 @@ export class CreateOrderFromBookingUseCase
 
     async execute(input: CreateOrderFromBookingUseCaseInput): Promise<void> {
         this._logger.debug('Creating order from booking', { input });
-        const movieRepository = this._unitOfWork.getRepository<MovieRepository>(Movie.name);
-
-        const movieOpt = await movieRepository.byId(MovieId.create(input.movieId));
-
-        if (!movieOpt.isPresent) {
-            throw new MovieNotFoundApplicationException(input.movieId);
-        }
-
-        const movie = movieOpt.value;
-
-        const movieInfo = MovieInfo.create(
-            movie.id,
-            movie.title,
-            movie.duration,
-            movie.genres,
-            movie.ageRating,
-            movie.posterUrl,
-            movie.price,
-        );
-
-        const ticketList = TicketMappingService.mapToTickets(
-            input.seatNumbers,
-            [
-                { type: VisitorType.Standard, quantity: input.numberOfStandardTickets },
-                { type: VisitorType.Discounted, quantity: input.numberOfDiscountedTickets },
-            ],
-            movieInfo,
-            RoomName.create(input.room),
-            ShowTime.create(input.showTime),
-        );
-        const orderId = OrderId.create();
-
-        const order = Order.create(
-            orderId,
-            BookingId.create(input.bookingId),
-            ticketList,
-        );
+       
 
         await this._unitOfWork.do(async () => {
+            const movieRepository = this._unitOfWork.getRepository<MovieRepository>(Movie.name);
+
+            const movieOpt = await movieRepository.byId(MovieId.create(input.movieId));
+
+            if (!movieOpt.isPresent) {
+                throw new MovieNotFoundApplicationException(input.movieId);
+            }
+
+            const movie = movieOpt.value;
+
+            const movieInfo = MovieInfo.create(
+                movie.id,
+                movie.title,
+                movie.duration,
+                movie.genres,
+                movie.ageRating,
+                movie.posterUrl,
+                movie.price,
+            );
+
+            const ticketList = TicketMappingService.mapToTickets(
+                input.seatNumbers,
+                [
+                    { type: VisitorType.Standard, quantity: input.numberOfStandardTickets },
+                    { type: VisitorType.Discounted, quantity: input.numberOfDiscountedTickets },
+                ],
+                movieInfo,
+                RoomName.create(input.room),
+                ShowTime.create(input.showTime),
+            );
+            const orderId = OrderId.create();
+
+            const order = Order.create(
+                orderId,
+                BookingId.create(input.bookingId),
+                ticketList,
+            );
+
             await this._unitOfWork.save(order);
 
             this._logger.info('Order created from booking', {

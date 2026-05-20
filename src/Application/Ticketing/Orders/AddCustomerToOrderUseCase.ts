@@ -28,30 +28,31 @@ export class AddCustomerToOrderUseCase implements UseCase<AddCustomerToOrderUseC
 
     async execute(input: AddCustomerToOrderUseCaseInput): Promise<string> {
         this._logger.debug('Adding customer information to order', { input });
-        const orderRepository = this._unitOfWork.getRepository<OrderRepository>(Order.name);
-
-        const orderOpt = await orderRepository.byId(OrderId.create(input.orderId));
-
-        if (!orderOpt.isPresent) {
-            throw new OrderNotFoundApplicationException(input.orderId);
-        }
-
-        const order = orderOpt.value;
-
-        if (input.agreeToTerms) {
-            order.acceptTerms();
-        }
-
-        const customer = Customer.create(
-            CustomerFirstName.create(input.firstName),
-            CustomerLastName.create(input.lastName),
-            CustomerEmail.create(input.email),
-            CustomerSalutation.create(input.salutation),
-        );
-
-        order.assignCustomer(customer);
+        
 
         return await this._unitOfWork.do(async () => {
+            const orderRepository = this._unitOfWork.getRepository<OrderRepository>(Order.name);
+
+            const orderOpt = await orderRepository.byId(OrderId.create(input.orderId));
+            
+            if (!orderOpt.isPresent) {
+                throw new OrderNotFoundApplicationException(input.orderId);
+            }
+        
+            const order = orderOpt.value;
+        
+            if (input.agreeToTerms) {
+                order.acceptTerms();
+            }
+        
+            const customer = Customer.create(
+                CustomerFirstName.create(input.firstName),
+                CustomerLastName.create(input.lastName),
+                CustomerEmail.create(input.email),
+                CustomerSalutation.create(input.salutation),
+            );
+        
+            order.assignCustomer(customer);
             await this._unitOfWork.save(order);
 
             this._logger.info('Customer information added to order', {
