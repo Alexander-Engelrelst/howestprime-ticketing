@@ -1,18 +1,18 @@
 import { Order, OrderId, OrderRepository } from '@/Domain/Ticketing/Orders/mod.ts';
 import { Logger, UnitOfWork, UseCase } from '@/Application/Ports/mod.ts';
 
-export interface MarkOrderAsPaidUseCaseInput {
+export interface CancelOrderUseCaseInput {
     orderId: string;
 }
 
-export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInput, void> {
+export class CancelOrderUseCase implements UseCase<CancelOrderUseCaseInput, void> {
     constructor(
         private readonly _unitOfWork: UnitOfWork,
         private readonly _logger: Logger,
     ) {}
 
-    async execute(input: MarkOrderAsPaidUseCaseInput): Promise<void> {
-        this._logger.debug('Marking order as paid', {
+    async execute(input: CancelOrderUseCaseInput): Promise<void> {
+        this._logger.debug('Cancelling order', {
             orderId: input.orderId,
         });
 
@@ -29,12 +29,10 @@ export class MarkOrderAsPaidUseCase implements UseCase<MarkOrderAsPaidUseCaseInp
             }
 
             const order = orderOpt.value;
-
-            // for simplicity no rollback is implemented if the confirmation fails because i don't even know if it is possible
-            order.confirmPayment();
+            order.cancel();
             await this._unitOfWork.save(order);
 
-            this._logger.info('Order marked as paid', {
+            this._logger.info('Order cancelled', {
                 orderId: input.orderId,
             });
         });
