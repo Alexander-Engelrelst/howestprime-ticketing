@@ -11,6 +11,7 @@ import {
 } from '@/Domain/Ticketing/Orders/mod.ts';
 import { Optional } from '@domaincrafters/std';
 import { OrderPaidDomainEvent } from '@/Domain/Ticketing/Orders/Events/OrderPaidDomainEvent.ts';
+import { TicketsReleasedDomainEvent } from '@/Domain/Ticketing/Orders/Events/TicketsReleasedDomainEvent.ts';
 
 export enum OrderStatus {
     Open = 'open',
@@ -138,6 +139,27 @@ export class Order extends AggregateRoot<OrderId> {
             );
         }
         this._status = OrderStatus.TicketReleased;
+
+        const customer = this._customer.isPresent
+            ? {
+                salutation: this._customer.value.salutation.value,
+                firstName: this._customer.value.firstName.value,
+                lastName: this._customer.value.lastName.value,
+                email: this._customer.value.email.value,
+            }
+            : null;
+
+        const tickets = this._tickets.map((ticket) => ({
+            ticketId: ticket.id.value,
+            movieId: ticket.movieInfo.movieId.value,
+            room: ticket.room.value,
+            seatNumber: ticket.seat.seatNumber,
+            visitorType: ticket.seat.visitorType,
+            price: ticket.price.value,
+            showTime: ticket.showTime.value,
+        }));
+
+        this.raise(TicketsReleasedDomainEvent.create(this.id.value, customer, tickets));
     }
 
     public acceptTerms(): void {

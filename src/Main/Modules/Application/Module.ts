@@ -39,7 +39,13 @@ import {
     CreateOrderFromBookingUseCaseInput,
     GetOrderByBookingIdInput,
     GetOrderByBookingIdUseCase,
+    MarkOrderAsPaidUseCase,
+    type MarkOrderAsPaidUseCaseInput,
+    ReleaseTicketUseCaseInput,
 } from '@/Application/Ticketing/Orders/mod.ts';
+import { WhenPaymentSucceededThenMarkOrderAsPaid } from '@/Application/Ticketing/Orders/WhenPaymentSucceededThenMarkOrderAsPaid.ts';
+import { ReleaseTicketUseCase } from '@/Application/Ticketing/Orders/ReleaseTicketUseCase.ts';
+import { WhenOrderPaidThenReleaseTickets } from '@/Application/Ticketing/Orders/WhenOrderPaidThenReleaseTickets.ts';
 
 export class Application implements Module {
     add(serviceCollection: ServiceCollection, _config: Config): void {
@@ -220,6 +226,45 @@ export class Application implements Module {
                 return useCase;
             },
         );
+
+        serviceCollection.addScoped(
+            MarkOrderAsPaidUseCase.name,
+            async (serviceProvider: ServiceProvider) => {
+                const unitOfWork = (await serviceProvider.getService<MongoDbUnitOfWork>(
+                    MongoDbUnitOfWork.name,
+                )).getOrThrow();
+
+                const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
+                    .getOrThrow();
+
+                const useCase: UseCase<MarkOrderAsPaidUseCaseInput, void> =
+                    new MarkOrderAsPaidUseCase(
+                        unitOfWork,
+                        logger,
+                    );
+
+                return useCase;
+            },
+        );
+
+        serviceCollection.addScoped(
+            ReleaseTicketUseCase.name,
+            async (serviceProvider: ServiceProvider) => {
+                const unitOfWork = (await serviceProvider.getService<MongoDbUnitOfWork>(
+                    MongoDbUnitOfWork.name,
+                )).getOrThrow();
+
+                const logger = (await serviceProvider.getService<Logger>(ConsoleLogger.name))
+                    .getOrThrow();
+
+                const useCase: UseCase<unknown, void> = new ReleaseTicketUseCase(
+                    unitOfWork,
+                    logger,
+                );
+
+                return useCase;
+            },
+        );
     }
 
     private addPolicies(serviceCollection: ServiceCollection): void {
@@ -231,6 +276,48 @@ export class Application implements Module {
                 )).getOrThrow();
 
                 return new WhenSuggestionCreatedConsoleLogSuggestion(logger);
+            },
+        );
+
+        serviceCollection.addScoped(
+            WhenPaymentSucceededThenMarkOrderAsPaid.name,
+            async (serviceProvider: ServiceProvider) => {
+                const logger = (await serviceProvider.getService<Logger>(
+                    ConsoleLogger.name,
+                )).getOrThrow();
+
+                const markOrderAsPaid = (await serviceProvider.getService<
+                    UseCase<
+                        MarkOrderAsPaidUseCaseInput,
+                        void
+                    >
+                >(MarkOrderAsPaidUseCase.name)).getOrThrow();
+
+                return new WhenPaymentSucceededThenMarkOrderAsPaid(
+                    logger,
+                    markOrderAsPaid,
+                );
+            },
+        );
+
+        serviceCollection.addScoped(
+            WhenOrderPaidThenReleaseTickets.name,
+            async (serviceProvider: ServiceProvider) => {
+                const logger = (await serviceProvider.getService<Logger>(
+                    ConsoleLogger.name,
+                )).getOrThrow();
+
+                const releaseTicket = (await serviceProvider.getService<
+                    UseCase<
+                        ReleaseTicketUseCaseInput,
+                        void
+                    >
+                >(ReleaseTicketUseCase.name)).getOrThrow();
+
+                return new WhenOrderPaidThenReleaseTickets(
+                    logger,
+                    releaseTicket,
+                );
             },
         );
     }

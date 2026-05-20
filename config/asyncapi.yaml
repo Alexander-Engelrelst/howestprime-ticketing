@@ -108,6 +108,20 @@ channels:
                     type: topic
                     routingKey: howestprime.ticketing.payment.paymentfailed
 
+    howestprime.ticketing.order.ticketsreleased:
+        address: howestprime.ticketing.order.ticketsreleased
+        title: Tickets Released
+        messages:
+            TicketsReleased:
+                $ref: '#/components/messages/TicketsReleased'
+        bindings:
+            amqp:
+                is: routingKey
+                exchange:
+                    name: howestprime
+                    type: topic
+                    routingKey: howestprime.ticketing.order.ticketsreleased
+
 operations:
     WhenSuggestionSendCreateSuggestion:
         action: receive
@@ -169,6 +183,16 @@ operations:
         messages:
             - $ref: '#/channels/howestprime.ticketing.payment.paymentfailed/messages/PaymentFailed'
 
+    sendTicketsReleased:
+        action: send
+        channel:
+            $ref: '#/channels/howestprime.ticketing.order.ticketsreleased'
+        description: |
+            Triggered when tickets are released for an order.
+            Publishes details of released tickets for downstream consumers.
+        messages:
+            - $ref: '#/channels/howestprime.ticketing.order.ticketsreleased/messages/TicketsReleased'
+
 components:
     messages:
         SuggestionSendCreateSuggestion:
@@ -212,6 +236,13 @@ components:
             summary: Event message emitted after a payment fails.
             payload:
                 $ref: '#/components/schemas/PaymentFailedPayload'
+
+        TicketsReleased:
+            name: TicketsReleased
+            title: Tickets Released
+            summary: Event message emitted when tickets are released for an order.
+            payload:
+                $ref: '#/components/schemas/TicketsReleasedPayload'
 
     schemas:
         SuggestionSendCreateSuggestionPayload:
@@ -419,3 +450,104 @@ components:
                     minLength: 1
                     description: Reason why the payment failed.
                     example: Payment declined by provider
+
+        TicketsReleasedPayload:
+            type: object
+            required:
+                - orderId
+                - tickets
+                - occurredOn
+            properties:
+                orderId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the order that released the tickets.
+                    example: 4957d902-8925-4129-8442-638327579c5b
+                customer:
+                    type: object
+                    description: Optional customer information associated with the released tickets.
+                    properties:
+                        salutation:
+                            type: string
+                        firstName:
+                            type: string
+                        lastName:
+                            type: string
+                        email:
+                            type: string
+                            format: email
+                    example:
+                        salutation: Mr.
+                        firstName: John
+                        lastName: Doe
+                        email: john@example.com
+                tickets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TicketsReleasedTicketData'
+                    description: List of released tickets.
+                occurredOn:
+                    type: string
+                    format: date-time
+                    description: Timestamp when the event occurred.
+                    example: 2026-05-20T12:34:56Z
+
+        TicketsReleasedCustomerData:
+            type: object
+            required:
+                - salutation
+                - firstName
+                - lastName
+                - email
+            properties:
+                salutation:
+                    type: string
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                email:
+                    type: string
+                    format: email
+
+        TicketsReleasedTicketData:
+            type: object
+            required:
+                - ticketId
+                - movieId
+                - room
+                - seatNumber
+                - visitorType
+                - price
+                - showTime
+            properties:
+                ticketId:
+                    type: string
+                    description: Identifier of the ticket.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                movieId:
+                    type: string
+                    format: uuid
+                    description: Identifier of the movie.
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                room:
+                    type: string
+                    description: Room where the screening takes place.
+                    example: Room 1
+                seatNumber:
+                    type: integer
+                    description: Seat number assigned to the ticket.
+                    example: 5
+                visitorType:
+                    type: string
+                    description: Visitor classification (standard, discounted, etc.).
+                    example: standard
+                price:
+                    type: number
+                    description: Price paid for the ticket.
+                    example: 9.99
+                showTime:
+                    type: string
+                    format: date-time
+                    description: Date and time of the screening.
+                    example: 2026-05-14T20:00:00Z
