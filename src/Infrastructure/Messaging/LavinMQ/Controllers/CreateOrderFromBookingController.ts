@@ -56,6 +56,7 @@ export class CreateOrderFromBookingController
             );
         }
 
+        console.log(payload);
         Guard.check(payload.bookingId, 'bookingId').isType('string').againstEmpty();
         Guard.check(payload.movieId, 'movieId').isType('string').againstEmpty();
         Guard.check(payload.room, 'room').isType('string').againstEmpty();

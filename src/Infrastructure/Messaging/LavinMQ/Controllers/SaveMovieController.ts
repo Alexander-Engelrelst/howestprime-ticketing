@@ -50,8 +50,7 @@ export class SaveMovieController implements AmqpController<SaveMovieRequest> {
             Guard.check(genre, 'genre').isType('string').againstEmpty();
         });
 
-        Guard.check(payload.ageRating, 'ageRating').isType('number').againstZero()
-            .againstNegative();
+        Guard.check(payload.ageRating, 'ageRating').isType('number').againstNegative();
         Guard.check(payload.posterUrl, 'posterUrl').isType('string').againstEmpty();
 
         return {
