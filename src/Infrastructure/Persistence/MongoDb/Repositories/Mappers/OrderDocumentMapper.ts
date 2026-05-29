@@ -104,7 +104,7 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
         const order = Object.create(Order.prototype);
         order['_id'] = OrderId.create(document._id ?? document.id);
         order['_bookingId'] = BookingId.create(orderData.bookingId);
-        order['_price'] = Money.create(orderData.price);
+        order['_price'] = Money.fromCents(orderData.price);
         order['_status'] = orderData.status;
         order['_agreeToTerms'] = orderData.agreeToTerms;
         order['_tickets'] = tickets;
@@ -144,11 +144,11 @@ export class OrderDocumentMapper implements DocumentMapper<Order> {
         movieInfo['_genres'] = mDoc.genres.map((g: string) => Genre.create(g));
         movieInfo['_ageRating'] = AgeRating.create(mDoc.ageRating);
         movieInfo['_posterUrl'] = PosterUrl.create(mDoc.posterUrl);
-        movieInfo['_price'] = Money.create(mDoc.price);
+        movieInfo['_price'] = Money.fromCents(mDoc.price);
 
         ticket['_id'] = TicketId.create(doc.id);
         ticket['_seat'] = seat;
-        ticket['_price'] = Money.create(doc.price);
+        ticket['_price'] = Money.fromCents(doc.price);
         ticket['_showTime'] = ShowTime.create(doc.showTime);
         ticket['_room'] = RoomName.create(doc.room);
         ticket['_movieInfo'] = movieInfo;

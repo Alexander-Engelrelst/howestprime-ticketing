@@ -65,7 +65,7 @@ export class Movie extends AggregateRoot<MovieId> {
             genres,
             ageRating,
             posterUrl,
-            Money.create(duration.value * Movie.PRICE_PER_MINUTE_IN_CENTS),
+            Money.fromCents(duration.value * Movie.PRICE_PER_MINUTE_IN_CENTS),
         );
 
         movie.validateInput(genres);
@@ -111,7 +111,7 @@ export class Movie extends AggregateRoot<MovieId> {
         this._genres = genres;
         this._ageRating = ageRating;
         this._posterUrl = posterUrl;
-        this._price = Money.create(duration.value * Movie.PRICE_PER_MINUTE_IN_CENTS);
+        this._price = Money.fromCents(duration.value * Movie.PRICE_PER_MINUTE_IN_CENTS);
     }
 
     private validateInput(genres: Genre[]): void {

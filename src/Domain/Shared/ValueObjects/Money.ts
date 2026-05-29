@@ -24,7 +24,7 @@ export class Money extends ValueObject {
     /**
      * Creates a Money instance from a whole number of cents (e.g., 1500 for €15.00).
      */
-    static create(valueInCents: number): Money {
+    static fromCents(valueInCents: number): Money {
         const instance = new Money(valueInCents);
         instance.validate();
         return instance;

@@ -6,7 +6,7 @@ import { MovieTitle } from '@/Domain/Ticketing/Movies/mod.ts';
 // --- Helpers to create valid inputs ---
 const createMockMovieInfo = (price: number) => ({
     title: MovieTitle.create("Inception"),
-    price: Money.create(price)
+    price: Money.fromCents(price)
 } as MovieInfo);
 
 const createMockSeat = (type: VisitorType) => ({

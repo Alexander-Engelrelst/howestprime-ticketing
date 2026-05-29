@@ -43,7 +43,7 @@ const createMockTicket = (priceValue: number): Ticket => {
         [Genre.create('Action')],
         AgeRating.create(12),
         PosterUrl.create('https://example.com/poster.jpg'),
-        Money.create(priceValue),
+        Money.fromCents(priceValue),
     );
 
     const ticket = Object.create(Ticket.prototype);
@@ -54,7 +54,7 @@ const createMockTicket = (priceValue: number): Ticket => {
         visitorType: VisitorType.Discounted,
     };
     ticket['_room'] = RoomName.create('Screen 1');
-    ticket['_price'] = Money.create(priceValue);
+    ticket['_price'] = Money.fromCents(priceValue);
     ticket['_showTime'] = ShowTime.create(new Date('2025-06-15T19:30:00Z'));
 
     return ticket as Ticket;
@@ -68,7 +68,7 @@ const createDetailedOrder = (withCustomer: boolean): Order => {
         [Genre.create('Action')],
         AgeRating.create(12),
         PosterUrl.create('https://example.com/poster.jpg'),
-        Money.create(1500),
+        Money.fromCents(1500),
     );
 
     const tickets = TicketMappingService.mapToTickets(

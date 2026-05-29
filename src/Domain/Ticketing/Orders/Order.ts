@@ -60,7 +60,7 @@ export class Order extends AggregateRoot<OrderId> {
         bookingId: BookingId,
         tickets: Ticket[],
     ): Order {
-        const price = Money.create(
+        const price = Money.fromCents(
             tickets.reduce((total, ticket) => total + ticket.price.value, 0),
         );
 

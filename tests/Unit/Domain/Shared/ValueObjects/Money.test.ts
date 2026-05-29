@@ -6,7 +6,7 @@ Deno.test('[Unit] - Money - create - valid positive value - returns value object
     const rawValue = 10050;
 
     // Act
-    const money = Money.create(rawValue);
+    const money = Money.fromCents(rawValue);
 
     // Assert
     assertEquals(money.value, 10050);
@@ -17,7 +17,7 @@ Deno.test('[Unit] - Money - create - zero value - returns value object', () => {
     const rawValue = 0;
 
     // Act
-    const money = Money.create(rawValue);
+    const money = Money.fromCents(rawValue);
 
     // Assert
     assertEquals(money.value, 0);
@@ -29,7 +29,7 @@ Deno.test('[Unit] - Money - create - negative value - throws InvalidMoneyExcepti
 
     // Act & Assert
     assertThrows(
-        () => Money.create(invalidValue),
+        () => Money.fromCents(invalidValue),
         InvalidMoneyException,
         "Money must be a non-negative safe integer representing cents"
     );
@@ -41,7 +41,7 @@ Deno.test('[Unit] - Money - create - non-finite value - throws InvalidMoneyExcep
 
     // Act & Assert
     assertThrows(
-        () => Money.create(invalidValue),
+        () => Money.fromCents(invalidValue),
         InvalidMoneyException
     );
 });
@@ -52,15 +52,15 @@ Deno.test('[Unit] - Money - create - exceeds MAX_SAFE_INTEGER - throws InvalidMo
 
     // Act & Assert
     assertThrows(
-        () => Money.create(invalidValue),
+        () => Money.fromCents(invalidValue),
         InvalidMoneyException
     );
 });
 
 Deno.test('[Unit] - Money - equals - identical values - returns true', () => {
     // Arrange
-    const left = Money.create(50);
-    const right = Money.create(50);
+    const left = Money.fromCents(50);
+    const right = Money.fromCents(50);
 
     // Act
     const result = left.equals(right);
@@ -71,8 +71,8 @@ Deno.test('[Unit] - Money - equals - identical values - returns true', () => {
 
 Deno.test('[Unit] - Money - equals - different values - returns false', () => {
     // Arrange
-    const left = Money.create(50);
-    const right = Money.create(100);
+    const left = Money.fromCents(50);
+    const right = Money.fromCents(100);
 
     // Act
     const result = left.equals(right);
@@ -83,7 +83,7 @@ Deno.test('[Unit] - Money - equals - different values - returns false', () => {
 
 Deno.test('[Unit] - Money - equals - null or undefined comparison - returns false', () => {
     // Arrange
-    const money = Money.create(25);
+    const money = Money.fromCents(25);
 
     // Act & Assert
     // @ts-ignore: Testing runtime safety for null/undefined

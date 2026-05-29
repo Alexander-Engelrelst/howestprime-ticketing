@@ -39,7 +39,7 @@ function createTestOrder(id: string, bookingId: string): Order {
         [Genre.create('Action')],
         AgeRating.create(12),
         PosterUrl.create('https://example.com/poster.jpg'),
-        Money.create(1500),
+        Money.fromCents(1500),
     );
 
     const tickets = TicketMappingService.mapToTickets(

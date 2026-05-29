@@ -47,7 +47,7 @@ export class MovieDocumentMapper implements DocumentMapper<Movie> {
         movie['_genres'] = movieData.genres.map((g: string) => Genre.create(g));
         movie['_ageRating'] = AgeRating.create(movieData.ageRating);
         movie['_posterUrl'] = PosterUrl.create(movieData.posterUrl);
-        movie['_price'] = Money.create(movieData.price);
+        movie['_price'] = Money.fromCents(movieData.price);
         movie['_domainEvents'] = [];
 
         return movie as Movie;
