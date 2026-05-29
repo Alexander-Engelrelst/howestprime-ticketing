@@ -12,11 +12,9 @@ import { Guard } from '@domaincrafters/std';
 interface PayOrderRequest {
     externalId: string;
     paymentMethod: string;
-    paymentDetails: {
-        cardNumber: string;
-        expiryDate: string;
-        cvv: string;
-    };
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
     bookingId: string;
     amount: number;
 }
@@ -59,9 +57,9 @@ export class PayOrderController implements WebApiController {
             orderId,
             externalId: body.externalId,
             paymentMethod: body.paymentMethod,
-            cardNumber: body.paymentDetails.cardNumber,
-            expiryDate: body.paymentDetails.expiryDate,
-            cvv: body.paymentDetails.cvv,
+            cardNumber: body.cardNumber,
+            expiryDate: body.expiryDate,
+            cvv: body.cvv,
             amount: Math.round(body.amount * 100),
             bookingId: body.bookingId,
         };
@@ -78,12 +76,12 @@ export class PayOrderController implements WebApiController {
             () => Guard.check(body.externalId, 'externalId').isType('string').againstEmpty(),
             () => Guard.check(body.paymentMethod, 'paymentMethod').isType('string').againstEmpty(),
             () =>
-                Guard.check(body.paymentDetails.cardNumber, 'cardNumber').isType('string')
+                Guard.check(body.cardNumber, 'cardNumber').isType('string')
                     .againstEmpty(),
             () =>
-                Guard.check(body.paymentDetails.expiryDate, 'expiryDate').isType('string')
+                Guard.check(body.expiryDate, 'expiryDate').isType('string')
                     .againstEmpty(),
-            () => Guard.check(body.paymentDetails.cvv, 'cvv').isType('string').againstEmpty(),
+            () => Guard.check(body.cvv, 'cvv').isType('string').againstEmpty(),
             () => Guard.check(body.bookingId, 'bookingId').isType('string').againstEmpty(),
             
             () => CurrencyGuard.isValidCurrencyInEuro(body.amount, 'amount'),

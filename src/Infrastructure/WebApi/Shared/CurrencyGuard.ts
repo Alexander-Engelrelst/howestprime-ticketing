@@ -2,7 +2,7 @@ import { Guard, IllegalArgumentException } from '@domaincrafters/std';
 
 // TODO(alexander): this is problematic in it's entirety
 
-// we avoid inheriting from the base guard class as it is an external resource
+// we avoid inheriting from the base guard class as it involves chaining methods
 /**
  * @description A custom guard for validating that a provided numeric value is a valid monetary amount in euros. 
  * It keeps floating point errors in mind

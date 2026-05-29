@@ -44,8 +44,8 @@ export class Ticket extends Entity<TicketId> {
         showTime: ShowTime,
     ): Ticket {
         const price = seat.visitorType === VisitorType.Discounted
-            ? movieInfo.price
-            : Money.fromCents(movieInfo.price.value * Ticket.DISCOUNT_TICKET_PRICE_MULTIPLIER);
+            ? Money.fromCents(movieInfo.price.value * Ticket.DISCOUNT_TICKET_PRICE_MULTIPLIER)
+            : movieInfo.price;
 
         return new Ticket(ticketId, movieInfo, seat, room, price, showTime);
     }

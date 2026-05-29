@@ -29,8 +29,7 @@ Deno.test('[Unit] - Ticket - create - full price - calculates price correctly', 
     const ticket = Ticket.create(id, movieInfo, seat, mockRoom, mockShowTime);
 
     // Assert
-    // Based on your current code logic: 100 * 0.9 = 90
-    assertEquals(ticket.price.value, 90); 
+    assertEquals(ticket.price.value, 100); 
     assertEquals(ticket.movieInfo.title.value, "Inception");
     assertEquals(ticket.seat.visitorType, VisitorType.Standard);
 });
@@ -45,8 +44,7 @@ Deno.test('[Unit] - Ticket - create - discounted visitor - applies base movie pr
     const ticket = Ticket.create(id, movieInfo, seat, mockRoom, mockShowTime);
 
     // Assert
-    // Based on your current code logic: if Discounted, use base price (100)
-    assertEquals(ticket.price.value, 100);
+    assertEquals(ticket.price.value, 90);
 });
 
 Deno.test('[Unit] - Ticket - getters - return correct values', () => {
