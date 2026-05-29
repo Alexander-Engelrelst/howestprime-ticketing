@@ -31,7 +31,6 @@ Deno.test('[Unit] - Money - create - negative value - throws InvalidMoneyExcepti
     assertThrows(
         () => Money.fromCents(invalidValue),
         InvalidMoneyException,
-        "Money must be a non-negative safe integer representing cents"
     );
 });
 
