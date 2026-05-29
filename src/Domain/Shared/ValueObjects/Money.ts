@@ -3,7 +3,7 @@ import { DomainException, ValueObject } from '@/Domain/Shared/mod.ts';
 export class InvalidMoneyException extends DomainException {
     constructor(value: number) {
         super(
-            `Money must be a non-negative safe integer representing cents, but got: '${
+            `Money must be a non-negative integer smaller than ${Money.MAX_CENTS}, representing cents, but got: '${
                 String(value)
             }'`,
         );
@@ -11,9 +11,10 @@ export class InvalidMoneyException extends DomainException {
 }
 
 /**
- * Represents a monetary amount in cents (e.g., 1500 for €15.00). Must be a non-negative safe integer.
+ * @description Represents a monetary amount in cents (e.g., 1500 for €15.00). Must be a non-negative safe integer.
  */
 export class Money extends ValueObject {
+    public static readonly MAX_CENTS = 99_999_999; // based on the max allowed size of a stripe payment
     private readonly _value: number;
 
     private constructor(value: number) {
@@ -22,7 +23,7 @@ export class Money extends ValueObject {
     }
 
     /**
-     * Creates a Money instance from a whole number of cents (e.g., 1500 for €15.00).
+     * @description Creates a Money instance from a whole number of cents (e.g., 1500 for €15.00).
      */
     static fromCents(valueInCents: number): Money {
         const instance = new Money(valueInCents);
@@ -32,7 +33,7 @@ export class Money extends ValueObject {
 
     private validate(): void {
         if (
-            !Number.isSafeInteger(this._value) || this._value < 0
+            !Number.isInteger(this._value) || this._value < 0 || this._value > Money.MAX_CENTS
         ) {
             throw new InvalidMoneyException(this._value);
         }

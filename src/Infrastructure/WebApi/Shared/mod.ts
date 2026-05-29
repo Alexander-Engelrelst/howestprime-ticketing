@@ -14,3 +14,4 @@ export { type Routes } from './Contracts/Routes.ts';
 export type { RouterContext } from '@oak/oak';
 export type { Router } from '@oak/oak';
 export type { Context, Middleware, Next } from '@oak/oak';
+export { CurrencyGuard } from './CurrencyGuard.ts';

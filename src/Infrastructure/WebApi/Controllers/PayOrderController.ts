@@ -1,4 +1,5 @@
 import {
+CurrencyGuard,
     RequestValidator,
     RouterContext,
     WebApiController,
@@ -61,7 +62,7 @@ export class PayOrderController implements WebApiController {
             cardNumber: body.paymentDetails.cardNumber,
             expiryDate: body.paymentDetails.expiryDate,
             cvv: body.paymentDetails.cvv,
-            amount: body.amount,
+            amount: Math.round(body.amount * 100),
             bookingId: body.bookingId,
         };
     }
@@ -84,7 +85,8 @@ export class PayOrderController implements WebApiController {
                     .againstEmpty(),
             () => Guard.check(body.paymentDetails.cvv, 'cvv').isType('string').againstEmpty(),
             () => Guard.check(body.bookingId, 'bookingId').isType('string').againstEmpty(),
-            () => Guard.check(body.amount, 'amount').isType('number'),
+            
+            () => CurrencyGuard.isValidCurrencyInEuro(body.amount, 'amount'),
         ]);
 
         validator
