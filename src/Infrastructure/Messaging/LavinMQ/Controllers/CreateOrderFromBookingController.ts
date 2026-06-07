@@ -7,7 +7,7 @@ export interface CreateOrderFromBookingRequest {
     bookingId: string;
     movieId: string;
     room: string;
-    showtime: string;
+    showTime: string;
     standardVisitors: number;
     discountedVisitors: number;
     seatNumbers: number[];
@@ -29,7 +29,7 @@ export class CreateOrderFromBookingController
 
     private extractInput(request: unknown): CreateOrderFromBookingUseCaseInput {
         const payload = CreateOrderFromBookingController.validatePayload(request);
-        const showTimeDate = new Date(payload.showtime);
+        const showTimeDate = new Date(payload.showTime);
 
         return {
             bookingId: payload.bookingId,
@@ -83,7 +83,7 @@ export class CreateOrderFromBookingController
             bookingId: payload.bookingId as string,
             movieId: payload.movieId as string,
             room: payload.room as string,
-            showtime: payload.showtime as string,
+            showTime: payload.showtime as string,
             standardVisitors: payload.standardVisitors as number,
             discountedVisitors: payload.discountedVisitors as number,
             seatNumbers: seatNumbers as number[],
