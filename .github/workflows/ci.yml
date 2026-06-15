@@ -96,10 +96,10 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Login to registry ${{ vars.AZ_CONTAINER_REGISTRY }}
+      - name: Login to registry ${{ vars.HOWESTPRIME_AZ_CONTAINER_REGISTRY }}
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ vars.AZ_CONTAINER_REGISTRY }}
+          login-server: ${{ vars.HOWESTPRIME_AZ_CONTAINER_REGISTRY }}
           username: ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL }}
           password: ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL_PASSWORD }}
 
@@ -110,7 +110,7 @@ jobs:
           context: .
           file: config/Dockerfile
           push: true
-          tags: ${{ vars.AZ_CONTAINER_REGISTRY }}/${{ env.AZ_CONTAINER_NAME }}:${{ env.CONTAINER_VERSION_TAG }}
+          tags: ${{ vars.HOWESTPRIME_AZ_CONTAINER_REGISTRY }}/${{ env.AZ_CONTAINER_NAME }}:${{ env.CONTAINER_VERSION_TAG }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -131,8 +131,8 @@ jobs:
           --name ${{ env.AZ_CONTAINER_NAME }} \
           --resource-group ${{ vars.AZ_RESOURCE_GROUP }} \
           --environment ${{ vars.AZ_CONTAINER_ENVIRONMENT }} \
-          --image ${{ vars.AZ_CONTAINER_REGISTRY }}/${{ env.AZ_CONTAINER_NAME }}:${{ env.CONTAINER_VERSION_TAG }} \
-          --registry-server ${{ vars.AZ_CONTAINER_REGISTRY }} \
+          --image ${{ vars.HOWESTPRIME_AZ_CONTAINER_REGISTRY }}/${{ env.AZ_CONTAINER_NAME }}:${{ env.CONTAINER_VERSION_TAG }} \
+          --registry-server ${{ vars.HOWESTPRIME_AZ_CONTAINER_REGISTRY }} \
           --registry-username ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL }} \
           --registry-password ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL_PASSWORD }} \
           --user-assigned "${{ vars.HOWESTPRIME_WIDE_MI_KEYVAULTREADER_URI }}" \
