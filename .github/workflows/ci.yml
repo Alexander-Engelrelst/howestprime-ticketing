@@ -4,15 +4,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+      AZ_CONTAINER_NAME: "microservice-ticketing"
+      CONTAINER_VERSION_TAG: ${{ github.sha }}
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-env:
-  AZ_CONTAINER_NAME: "microservice-ticketing"
-  CONTAINER_VERSION_TAG: ${{ github.sha }}
 
 jobs:
   testing:
@@ -114,6 +114,8 @@ jobs:
     needs: build
     environment: production
     permissions: {}
+    env:
+      SECRETS_LIST: "db-password=keyvaultref:${{ vars.HOWESTPRIME_TICKETING_DOCUMENTDB_PASSWORD_URI }},identityref:${{ vars.HOWESTPRIME_WIDE_MID_KEYVAULTREADER_URI }} mb-password=keyvaultref:${{ vars.HOWESTPRIME_WIDE_MESSAGEBROKER_PASSWORD_URI }},identityref:${{ vars.HOWESTPRIME_WIDE_MID_KEYVAULTREADER_URI }}"
     steps:
       - name: Log in to Azure
         run: az login --service-principal --username ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL }} --password ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL_PASSWORD }} --tenant ${{ vars.AZ_TENANT_ID }}
@@ -129,11 +131,9 @@ jobs:
           --registry-username ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL }} \
           --registry-password ${{ secrets.HOWESTPRIME_WIDE_CI_SERVICE_PRINCIPAL_PASSWORD }} \
           --user-assigned "${{ vars.HOWESTPRIME_MID_KEYVAULTREADER_ID }}" \
+          --min-replicas 1 \
           \
-          --secrets \
-          "db-password=keyvaultref:${{ vars.HOWESTPRIME_TICKETING_DOCUMENTDB_PASSWORD_URI }},identityref:${{ vars.HOWESTPRIME_WIDE_MID_KEYVAULTREADER_URI }}" \
-          "mb-password=keyvaultref:${{ vars.HOWESTPRIME_WIDE_MESSAGEBROKER_PASSWORD_URI }},identityref:${{ vars.HOWESTPRIME_WIDE_MID_KEYVAULTREADER_URI }}" \
-          \
+          --secrets $SECRETS_LIST
           --env-vars \
           "PERSISTENCE_MONGO_DB_PROTOCOL=${{ vars.HOWESTPRIME_TICKETING_DOCUMENTDB_PROTOCOL }}" \
           "PERSISTENCE_MONGO_DB_USER=${{ vars.HOWESTPRIME_TICKETING_DOCUMENTDB_LOGIN }}" \
