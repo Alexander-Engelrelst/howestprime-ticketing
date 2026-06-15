@@ -49,6 +49,7 @@ export enum MongoErrorCode {
  */
 export class MongoDbUnitOfWork implements UnitOfWork {
     private readonly _session: ClientSession;
+    // @ts-ignore: transaction options unused because prod doesn't support transactions
     private readonly _transactionOptions: TransactionOptions;
     private readonly _repositories: Map<string, Repository<AggregateRoot<EntityId>, EntityId>> =
         new Map();
@@ -137,13 +138,13 @@ export class MongoDbUnitOfWork implements UnitOfWork {
 
             try {
                 // Start transaction
-                this._session.startTransaction(this._transactionOptions);
+                // this._session.startTransaction(this._transactionOptions);
 
                 // Execute the business logic
                 const result = await action();
 
                 // Commit transaction - this may fail with WriteConflict
-                await this._session.commitTransaction();
+                // await this._session.commitTransaction();
 
                 // Only execute post-transaction hooks after successful commit
                 // Interceptors may need access to tracked entities (e.g., for domain events)
