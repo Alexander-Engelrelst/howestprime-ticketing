@@ -54,8 +54,11 @@ export class MongoDbClient {
             const collections = await db.listCollections({ name: collectionName }).toArray();
             if (collections.length === 0) {
                 console.log(`Creating collection ${collectionName} in database ${dbName}`);
-
-                const createOptions: CreateCollectionOptions = {};
+                // *  needed because apparently 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+               const createOptions: CreateCollectionOptions & { autoIndex?: boolean } = {
+                    autoIndex: false
+                };
                 await db.createCollection(collectionName, createOptions);
                 console.log(`Collection ${collectionName} created successfully`);
             }
