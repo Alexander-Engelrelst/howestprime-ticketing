@@ -1,7 +1,6 @@
 import type {
     ClientSession,
     Collection,
-    CreateCollectionOptions,
     DeleteResult,
     Document,
     Filter,
