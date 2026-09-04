@@ -19,20 +19,20 @@ export class CurrencyGuard {
      * @returns The internal framework Guard instance for further constraint chaining if needed.
      * @throws {IllegalArgumentException} If the value is not a number, is negative, or contains microcents (> 2 decimal places).
      * * @example
-     * // Standard valid usage
+     * Standard valid usage
      * CurrencyGuard.isValidCurrencyInEuro(15.00, 'price');
      * * @example
-     * // Floating-point error handling (Will safely pass)
-     * // 159.45 * 100 results in 15944.999999999998 internally.
-     * // The guard identifies this engine noise and allows it to pass.
+     * Floating-point error handling (Will safely pass)
+     * 159.45 * 100 results in 15944.999999999998 internally.
+     * The guard identifies this engine noise and allows it to pass.
      * CurrencyGuard.isValidCurrencyInEuro(159.45, 'price'); 
      * * @example
-     * // Client-side floating-point noise handling (Will safely pass)
-     * // If the frontend/JSON payload sends an inherently distorted float like 1.9999999999999,
-     * // the guard recognizes the variance is well below the EPS threshold and lets it pass.
+     * Client-side floating-point noise handling (Will safely pass)
+     * If the frontend/JSON payload sends an inherently distorted float like 1.9999999999999,
+     * the guard recognizes the variance is well below the EPS threshold and lets it pass.
      * CurrencyGuard.isValidCurrencyInEuro(1.9999999999999, 'price');
      * * @example
-     * // Invalid usage (Will throw an exception)
+     * Invalid usage (Will throw an exception)
      * CurrencyGuard.isValidCurrencyInEuro(12.345, 'price'); // more than 2 decimal places
      * CurrencyGuard.isValidCurrencyInEuro(-5.00, 'price');  // negative value
      * CurrencyGuard.isValidCurrencyInEuro('15.00', 'price'); // not a number

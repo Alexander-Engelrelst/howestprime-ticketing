@@ -54,12 +54,13 @@ export class MongoDbClient {
             const collections = await db.listCollections({ name: collectionName }).toArray();
             if (collections.length === 0) {
                 console.log(`Creating collection ${collectionName} in database ${dbName}`);
-                // *  needed because apparently 
+                // *  this autoindex option was at one point added since cosmosdb was used in prod and this would break if this option wasn't passed
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-               const createOptions: CreateCollectionOptions & { autoIndex?: boolean } = {
+               /* const createOptions: CreateCollectionOptions & { autoIndex?: boolean } = {
                     autoIndex: false
                 };
-                await db.createCollection(collectionName, createOptions);
+                await db.createCollection(collectionName, createOptions); */
+                await db.createCollection(collectionName)
                 console.log(`Collection ${collectionName} created successfully`);
             }
         } catch (error) {
